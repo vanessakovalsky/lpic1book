@@ -1,10 +1,10 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [101.1. Determine and configure hardware settings](1011-determine-and-configure-hardware-settings.md)
-* [101.2. Boot the system](1012-boot-the-system.md)
-* [101.3. Change runlevels / boot targets and shutdown or reboot system](1013-change-runlevels-boot-targets-and-shutdown-or-reboot-system.md)
-* [102.1. Design hard disk layout](1021-design-hard-disk-layout.md)
+* [101.1. Déterminer et configurer les paramètres matériel](1011-determine-and-configure-hardware-settings.md)
+* [101.2. Démarrage du système](1012-boot-the-system.md)
+* [101.3. Changer le niveau d'exécution / les cibles de démarrage et arrêter ou redémarrer le système](1013-change-runlevels-boot-targets-and-shutdown-or-reboot-system.md)
+* [102.1. Modèle de conception d'un disque dur](1021-design-hard-disk-layout.md)
 * [102.2. Install a boot manager](1022-install-a-boot-manager.md)
 * [102.3. Manage shared libraries](1023-manage-shared-libraries.md)
 * [102.4. Use Debian package management](1024-use-debian-package-management.md)

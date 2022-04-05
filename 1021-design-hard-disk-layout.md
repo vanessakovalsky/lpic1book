@@ -1,19 +1,19 @@
-# 102.1. Design hard disk layout
+# 102.1. Modèle de conception d'un disque dur
 
-## **102.1 Design hard disk layout**
+## **102.1 Modèle de conception d'un disque dur**
 
-**Weight:** 2
+**Poids:** 2
 
-**Description:** Candidates should be able to design a disk partitioning scheme for a Linux system.
+**Description:** Les candidats doivent être capable de concevoir le schema de partitionnement d'un disque pour un système Linux.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Allocate filesystems and swap space to separate partitions or disks
-* Tailor the design to the intended use of the system
-* Ensure the /boot partition conforms to the hardware architecture requirements for booting
-* Knowledge of basic features of LVM
+* Allouer le système de fichier et l'espace swap pour séparer les partitions ou les disques
+* Adapter la conception pour correspondre à l'usage du système
+* S'assurer que la partition /boot est conforme aux pré-requis de l'architecture matériel pour le démarrage
+* Connaissances des fonctionnalités basic de LVM
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * / (root) filesystem
 * /var filesystem
@@ -23,25 +23,25 @@
 * mount points
 * partitions
 
-In this light weight lesson first we will have a quick review over Hard Disks structure and how data are stored on them, next we will take a look at linux disk layout.
+Dans cette petite leçon nous ferons le tours de la structure d'un disque dur et comment les données sont stockées sur eux, puis nous irons voir le modèle de disque de linux.
 
-### Disk tracks, cylinders, and sectors
+### Pistes de siques, cylindre et secteurs
 
-A disk is divided into tracks, cylinders, and sectors.
+Un disque est divisé en pistes, cylindres et secteurs.
 
 ![](.gitbook/assets/disklayout-diskstructure.jpg)
 
-A **track** is that portion of a disk which passes under a single stationary head during a disk rotation, a ring 1 bit wide.
+Une **piste** est une portiion du disque qui passe sous une tête unique stationnaire pendant la rotation du disque. Un anneau est large de 1 bit.
 
-A **cylinder** is comprised of the set of tracks described by all the heads (on separate platters) at a single seek position. Each cylinder is equidistant from the center of the disk. A track is divided into segments of sectors, which is the basic unit of storage.
+Un **cylindre** est comprit dans l'ensemble des pistes décrit par toutes les têtes (sur des plateaux séparés) sur une position de recherche unique. Chaque cylindre est équidistant du centre du disque. Une piste est divisé en segments de secteurs, ce qui est l'unité basique de stockage.
 
-A **sector**, being the smallest physical storage unit on the disk, is almost always 512 bytes in size because 512 is a power of 2 (2 to the power of 9). The number 2 is used because there are two states in the most basic of computer languages — on and off.
+Un **secteur**, est la plus petite unité physique de stockage sur un disque, il fait presque toujours 512 bytes car 512 st un multiple de 2 ( 2 puissance 9). Le nombre 2 est utilisé car il y a deux état dans le plus basique des langages de l'ordinateur : on et off.
 
 ### Partitions
 
-Disk partitioning or disk slicing is the creation of one or more regions on a hard disk or other secondary storage, **so that an operating system can manage information in each region separately**. These regions are called partitions.
+Le partitionnement du disque ou division du disque est la création d'une ou plusieurs régions sur un disque dur ou un autre stockage secondaire,  **pour que le système d'exploitation puisse gérer les information dans chaque région séparément**. Ces régions sont appelées partitions.
 
-The disk stores the** information about the partitions' locations and sizes** in an area known as the **partition table** that the operating system reads before any other part of the disk. Each partition then appears in the operating system as a distinct "logical" disk that uses part of the actual disk.
+Le disque stocke la localisation de l'** information à propos des partitions' et leur tailles** dans une zone appelé la **table de partition** que le système d'opération lead avant tout autre partie du disque. Chaque partition apparait alors dans le système d'exploitation comme un disque "logique" distinct qui utilise une partie du disque.
 
 ```
 [root@centos7-1 ~]# lsblk
@@ -54,22 +54,22 @@ sda               8:0    0   50G  0 disk
 sr0              11:0    1 55.7M  0 rom  /run/media/payam/VMware Tools
 ```
 
-When doing an installation there is normally a minimum disk configuration of two partitions that needs to be created:
+Lorsque vous faite une installation il y a normalement au moins deux partitions qui ont besoin d'être créé :
 
-* **/ **(root): directory that contains the Linux distribution.
-* **Swap space**
+* **/ **(root): dossier racine qui contient la distribution Linux.
+* **Espace Swap**
 
-### **What is swap space?**
+### **Qu'est ce que l'espace swap?**
 
-Swap space in Linux is used when the amount of physical memory (RAM) is full. If the system needs more memory resources and the RAM is full, inactive pages in memory are moved to the swap space. While swap space can help machines with a small amount of RAM, it should not be considered a replacement for more RAM. Swap space is located on hard drives, which have a slower access time than physical memory.
+L'espace Swap dans Linux est utilisé lorsque la totalité de la mémoire physique disponible (RAM) est occupé. Si le système a besoin de plus de ressources mémoires et que la RAM est pleine, les pages inacties en mémoire sont déplacer dans l'espace swap. Alors que l'espace swap peut aider les machines avec de faibles capacité de RAM, il ne doit pas être considéré comme un remplacemnet pour plus de RAM. L'espace Swap est placé sur le disque dur, qui a un temps d'accès plus lent que la mémoire physique.
 
-**Swap space can be** a **dedicated swap partition** (recommended), a **swap file**, or a **combination of swap partitions and swap files**.
+**L'espace Swap peut être** une **parition dédié au swap** (recommendé), un **fichier swap**, ou une **combinaison de paritions swap et de fichier swap**.
 
-Swap should equal 2x physical RAM for up to 2 GB of physical RAM, and about 1.5x physical RAM for more than 2 GB of physical RAM. How ever that an old recipe and it depends on what kind of system we are talking about.
+Swap doit être équivalent à 2X la RAM physique pour le RAM physique jusqu'à 2GB et environ 1.5X la RAM physique pour la RAM de plus de 2GB. Cepenant c'est une recette ancienne et cela dépend du type de système dont nous parlons.
 
-### **mount points**
+### **Point de montage**
 
-All **partitions are attached to the system via a mount point**. The mount point defines the place of a particular data set in the file system. Usually, all partitions are connected through the root partition. On this partition, which is indicated with the slash (/), directories are created. These empty directories will be the starting point of the partitions that are attached to them.
+Toutes les **partitions sont attaché au système via un point de montage**. Le point de montage défini la place d'un ensemble particulier de donnée dans le système de fichier. Généralement, toutes les partitions sont connecté au travers de la partition racine. Sur cettte parition, qui est indiqué avec le slash (/), les dossiers sont créé. Ces dossiers vides sont les points de départ des partitions attachés à eux.
 
 ```
 [root@centos7-1 ~]# df -h
@@ -85,20 +85,20 @@ tmpfs                    378M   32K  378M   1% /run/user/1000
 tmpfs                    378M     0  378M   0% /run/user/0
 ```
 
-During system startup, all the partitions are thus mounted, (will be described in the file /etc/fstab). Some partitions are not mounted by default, for instance if they are **not constantly connected to the system, such like the usb storage**. If well configured, the device will be mounted as soon as the system notices that it is connected, or it can be user-mountable.
+Pendant le démarrage du système, toutes les partitions sont montés (et seront décirte dans le fichier /etc/fstab). Certaines partitions ne sont pas monté par défaut, par exemple si elles ne sont **pas connectés en permanence au système, comme les stockage usb**. S'il est bien configuré, le périphérique sera monté dès que le système sera informé qu'il est connecté, ou il peut être monté par l'utilisateur.
 
-### File Systems
+### Système de fichiers
 
-**A filesystem is the methods and data structures that an operating system uses to keep track of files on a disk or partition**; that is, the way the files are organized on the disk. Without a file system, information placed in a storage medium would be one large body of data with no way to tell where one piece of information stops and the next begins.
+**Un système de fichier est l'ensemble des méthodes et des structures de données qu'un système d'exploitation utilise pour garder une trace des fichiers sur un disque ou une partition**; c'est, d'une certaine manière, la manière dont les fichiers sont organisés sur le disque. Sans un système de fichier, les informations placés sur un media de stockage sera un ensemble important de données sans moyen de savoir où est quelle information, où elle s'arrête et où commence la prochaine.
 
-Different filesystems have different organizing structures to determine where the data and indexing information will be stored:
+Des systèmes de fichiers différents ont une structure différente pour déterminer où sont les données et indexer l'information qui est stockée :
 
-* **FAT32**: FAT32 is an older Windows file system, but it’s still used on removable media devices — just the smaller ones, though. Larger external hard drives of 1 TB or so will likely come formatted with NTFS
-* **NTFS**: Modern versions of Windows — since Windows XP — use the NTFS file system for their system partition. External drives can be formatted with either FAT32 or NTFS.
-* **HFS**+: Macs use HFS+ for their internal partitions, and they like to format external drives with HFS+ too. 
-* **Ext2/Ext3/Ext4**: You’ll often see the Ext2, Ext3, and Ext4 file systems on Linux.
-* **Btrfs**: Btrfs — “better file system” — is a newer Linux file system that’s still in development. It isn’t the default on most Linux distributions at this point, but it will probably replace Ext4 one day. The goal is to provide additional features that allow Linux to scale to larger amounts of storage.
-* **Swap**: On Linux, the “swap” file system isn’t really a file system. A partition formatted as “swap” can just be used as swap space by the operating system 
+* **FAT32**: FAT32 est un ancien système de fichier de Windows, mais il est encore utilisé sur les médias amovibles - seulement les plus petit. Les disque dur externes de plus de 1TB sont formatté avec NTFS
+* **NTFS**: les versions modernes de Windows — depuis Windows XP — utilise le système de fichier NTFS pour leur système de partitions. Les disques externes peuvent être formatté soit en  FAT32 ou en  NTFS.
+* **HFS**+: Macs utilise HFS+ pour ses partitions internes, et aime formater les disques externe également avec  HFS+. 
+* **Ext2/Ext3/Ext4**: Vous verrez souvnet les systèmes de fichier Ext2, Ext3, et Ext4 sur Linux.
+* **Btrfs**: Btrfs — “better file system” — est un nouveau système de fichier Linux qui est encore en développement. Ce n'est pas celui utilisé par défaut sur la plupart des distribution Linux, mais il remplacera probablement Ext4 un jour. L'objectif est de fournir des fonctionnalités supplémentaire pour permettre à Linux de se mettre à l'échelle sur des stockage plus important.
+* **Swap**: Sur Linux, le système de fichier “swap” n'est pas vraiment un système de fichier. Une partition formatté comme “swap” peut seulement être utilisé comme espace swap par le système d'exploitation 
 
 #### Linux Directory Structure
 

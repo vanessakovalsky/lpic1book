@@ -1,20 +1,20 @@
-# 101.3. Change runlevels / boot targets and shutdown or reboot system
+# 101.3. Changer le niveau d'exécution / les cibles de démarrage et arrêter ou redémarrer le système
 
-## **101.3 Change runlevels / boot targets and shutdown or reboot system**
+## **101.3 Changer le niveau d'exécution / les cibles de démarrage et arrêter ou redémarrer le système**
 
-**Weight:**3
+**Poids:**3
 
-**Description:** Candidates should be able to manage the SysVinit runlevel or systemd boot target of the system. This objective includes changing to single user mode, shutdown or rebooting the system. Candidates should be able to alert users before switching runlevels / boot targets and properly terminate processes. This objective also includes setting the default SysVinit runlevel or systemd boot target. It also includes awareness of Upstart as an alternative to SysVinit or systemd.
+**Description:** Les candidats devrait être capble de gérer le niveau d'exécution SysVinit ou la cible de démarrage de systemd sur le système. Cet objectif inclut le changement pour un mode utilisateur unique, l'arrêt ou le redémarrage du système. Les candidats devrait être capable d'alerter les utilisateurs avant de modifier les niveaux d'éxecution et les cibles de démarrage et d'arrêter les processus proprement. Cet objectif inclue aussi le paramètrage du niveau d'exécution par défaut de  SysVinit ou de la cible de démarrage de systemd. Il inclut également une sensibilisation sur Upstart en tant qu'alternative à SysVinit ou systemd.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Set the default runlevel or boot target
-* Change between runlevels / boot targets including single user mode
-* Shutdown and reboot from the command line
-* Alert users before switching runlevels / boot targets or other major system events
-* Properly terminate processes
+* Définir le niveau d'exécution par défaut et la cible de démarrage
+* Changer entre niveau d'exécution / cible de démarrage incluant le mode utilisateur unique
+* Arrêt et redémarrage depuis la ligne de commande
+* Prévenir les utilisateurs avant de modifier le niveau d'exécution / les cibles de démarrage ou tout autre évènement majeur du système
+* Arrêter proprement un processus
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * /etc/inittab
 * shutdown
@@ -27,15 +27,15 @@
 * /usr/lib/systemd/
 * wall
 
-In previous lesson we explain the sequence of system boot in liunx, then we get introduced to Sysv, Upstart and system as different service managers in linux world. In this lesson we learn how to take control over our linux system services using these service managers.
+Dans la leçon précédente nous avons expliqué la séquence de démarrage du système dans Linux, puis nous avons introduit Sysv, Upstart et systemd comme gestionnaires de services différents dans le monde linux. Dans cette leçon nous apprendront comment prendre le contrôle des services de notre système Linux en utilisant ces gestionnaires de service.
 
-Lets start with SysV. SysV is is nothing more than many executable scripts which are run after init process. How we can define which service should be run when computer starts ? I'm glad you asked. It seems that huge text configuration files would be needed, there is where **runlevels** come to play.
+Commençons avec SysV. SysV n'est rien de plus que de nombreux scripts exécutable qui sont lancer après le processus init. Comment pouvons nous définir quel service doit être lancé lorsque l'ordinateur démarre ? Ravi que vous le demandiez. Il semble que des fichiers de configurations volumineux soient nécessiare, c'est ici que les  **runlevels** (niveau d'éxecution) entrent en jeu.
 
 ### runlevels
 
-A runlevel is one of the modes that a Unix -based operating system will run in. Each runlevel has a certain number of services stopped or started, giving the user control over the behavior of the machine. runlevels avoid of having a few large files to edit by hand.
+Un niveau d'exécution est un des mode que les systèmes d'exploitation Unix utilisent. Chaque niveau d'exécution a un certain nombre de services arrêtés ou démarrés, donnant le contrôle à l'utilisatuer sur le comportement de la machine. Les runlevels évite d'avoir des fichiers volumineux à éditer à la main.
 
-Conventionally, **seven** runlevels exist, numbered from zero to six. And there are some differences between Debian and RedHat based systems:
+Par convention, **seven** niveaux d'exécution existent, numéroté de 0 à 6. Et il y a des différentes entre les systèmes de type Debian et les système de type RedHat:
 
 | Runlevel | Debian               | RedHat                       |
 | -------- | -------------------- | ---------------------------- |
@@ -47,30 +47,30 @@ Conventionally, **seven** runlevels exist, numbered from zero to six. And there 
 | **5**    | Nothing              | Full,Multi-User,GUI          |
 | **6**    | **Reboot**           | **Reboot**                   |
 
-CentsOS 5 was the last version which used SysV and from CentOS 7 Systemd is used.
+CentsOS 5 a été la dernière version a utilisé SysV et depuis CentOS 7 Systemd est utilisé.
 
 ### runlevel
 
-To find the current and previous runlevels , the runlevel command is used:
+Pour trouver le niveau courant et le précéden niveau d'exécution, la commande runlevel est utilisé :
 
 ```
 [root@centos5-1 ~]# runlevel
 N 5
 ```
 
-In the above output, the letter ‘N’ indicates that the runlevel has not been changed since the system was booted. And, 5 is the current runlevel.
+Dans la sortie ci-dessus, la lettre ‘N’ indique quel niveau d'exécution n'a pas été modifié depuis que le système a démarré. Et 5 est le niveau d'exécution courant.
 
-Now that we now about runlevels, How we can switch between them? well just tell 'init' what runlevel you like.
+Maintenant que nous savons ce que sont les niveaux d'exécution, comment passer de l'un à l'autre ? il suffit de dire à  'init' quel niveau d'exécution nous voulons.
 
 ## telinit
 
-telinit is used to change the SysV system runlevel.
+telinit est utilisé pour changer le niveau d'exécution système de SysV.
 
 ```
 telinit  RUNLEVEL
 ```
 
-Lets try it on a CentOS5 machine:
+Essayons sur une machine CentOS5:
 
 ```
 [root@centos5-1 ~]# runlevel
@@ -78,7 +78,7 @@ N 5
 [root@centos5-1 ~]# telinit 3
 ```
 
-and system goes to runlevel 3 lets go back to runlevel 5:
+et le système passe au niveau d'exécution 3 puis revenons au niveau d'exécution 5:
 
 ```
 [root@centos5-1 ~]# telinit 5
@@ -86,7 +86,7 @@ and system goes to runlevel 3 lets go back to runlevel 5:
 
 ## init
 
-init (as a command) is a process control initialization like telinit.
+init (en tant que commande) est un processus de contrôle de l'initialisation comme telinit.
 
 ```
 [root@centos5-1 ~]# init 3
@@ -95,7 +95,7 @@ init (as a command) is a process control initialization like telinit.
 {% hint style="info" %}
 #### telinit vs init
 
-telinit is a smaller tool that informs init when it needs to switch runlevels. So we can use "telinit" to "tell init" that it needs to switch runlevel. telinit is actually linked to init command and it is possible to use init command instead but it is not recommanded.
+telinit est un outil plus petit qui informe init lorsque cela est nécessaire de changer le niveau d'exécution. Donc nous pouvons utiliser "telinit" pour "dire à init" que nous avons besoin de changer de niveau d'exécution. telinit est actuellement lié à la commande init et il est posible d'utiliser la commande init à la place mais cela n'est pas recommandé.
 
 ```
 [root@centos5-1 ~]# ls -l /sbin/telinit 
@@ -103,11 +103,11 @@ lrwxrwxrwx 1 root root 4 Aug 26 23:20 /sbin/telinit -> init
 ```
 {% endhint %}
 
-There are several ways to change runlevels. To make a permanent change, we can edit **/etc/inittab** and change the default level that we just saw above.
+Il y a différente manière de modifier le niveau d'exécution. Pour rendre la modification permanent, nous pouvons éditer **/etc/inittab** et modifier le niveau par défaut avec celui que nous avons vu ci-dessus.
 
 ### /etc/inttab
 
-After the Linux kernel has booted, the init program reads the /etc/inittab file to determine the **behavior for each runlevel**. Unless the user specifies another value as a kernel boot parameter, the system will attempt to enter (start) the default runlevel.(CentOs5)
+Après que le noyau Linux a démarré, le programme init lit le fichier /etc/inittab pour déterminer le  **comportement de chaque niveau d'exécution**. Sauf si l'utilisateur spécifie une autre valeur comme paramètre de démarrage du noyau, le system essayera d'entrer le niveau d'exécution par défaut.(CentOs5)
 
 ```
 [root@centos5-1 ~]# cat /etc/inittab 
@@ -166,24 +166,24 @@ pr:12345:powerokwait:/sbin/shutdown -c "Power Restored; Shutdown Cancelled"
 x:5:respawn:/etc/X11/prefdm -nodaemon
 ```
 
-the **default runlevel** is determined from the`id:`entry in **/etc/inittab**. How run levels are set up by default and how they are configured depends in part on the particular distribution you are running.
+Le **niveau d'exécution par défaut** est déterminé depuis l'entrée `id:`dans **/etc/inittab**. Comment les niveaux d'exécution sont définis par défaut et comment ils sont configurés dépendent en partie de la distribution particulière que vous exécuter.
 
-The format of each line in inittab file is as follows:
+Le format de chaque ligne du fichier inittab file est le suivant:
 
 `id:runlevel:action:process`
 
-Here is a description of these fields:
+Voici une description de ces champs :
 
-* **id (identification code)** – consists of a sequence of one to four characters that identifies its function.
-* **runlevels** – lists the run levels to which this entry applies.
-* **action** – specific codes in this field tell init how to treat the process. Possible values include: initdefault, sysinit, boot, bootwait, wait, and respawn.
-* **process** – defines the command or script to execute.
+* **id (identification code)** – consiste en une séquence de un à quatre caractères qui identifie sa fonction.
+* **runlevels** – liste les niveaux d'exécution sur lesquels l'entrée s'applique.
+* **action** – code spécifique dans ce champ dit à init comment traiter le processus. Les valeurs possibles incluent: initdefault, sysinit, boot, bootwait, wait, et respawn.
+* **process** – définit la commande ou le script à exécuter.
 
-Now lets see how SysV implements the concept of run levels.
+Voyons maintenant comment SysV implémente le concept de niveau d'exécution.
 
 ### /etc/init.d
 
-/etc/init.d contains scripts used by the System V init tools (SysVinit).
+/etc/init.d contient des script utilisé par l'outil init de  System V  (SysVinit).
 
 ```
 [root@centos5-1 ~]# ls  /etc/init.d/
@@ -209,15 +209,15 @@ haldaemon           microcode_ctl  restorecond
 halt                multipathd     rpcgssd
 ```
 
-As we said, in SysV, init program is the first process that is run and consequently some infrastructure services are started. Files in /etc/init.d are shell scripts that respond to start, stop, restart, and (when supported) reload commands to manage a particular service. But how SysV determine which services inside /etc/init.d should be started or stopped depend on default runlevel ?Lets draw a picture:
+Comme nous disions, dans SysV, le programme init program est le premier processus qui est lancé et par conséquence certains services d'infrastructures sont démarrés. Les fichiers dans /etc/init.d sont des scripts shell qui réponde aux commandes  start, stop, restart, et (lorsque c'est supporté) pour gérer un service particulier. Mais comment SysV détermine quel services dans  /etc/init.d devrait être démarré ou arrété en fonction du niveau d'exécution ? Faisons un schéma :
 
 ![](.gitbook/assets/customizsysv-SysVScripts.jpg)
 
 ### /etc/rc.d/
 
-SysV uses grouping. **Scripts of each runlevel are grouped and placed in /etc/rc{runlevel}.d/** where runlevel is the runlevel. 
+SysV utilises des groupes. **Les scripts de chaque niveau d'exécution sont regroupés et placés dans  /etc/rc{runlevel}.d/** où runlevel est le niveau d'exécution. 
 
-As many services might be existed in different runlevels, the real script files are hold in /etc/init.d and /etc/rc{runlevel}.d/just point to required ones.
+Comme de nombreux services doivent existés dans différents niveaux d'exécution, les fichiers réels des scripts sont stockés dans  /etc/init.d et /etc/rc{runlevel}.d/ pointe seulement sur ceux dont il a besoin.
 
 ```
 [root@centos5-1 etc]# ls | grep rc.
@@ -272,7 +272,7 @@ lrwxrwxrwx 1 root root 19 Aug 26 23:21 S15mdmonitor -> ../init.d/mdmonitor
 <output has been truncated>
 ```
 
-Each script in each runlevel is run with its startup or shutdown functions depending on if that runlevel is going up or going down.** S** means **starting** script and **K** shows that it is a **killing** script .The sequence of actions is defined by the numbers. try cat command to see what is inside :
+Chaque script dans chaque niveau d'exécution est lancé avec les fonction de démarrage ou d'arrêt en fonction du niveau d'exécution qui est lancé..** S** signifie script de **démarrage(starting)** et **K** montre que c'est un script pour **arrêter(killing)** . La séquence des actions est définit par les numéros. Essayer la commande cat pour voir ce qu'il y a à l'intérieur :
 
 ```
 [root@centos5-1 rc5.d]# cat S55sshd
@@ -461,19 +461,19 @@ esac
 exit $RETVAL
 ```
 
-And all of these places were places that SysV uses to manage scripts and runlevels. In Sysv system we can manage services with `service`command and`chkconfig`command to define how and when services are started. We will talk about them later.
+Et tous ces espaces sont des espaces que SysV utilise pour gérer ces scripts et ces niveaux d'exécution. Dans le système Sysv nous pouvons gérer les services avec la commande `service` et la commande `chkconfig` pour définir comment et quand les services sont démarrer. Nous en parlerons plus tard.
 
 {% hint style="info" %}
 **rc.local**
 
-But what about /etc/rc.local ? This file runs after all other init level scripts have run, so it's safe to put various commands that you want to have issued upon startup.This is also a good place to place "troubleshooting" scripts in. **But do not forget rc.local may not work properly in Upstart and Systemd.** Test it, search it and do required configuration before using in production environment.
+Qu'en est t'il de  /etc/rc.local ? Ce fichier se lance après tous les autres scripts de niveau d'init se soient exécutée, donc il est plus sûr de mettre des commandes avec lesquels vous avez des problèmes dans ce fichier. C'est aussi un bon ecdroit pour mettre les script de "debugage". **Mais n'oubliez pas rc.local ne devrait pas fonctionner correctement dans Upstart et Systemd.** Tester le, faites vos recherches et faites la configuration requise avant de l'utiliser dans les environnement de production.
 {% endhint %}
 
-Lets go back to our topic and get familiar with runlevels equivalent in systemd. Although /etc/inittab still exist in Systemd systems but that is not part of configuration, we have something called "Targets".
+Revenons à notre sujet, et voyons l'équivalent des niveaux d'exécution dans systemd. Bien que /etc/inittab existe encore dans les systèmes Systemd il ne fait pas partie de la configuration, nous avons quelque chose appelé "Cibles".
 
-### systemd targets
+### Les cibles systemd 
 
-Like runlevels there are some modes in systemd system that our system can run in, systemd runlevels are referred to as "**targets**". "**targets**" **are described as a collection of services**. Look at the equivalents:** **
+Comme les niveaux d'exécution il y a des modes dans les systèmes systemd avec lesquels notre système peut s'exécuter, les niveaux d'exécution de systemd sont appelés "**cibles(targetsç**". Les "**cibles**" **sont décrites comme une collection de services**. Voyons les équivalences:** **
 
 ```
    ┌─────────┬───────────────────┐
@@ -491,20 +491,20 @@ Like runlevels there are some modes in systemd system that our system can run in
    └─────────┴───────────────────┘
 ```
 
-In order to switch between Boot Targets we use systemctl tool.
+Afin de naviguer entre les cibles de démarrage (Boot Targets) nous utilisons l'outil systemctl.
 
 ### systemctl
 
-Systemctl is a systemd utility which is responsible for Controlling the systemd system and service manager. It can does lots of thing but what we need here and use it for is changing boot targets.
+Systemctl est un utilitaire de systemd qui est responsable du controle du système systemd et de la gestion des services. Il peut faire beaucoup de chose mais ce dont nous avons besoin ici est de changer les cibles de demarrage.
 
-To see the current boot target use `systemctl get-default` command:
+Pour voir la cible de démarrage courante utiliser la commande `systemctl get-default`:
 
 ```
 [root@centos7-1 ~]# systemctl get-default 
 graphical.target
 ```
 
-To change the target use `systemctl isolate xxxxx.target` , for example:
+Pour changer la cible utiliser la commande `systemctl isolate xxxxx.target` , par exemple:
 
 ```
 [root@centos7-1 ~]# systemctl isolate rescue.target
@@ -514,7 +514,7 @@ To change the target use `systemctl isolate xxxxx.target` , for example:
 [root@centos7-1 ~]# systemctl isolate multi-user.target
 ```
 
-To set the default target, run `systemctl set-default xxxxxx.target` command :
+Pour définir la cible par défaut, lancer la commande `systemctl set-default xxxxxx.target` :
 
 ```
 [root@centos7-1 ~]# systemctl set-default graphical.target 
@@ -522,19 +522,19 @@ Removed symlink /etc/systemd/system/default.target.
 Created symlink from /etc/systemd/system/default.target to /usr/lib/systemd/system/graphical.target.
 ```
 
-But how systemd knows what to do and how to do things ? We have something called "**Unit**". **The concept of "Unit Files" replaces the SysV init scripts for services.**
+Mais comment systemd connait ce qu'il doit faire et comment faire les choses ? ? Nous avons quelque chose appelé les "**Unit**". **Le concept de "Unit Files" remplaces les scripts d'init de SysV pour les services.**
 
 ### systemd unit files
 
-There are different types of unit files and the best way to describe unit files, is **'that is a thing which should be started'**.Yes that is a thing because there are different kinds of unit files. **Each unit file is a simple text file describing a unit, what it does, what needs to run before or afterward, and other details**
+Il y a différents types de fichiers unit et la meilleur moyen de décrire un fichier unit est  **'c'est une chose qui doit être démarré'**.Oui c'est une chose car il y a différents type de fichiers unit. **Chaque fichier unit est un fichier texte simple qui décrit une unit, ce qu'il fait, ce qu'il a besoin de lancer avant ou après, et d'autres détails**
 
-Unit files can be stored in a few different places on your system. systemd looks for system unit files in this order:
+Les fichiers unit peuvent être stocké dans quelques endroits différents sur votre système. systemd cherche pour les fichiers unit dans cet ordre :
 
-1. **/etc/systemd/system:**directory stores unit files that extend a service. This directory will take precedence over unit files located anywhere else in the system.
-2. **/run/systemd/system:**directory is the runtime location for unit files.
-3. **/usr/lib/systemd/system:**directory is the default location where unit files are installed by packages. Unit files in the default directory should not be altered.
+1. **/etc/systemd/system:**dossier qui stocke les fichiers unit qui étende un service. Ce dossier aura la préséance sur parmi les fichiers unit positionnés n'importe où ailleurs sur le système.
+2. **/run/systemd/system:**dossier qui est celui utilisé pendant l'exécution pour les fichiers unit.
+3. **/usr/lib/systemd/system:**dossier qui est le dossier par défaut où les fichier unit sont installés par les paquets. Les fichiers unit du dossier par défaut ne doivent pas être modifié.
 
-**Unit files in the earlier directories override later ones.** Lets take a look at them:
+**Les fichier Unit lu en premier écrase ceux qui sont lu après.** Regardons cela de plus près :
 
 ### 1./etc/systemd/system
 
@@ -619,14 +619,14 @@ plymouth-kexec.service                   zram.service
 plymouth-poweroff.service
 ```
 
-lets follow one of target unit files.Try `ls -al *.target` to see all of target files. As an instance _default.target_:
+Suivons un des fichiers unit de cible. Essayez `ls -al *.target` pour voir tous les fichiers cibles. Comme une instance  _default.target_:
 
 ```
 [root@centos7-1 ~]# ls -al /usr/lib/systemd/system/default.target
 lrwxrwxrwx. 1 root root 16 Oct 28  2017 /usr/lib/systemd/system/default.target -> graphical.target
 ```
 
-Lets take a look at that _graphical.target_:
+Voyons pour la cible _graphical.target_:
 
 ```
 [root@centos7-1 ~]# cat  /usr/lib/systemd/system/graphical.target
@@ -647,7 +647,7 @@ After=multi-user.target rescue.service rescue.target display-manager.service
 AllowIsolate=yes
 ```
 
-And what it requires is _multi-user.target_, lets see:
+Et ce qui est requis pour _multi-user.target_ :
 
 ```
 [root@centos7-1 ~]# cat  /usr/lib/systemd/system/multi-user.target
@@ -667,7 +667,7 @@ After=basic.target rescue.service rescue.target
 AllowIsolate=yes
 ```
 
-and it requires _basic.target _:
+et ceux qui ont besoin de _basic.target _:
 
 ```
 [root@centos7-1 ~]# cat  /usr/lib/systemd/system/basic.target
@@ -688,7 +688,7 @@ Wants=sockets.target timers.target paths.target slices.target
 After=sockets.target paths.target slices.target
 ```
 
-Finally _sysinit.target_ :
+Enfin _sysinit.target_ :
 
 ```
 [root@centos7-1 ~]# cat  /usr/lib/systemd/system/sysinit.target
@@ -707,15 +707,16 @@ Wants=local-fs.target swap.target
 After=local-fs.target swap.target emergency.service emergency.target
 ```
 
-And _sysint.target_ does not require any thing. It seems that we have reached top level target in our tree and we can go back.
+Et _sysint.target_ n'a besoin de rien. Il semble que nous avions atteint le niveau le plus haut de cible de notre arbre.
 
-Using unit files beside Targets concept make Systemd more flexible in comparison to SysV.
+Utiliser les fichiers unit avec le concepts de Cibles rend Systemd plus flexible en comparaison avec SysV.
 
 ## wall
 
-There are times when multiple users are logged in to a server computer, and we need to, say, restart the server to perform some maintenance task. Of course, the **correct way is to inform all **those who are logged in about the maintenance activity.
+Certaines fois plusieurs utilisateurs sont connecter sur un serveur, et nous avons besoin de leur dire que nous allons redémarrer le serveur pour des tâches de maintenance. Bien sur, la **manière correcte est de les informer tous **ceux qui sont connecté à propos de cette activité de maintenance.
 
-wall (an abbreviation of write to all) is a Unix command-line utility that displays the contents of a file or standard input to all logged-in users. It is typically used by root to send out shutting down message to all users just before poweroff.(Ubuntu16)
+wall (un abreviation pour write to all) est un utilitaire en ligne de commande Unix qui affiche un fichier ou une entrée standard à tous les utilisateurs connectés. Il est typiquement utilisé par root pour envoer un message en cas d'arrêt juste avant l'arrêt
+.(Ubuntu16)
 
 ```
 wall [-n] [-t timeout] [-g group] [message | file]
@@ -743,7 +744,7 @@ OPTIONS
               Display help text and exit.
 ```
 
-Lets try sending out "we are going down" message:
+Essayons d'envoyer un message "we are going down" :
 
 ```
 [root@centos5-1 ~]# wall "we are going down"
@@ -753,7 +754,7 @@ Broadcast message from root@centos6-1 (pts/1) (Sun Nov 11 00:46:58 2018):
 we are going down
 ```
 
-and what will **user1** receive:
+et voici ce que **user1** recevra:
 
 ```
 [user1@centos5-1 ~]$ 
@@ -762,11 +763,11 @@ Broadcast message from root@centos6-1 (pts/1) (Sun Nov 11 00:46:58 2018):
 we are going down
 ```
 
-options might not work is some old distributions.
+Les options pourraient ne pas fonctionner dans certaines distributions anciennes.
 
 ## shutdown
 
-shutdown - Halt, power-off or reboot the machine
+shutdown - Arrêt, arrêt complet ou redémarrage de la machine
 
 ```
 shutdown [OPTIONS...] [TIME] [WALL...]
@@ -811,7 +812,7 @@ OPTIONS
            A message to be sent to all users, along with the standard shutdown notification.
 ```
 
-shutdown does its job by signalling the init process, asking it to change the runlevel. According to previous title, runlevel 0 is used to halt the system, runlevel 6 is used to reboot the system, and runlevel 1 is used to put the system into a state where administrative tasks can be performed (single-user mode).
+shutdown fait son travail en signalant le processus init, en lui demandant de changer de niveau d'exécution. Conformément au titre précédent, le niveau d'exécution 0 est utilisé pour arrêter le système, le niveau d'exécution 6 est utilisé pour redémarrer le système, et le niveau d'exécution 1 est utilisé pour mettre le système dans un état où les tâches d'administrations peuvent être faite (mode utilisateur unique) .
 
 ```
 root@ubuntu16-1:~# shutdown -r -t 15 +5 "Server will restart in 5 minutes. Please save your work."
@@ -819,7 +820,7 @@ Shutdown scheduled for Sun 2018-11-11 03:19:56 PST, use 'shutdown -c' to cancel.
 root@ubuntu16-1:~# shutdown -c
 ```
 
-We may specify a time string (which is usually “now” or “hh:mm” for hour/minutes):
+Nous pouvons spécifier une chaine temps (qui est généralement “now” ou “hh:mm” pour heures/minutes):
 
 ```
 root@ubuntu16-1:~# shutdown -r 10:10 "Server will be rebooted at 10:10am"
@@ -832,15 +833,15 @@ root@ubuntu16-1:~# shutdown -c
 {% hint style="info" %}
 #### halt vs poweroff ! it's a bit historical
 
-* halt was used before ACPI (Advanced Configuration and Power Interface)which today will turn off the power for us. It would halt the system and then print a message to the effect of "it's ok to power off now". Back then there were physical on/off switches, rather than the combo ACPI controlled power button of modern computers.
-* poweroff, naturally will halt the system and then call ACPI power off.
+* halt a été utilisé avant  ACPI (Advanced Configuration and Power Interface)qui s'occupe pour nous aujourd'hui d'éteindre le courant. Il arrêtait le système et affichait un message  "it's ok to power off now". Il faut revenir au temps où les boutons était physique avec on/off, plutôt que ceux les boutons contrôlé par ACPI que l'on connait aujourd'hui.
+* poweroff, arrêtait naturellement le système et appelait la fonction ACPI power off.
 
-These days halt is smart enough to automatically call poweroff if ACPI is enabled. In fact, they are functionally equivalent now.
+De nos jour hat est suffisament intelligent pour automatiquement appeler poweroff si ACPI est activé. En fait, ils sont fonctionnellement équivalent maintenant..
 {% endhint %}
 
 ### reboot
 
-reboot command can be used to shutdown or reboot linux.
+La commande reboot peut être utilisé pour arrêter ou redémarrer linux.
 
 ```
 [root@centos7-1 ~]# reboot --help
@@ -858,19 +859,19 @@ Reboot the system.
      --no-wall   Don't send wall message before halt/power-off/reboot
 ```
 
-To reboot linux just call the reboot command directly without any options.
+Pour redémarrer linux il suffit d'appeler la commande reboot directement sans aucune option.
 
 ```
 [root@centos7-1 ~]# reboot
 ```
 
-This will perform a graceful shutdown and restart of the machine. This is what happens when we click restart from your menu.
+Cela effectuera un arrêt propre et un redémarrage de la machine. C'est ce qui se passe lorsque l'on clique sur Restart dans le menu.
 
-`-f` option will forcefully reboot the machine. This is similar to pressing the power button of the CPU. No shutdown takes place. The system will reset instantly.
+L'option `-f` forcera le redémarrage de la machine. C'est similaire à appuyer sur le bouton power de l'ordinateur. Il n'y a pas d'arrêt, le système rédémarre instantannément.
 
 ### halt
 
-The next command is the halt command. This can shutdown a system but has some other options:
+La prochaine commande est la commande halt. Elle peut éteindre un système mais a aussi d'autres options :
 
 ```
 [root@centos7-1 ~]# halt --help
@@ -888,11 +889,11 @@ Halt the system.
      --no-wall   Don't send wall message before halt/power-off/reboot
 ```
 
-the halt command also has force option but try not to use it, because it might put your system in an in consistant state.
+La commande halt a aussi une option force mais essayer de ne pas l'utiliser, car cela pourrait mettre votre système dans un état inconsistant.
 
 ### poweroff
 
-There is another command exactly same as the halt command. It does the same things and takes the same options.
+Il y a une autre commande identique à la commande halt. Elle fait la même chose et prend les mêmes options.
 
 ```
 [root@centos7-1 ~]# poweroff --help
@@ -910,7 +911,7 @@ Power off the system.
      --no-wall   Don't send wall message before halt/power-off/reboot
 ```
 
-and we are done.
+Et nous avons terminé.
 
 .
 

@@ -1,12 +1,12 @@
-# 101.2. Boot the system
+# 101.2. Démarrage du système
 
-### 101.2.Boot the system
+### 101.2.Démarrage du système
 
-**Weight:**3
+**Poids:**3
 
-**Description:** Candidates should be able to guide the system through the booting process.
+**Description:** Les candidats doivent être capable de guider le système durant le processus de démarrage.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
 * Provide common commands to the boot loader and options to the kernel at boot time
 * Demonstrate knowledge of the boot sequence from BIOS to boot completion
@@ -14,7 +14,7 @@
 * Awareness of Upstart
 * Check boot events in the log files
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * dmesg
 * BIOS
@@ -25,69 +25,70 @@
 * SysVinit
 * systemd
 
- Have you ever think what happens when you press power button on a pc or laptop? There is no jinni or ghost who starts dead metal heart and brings operating system up and running. Lets see how does is happen?
+ N'avez-vous jamais penser à ce qu'il se passe lorsque vous démarrer le bouton marche d'un pc ? Il n'y a ni génie ou fantôle qui démarre un coeur de métal hurlant et amène le système d'exploitation démarré et fonctionnel. Voyons ce qu'il se passe ?
 
-## Boot procedure
+## Procédure de démarrage
 
-Lets draw a big picture to have an overview of generic boot procedure from BIOS to the shell
+Dessinons une vue d'ensemble pour avoir un aperçu de la procédure générique de démarrage depuis le BIOS jusqu'au shell
 
 ![](.gitbook/assets/boot-bootseq.jpg)
 
-Now lets explain more each of these steps:
+Maintenant expliquons chacune de ces étapes :
 
-**1-**First system power on.
+**1-**Premier démarrage du système.
 
-**2-**BIOS load (in modern systems it would be UEFI)
+**2-**Chargement du BIOS (dans les systèmes modernes cela sera UEFI)
 
 ## BIOS
 
-BIOS, which stands for Basic Input Output System, is software stored on a small memory chip on the motherboard. BIOS is responsible for POST. POST short for Power On Self Test, is the initial set of diagnostic tests performed by the computer right after it's powered on, with the intent to check for any hardware related issues.So BIOS makes POST the very first software to run when a computer is started.
+BIOS, qui signifie Basic Input Output System, est un logiciel stocké sur une petite partie de mémoire de la carte mère. BIOS est responsable du POST. POST acronyme pour Power On Self Test, est l'ensemble de diagnostiques initiaux fait par l'ordinateur après son démarrage, qui ont pour but de vérifier si chaque matériel a des problèmes. Donc BIOS fait de POST le tout premier logiciel lancé lorsque l'ordinateur est démarré.
 
 ![](.gitbook/assets/boot-bios.jpg)
 
-**3-**BIOS scans and goes for the primary (or chosen) disk's "boot sector" .A boot sector is a region of a hard disk, floppy disk, optical disc, or other data storage device that contains machine code to be loaded into random-access memory (RAM) by a computer system's built-in firmware like BIOS.
+**3-**BIOS scanne et va sur le premier secteur d'amorçage  du disque (ou celui qu'on a choisi. Un secteur d'amorçage  est une région du disque dur, d'une disquette, d'un cdrom ou d'un autre périphérique de stockage de donnée qui contient du code machine à charger dans la random-access memory (RAM) par le système d'un ordinateur vie le logiciel d'usine fourni comme BIOS.
 
-What exist on boot sector? MBR
+Qu'est ce qui existe sur un secteur d'amorçage ? MBR
 
 ## MBR
 
-A master boot record (often shortened as MBR) is a kind of boot sector stored on a hard disk drive or other storage device that contains the necessary computer code to start the boot process.
+Un enregistrement maitre de démarrage ( master boot record (souvent raccourci en MBR) est une sorte de secteur d'amorçage stocké sur un disque dur ou un autre périphérique de stockage qui contient le code nécessaire à l'ordinateur pour démarrer le processus de démarrage.
 
-The master boot record is located on the first sector of a disk. The specific address on the disk is Cylinder: 0, Head: 0, Sector: 1 and it is 512 bytes.
 
-What Master Boot Record includes and how it continues the boot sequence?
+Le MBR est localisé dans le premier secteur d'un disque. L'adresse spécifique sur un disque est Cylinder: 0, Head: 0, Sector: 1 et il est de 512 bytes.
+
+Qu'est ce que le Master Boot Record inclue et comment il continue la séquence de démarrage ?
 
 ![](.gitbook/assets/boot-MBR.JPG)
 
-The master boot record itself holds two things : the boot loader program(or some of it) and the partition table
+Le MBR lui-même contient deux choses : le programme de chargement du démarrage et la table de partition
 
-When the BIOS loads, it looks for data stored in the first sector of the hard drive, the MBR; using the data stored in the MBR, the BIOS activates the boot loader.
+Lorsque le BIOS charge, il cherche les données stockées dans ce premier secteur du disque dur, le MCR; utilisant les données stockées dans le MBR, le BIOS active le chargement du démarrage.
 
 {% hint style="info" %}
-Whats magic Number? Located in the final two bytes of the **MBR** (511-512), this section must contain the hex value AA55, which officially classifies this as a valid **MBR**. An invalid **magic number** indicates a corrupt or missing **MBR**, therefore these bytes are critical to booting or using the disk.
+Qu'est ce que le nombre magique ? Localisé dans les deux derniers bytes du  **MBR** (511-512), cette section doit contenir la valeur hexadécomale AA55, qui la classe officiellement comme un **MBR** valide. Un **magic number** invalide indique un  **MBR** corrompu ou absent, c'est pourquoi ces bytes sont critiques pour démarrer ou utiliser le disque.
 {% endhint %}
 
-**4-**Boot Loader is executed.
+**4-**Le chargement du démarrage est exécuté.
 
-### Boot Loader
+### Chargement du démarrage (boot loader)
 
-Most simply, a boot loader loads the operating system. Most boot loaders load in two stages.
+Très simplement, un chargeur de démarrage charge le système d'exploitation. La plupart des chargeurs de démarrage charge deux étapes.
 
-**A-** In the first stage of the boot, the BIOS loads a part of the boot loader known as the **initial program loader**, or **IPL**. The **IPL** **interrogates the partition table and subsequently is able to load data wherever it may exist on the various media. **This action is used initially to locate the second stage boot loader, which holds the remainder of the loader.
+**A-** Dans la première étape du démarrage, le BIOS charge une partie du chargeur de démarrage connue comme le  **initial program loader**, ou **IPL**. L' **IPL** ** interroge la table de partition et est donc capable de charger les données si elles existes sur les différents médias. **Cette action est utilisé initialement pour localiser la seconde étape du chargeur de démarrage, qui contient le reste du chargeur.
 
-**B-**The second stage boot loader is the real meat of the boot loader; many consider it the only real part of the boot loader. This contains the more **disk-intensive parts** of the loader, such as \[bootloader] user interfaces and kernel loaders. (These user interfaces can range from a simple command line to the modern GUIs.)
+**B-**La seconde étape du chargeur de démarrage est la partie principal du chargeur de démarrage; beaucoup considère que c'est la seule vraie partie du chargeur de démarrage. Elle contient les parties les plus **disk-intensive parts** du chargeur, comme l'interface utilisateur \[bootloader] et les chargements du noyau. (Ces interfaces utilisateurs peuvent aller de la simple ligne de commande à des interfaces graphique moderne.)
 
-**5-**Lilo / Grub / Grub2 begins.
+**5-**Lilo / Grub / Grub2 démarrage.
 
-There have been different boot loaders . Lilo, Grub and Grub2:
+Il y a différent chargeurs de démarrage . Lilo, Grub et Grub2:
 
 ## Lilo
 
-LILO (Linux Loader) is a boot loader for Linux and was the default boot loader for most Linux distributions in the years after the popularity of loadlin. Today, many distributions use GRUB as the default boot loader, but LILO and its variant ELILO are still in wide use. Further development of LILO was discontinued in December 2015 along with a request by Joachim Wiedorn for potential developers.
+LILO (Linux Loader) est un chargeur de démarrage pour Linux et a été le chargeur de démarrage par défaut de nombreuses distributions Linux dans les années après la popularité de loadlin. Aujourd'hui, de nombreuses distributions utilise GRUB comme chargeur de démarrage par défaut, mais LILO et sa variante ELILO sont encore largement utilisés. Le dévelopement de LILO a été arrêté en December 2015 quite à la demande de Joachim Wiedorn pour de nouveaux développeurs.
 
 ![](.gitbook/assets/boot-lilo.jpg)
 
-The configuration file of lilo is located at “/etc/lilo.conf”. Lilo reads this configuration file and it tells Lilo where it should place the bootloader. The sample configuration file is specified below:
+Le fichier de configuration de lilo est positionné dans “/etc/lilo.conf”. Lilo lit ce fichier de configuration et il permet de dire à Lilo où le chargeur de démarrage doit être placé. Le fichier de configuration exemple est présenté ci-dessous :
 
 ```
 boot=/dev/hda              # This tells LILO where to install the bootloader.
@@ -103,7 +104,7 @@ other=/dev/hda1            # It tells LILO to boot an operating system other tha
 label=win                  # same as all other label options.
 ```
 
-lilo as a command has some options which might be help full:
+lilo a une commande et quelques options qui peuvent être utile :
 
 ```
  -c config-file: Specifies the alternative configuration file other than default file /etc/lilo.conf.
@@ -117,109 +118,110 @@ lilo as a command has some options which might be help full:
 
 ## Grub
 
-GRUB (GRand Unified Bootloader) is a boot loader package developed to support multiple operating systems and allow the user to select among them during boot-up. It has been developed under the GNU project GNU GRUB.
+GRUB (GRand Unified Bootloader) est un packet de chargement de démarrage développé pour supporté de nombreux système d'exploitation et permettre aux utilisateur de sélectionner parmi eux lors du démarrage. Il est développé sous le projet GNU GRUB.
 
 ## Grub2
 
-GRUB 2 has now replaced the GRUB. And the name GRUB was renamed to GRUB Legacy and is not actively developed, however, it can be used for booting older systems since bug fixes are still on going.
+GRUB 2 remplace mainteantn GRUB. Et le nom GRUB a été renommé en GRUB Legacy et n'est plus développé activement, cependant, il peut être utilisé pour démarrer d'anciens systèmes puisque des corrections de bugs sont encore fourni.
 
-On the surface the majority of users won't notice any difference but the new version has fairly major structural changes and should be more reliable. Also the new version stores its configuration files differently
+En surgace la majorité des utilisateurs ne remarquera aucune différence mais la nouvelle version a un changment structurel majeur et devrait être plus fiable. La nouvelle version stocke aussi ces fichiers de configuration différement.
 
-GRUB 2's major improvements over the original GRUB include:
+Les améliorations majeur de GRUB 2' par rapport au GRUB original inclue :
 
-* Supports multiboot
-* Supports multiple hardware architectures and operating systems such as Linux and Windows
-* Offers a Bash-like interactive command line interface for users to run GRUB commands as well interact with configuration files
-* Enables access to GRUB editor
-* Supports setting of passwords with encryption for security
-* Supports booting from a network combined with several other minor features
+* Support du démarrage multiple
+* Support de différentes architectures matériel et système d'exploitation comme  Linux et Windows
+* Fournit une interface en ligne de commande interactive Bash-like pour les utilisateurs qui exécutent des commandes GRUB ainsi que l'interraction avec les fichiers de configuration
+* Active l'accès à l'éditeur de GRUB
+* Support la configuration des mots de passe avec chiffrement pour la sécurité
+* Support le démarrage depuis un réseaux combiné avec plusieurs autres fonctionnalités mineures
 
-Regardless of the GRUB version, a boot loader allows the user to:
+Sans tenir compte de la version de GRUB, un chargeur de démarrage permet à l'utilisateur de:
 
-1. modify the way the system behaves by specifying different kernels to use,
-2. choose between alternate operating systems to boot, and
-3. add or edit configuration lines to change boot options, among other things.
+1. Modifier la manière dont le système se comporte en spécifiant différents noyaux à utiliser,
+2. Choisir entre différents système d'exploitation à démarrer, et
+3. Ajouter ou éditer des lignes de configuration pour modifier les options de démarage, parmi d'autres choses.
 
-## Kernel boot-time Options
+## Option de démarrage du Kernel 
 
-Kernel command line parameters are parameters that we pass on the system during the boot process. They are also known as "boot options".
+Les paramètres de la ligne de commande du Kernel sont des paramètres que l'on passe au système durant le processus de démarrage. Ils sont aussi connu comme "boot options".
 
-We** must be at console** to pass kernel boot time command because when the system is booting up there is no Networking service. So reboot the system and Press Esc key during boot:
+Nous** devons utiliser un clavier physique** pour passer au kernel des commande de démarrage car lors du démarrage il n'y a pas de service réseau. Redémarrer le système et appuyer sur la touche Esc pendant le démarrage:
 
 ![](.gitbook/assets/boot-grubmenu.jpg)
 
-Depending on the configuration the user may be able to choose from a menu of potential boot types or kernel versions or simple allow the default to proceed.Lets press 'e' to see some kernel parameters:
+En fonction de la configuration l'utilisateur peut choisir dans un menu de type de démarrage potentiel ou de versions de noyau ou simplement être autorisé à lancer les options par défaut. Appuyer sur la touche 'e' pour voir certains paramètres du noyau :
 
 ![](.gitbook/assets/boot-grubmenu2.jpg)
 
-The Linux Kernel boot parameters are passed into a list of strings separated with white spaces:
+Les paramètres de démmarrage du Noyau Linux sont passé dans une liste de chaines de caractères séparée par des espaces blancs :
 
 ```
 name[=value_1] [,value_2]........[,value_10]
 ```
 
-Where ‘**name=unique keyword**‘ it **defines the part of kernel** where the value is to be associated. (max 10)
+Où ‘**name=unique keyword**‘ est **définit comme partie du noyau** avec les valeurs associées(max 10)
 
-`'linux'`defines the place of executable kernel (vmlinuz/vmlinux) to run ,and obviously kernel boot options come after it.
+`'linux'`définit l'endroit où le noyau exécutable se lance, et les options de démarrage du noyau vienne après celle-ci.
 
-There are many parameters that help us configure and determine all aspects of our system's operation during the boot process. Some of them are:
+Il y a de nombreux paramètre qui nous aide à configurer et à déterminer tous les aspects de notre système d'opération durant le processus de démarrage. Certaines d'entre elles sont :
 
 ```
 root=UUID=... : This argument tells the kernel what device (hard disk, floppy disk) to be used as the root filesystem while booting.
 ro : This argument tells the kernel to mount root file system as read-only.
 ```
 
-One of famous Kernel boot options is pasword recovery using `single` kernel parameter option. The `single` parameter guides ‘init‘ to the start computer in single user mode and disable starting all the daemons.
+Une des options de démarrage du Noyau les plus connus est la récupération du mot de passe en utilisant le paramètre du noyau  `single`. Le paramètre `single` guide ‘init‘ pour démarrer l'ordinateur dans un mode utilisateur unique et désactive le démarrage de tous les démons.
 
-`/proc/cmdline` This file shows the parameters passed to the kernel at the time it is started:
+`/proc/cmdline` Ce fichier montre les paramètres passé au noyau lors du démarrage :
 
 ```
 root@server2:~# cat /proc/cmdline 
 BOOT_IMAGE=/boot/vmlinuz-4.10.0-28-generic root=UUID=e4a2c83b-fb68-46f5-a7ec-a83bbad6e3fd ro find_preseed=/preseed.cfg auto noprompt priority=critical locale=en_US quiet
 ```
 
-**6-** Linux Kernel is read an executed. 
+**6-** Le noyau Linux est lu et exécuté. 
 
 {% hint style="info" %}
-As soon as the Linux kernel has been booted and the root file system (/) mounted, programs can be run and further kernel modules can be integrated to provide additional functions. 
 
-To mount the root file system, certain conditions must be met. The kernel needs the corresponding drivers to access the device on which the root file system is located (especially SCSI drivers). The kernel must also contain the code needed to read the file system (ext2, reiserfs, romfs, etc.). It is also conceivable that the root file system is already encrypted. In this case, a password is needed to mount the file system.
+Dès que le noyau Linux a été démarré et le système de fichier racine (/) monté, les programmes peuvent se lancer et d'autre modules du noyau peuvent être intégrer pour fournir des fonctionnalités supplémentaires.
 
-The initial ramdisk (also called initdisk or initrd) solves precisely the problems described above.
+Pour monter le système de fichier racine, certaines conditions doivent être remplies. Le noyeau a besoin des pilotes correspondants pour accéder au périphériques sur lequel le système de fichier racine est positionné (notamment les pilotes SCSI). Le noyau doit aussi contenir le code nécessaire pour lire le système de fichier (ext2, reiserfs, romfs, etc.). Il est aussi possible que le système de fichier racine soit déjà chiffré. Dans ce cas, un mot de passe est nécessaire pour monter le système de fichier.
+
+Le disque RAM initial (aussi appelé initdisk ou initrd) résout précisment le problème décrit ci-dessus.
 {% endhint %}
 
 ## initramfs
 
- The Linux kernel provides an option of having a small file system loaded to a RAM disk and running programs there before the actual root file system is mounted. 
+ Le noyau Linux fournit une option pour avoir un petit système de fichier chargé dans un disque RAM et qui exécute des programme avant que le système de fichier racine ne soit monté. 
 
-The initrd contains a minimal set of directories and executables to achieve this, such as the `insmod` tool to install kernel modules into the kernel.
+ initrd contient un ensemble minimum de répertoire et d'exécutables pour le faire, comme l'outil `insmod` pour installer les modules du noyau dans le noyau.
 
-Its lifetime is short, only serving as a bridge to the real root file system. 
+Sa durée de vi est courte, il ne sert que de pont avec le système de fichier racine réel. 
 
-**7- **The 'init' program loads and become the first process ID.
+**7- **Le programme 'init' charge et devient le premier processus ID.
 
-### What is init?
+### Qu'est ce que init?
 
-In Linux, init is a abbreviation for Initialization. The init is a daemon process which starts as soon as the computer starts and continue running till, it is shutdown. In-fact init is the first process that starts when a computer boots, making it the parent of all other running processes directly or indirectly and hence typically it is assigned “pid=1“.\
-'init' on previous linux distributions was a process with a name /sbin/int . Today 'init' is not 'init' any more, it can be any thing.
+Dans Linux, init est une abréviation pour Initialization. L'init est un processus démon qui démarre dès que l'ordinateur démarre et continue à tourner ensuite, jusqu'à son arrêt. De fait init est le premier processus qui démarrer lorsque l'ordinateur démarre, le rendant le parent de tous les autres processus directement et par conséquent il est assigné à“pid=1“.\
+'init' sur les anciennes distributions linux était un processus avec un nom /sbin/int . Aujourd'hui 'init' n'est plus 'init', il peut être n'importe quoi.
 
-## init program solutions
+## Solutions de programme init
 
-In linux world we have three different types of init programs that lunch various daemons, applications and programs.
+Dans le monde linux nous avons trois types différents de programme init qui lance des différents démons, applications et programmes.
 
 * SysV
 * upstart
 * Systemd
 
-so /sbin/init can be linked to upstart or systemd.
+Donc /sbin/init peut être lié à upstart ou systemd.
 
 **Sysv**
 
-SysV is a much older system to manage service startup during the boot process in a Linux system. SysVinit has been around since basically forever.Traditionaly in SystemV, /sbin/init procedure was used to start services.
+SysV est le plus vieux système pour gérer le démarrage des sevice durant le processus de démarrage dans un système Linux.  SysVinit existe depuis toujours (au moins depuis la naissance de Linux).Traditionnellement dans SystemV, la procédure /sbin/init était utilisé pour démarrer des services.
 
-The way SysVinit does this is by setting a strict order for services to start in. Every service is assigned a priority number and init starts the services in sequence by priority.
+La manière de faire de SysVinit était de définir un ordre strict pour le démarrage des services. Chaque service était assigné à un numéro de priorité et init démarrait les services en séquence par priorité.
 
-The order in which this happens is essential, serial loading is required for dependencies, but some times parallel loading can be used to increase speed. The problem with SysVinit is that it takes careful tuning, both upstart and Systemd have been developed to make loading system configurations much more efficient.
+L'ordre dans lequel cela se passe est essentiel, le chargement en série est nécessaire pour les dépendances, mais parfois un chargement parallèlle peut être utilisé pour augmenter la vitesse. Le problème avec SysVinit est qu'il était difficile à configurer, à la fois upstart et Systemd ont été developpé pour rendre la configuration du système de chargement plus efficace.
 
 ```
 ### CentOS 5
@@ -227,13 +229,13 @@ The order in which this happens is essential, serial loading is required for dep
 
 **Upstart**
 
-In an attempt to bring more features to the Linux initialization process, Canonical released Ubuntu 6.10 (Edgy Eft) in 2006 with Upstart. Upstart was designed with backward compatibility from the start. It could run daemons without any modification to the startup scripts. Because of this, many Linux distributions moved toward Upstart, but not all of them.
+Dans une tentative pour amener plus de fonctionnalité dans le processus d'initilisation de Linux, Canonical a publié Ubuntu 6.10 (Edgy Eft) en 2006 avec Upstart. Upstart a été conçu avec une compatibilité ascendante depuis le début. Il pouvait lancer des démons sans aucune modification des scripts de démarrage. Graçe à ça, de nombreuses distributions Linux sont passé à Upstart, mais pas toutes.
 
-Upstart is an event-based replacement, it receives events and then runs jobs based on these events.
+Upstart est un remplacement basé sur les évènement, il reçoit des évènement et lance les taches (jobs) en se basant sur les évènements.
 
-The problem with upstart is that it is using shell scripts and many features that existed in init already. So although it is backward compatible but it suffers from relaying on messy codes.
+Le problème avec upstart est qu'il utilise des script shell et denombreuses fonctionnalité qui existaient était déjà initialisé. Bien que rétro-compatible il souffrait du relais de code non optimisé.
 
-> if our system has /etc/init Directory, it is using upstart.
+> si notre système a un dossier /etc/init Directory, il utilise upstart.
 
 ```
 ### Ubuntu 14
@@ -244,14 +246,14 @@ init/            init.d/          initramfs-tools/
 **Systemd**
 
 {% hint style="info" %}
-A systemd, may refer to all the packages, utilities and libraries around daemon.The goal of systemd project is to provide an operating system that runs on top of the linux kernel and taking control of almost every thing after kernel loading. Consequently it has been developed to overcome the shortcomings of init.
+Un systemd, fait référence à tous les paquets, utilitaires et bibliothèques autour des démons. L'objectif du projet systemd est de fournir un système d'exploitation qui tourne au dessus d'un noyau Linux et prend le contrôle de presque tout après le chargement du noyau. En conséquence il a été développé pour combler les lacunes de l'init.
 {% endhint %}
 
-Systemd is designed to start processes in parallel, thus reducing the boot time and computational overhead. It has a lot other features as compared to init.
+Systemd est conçu pour démarrer les processus en parallèle, ce qui réduit le temps de démarrage et optimiser l'utilisation du matériel. Il a de nombreuses autres fonctionnalités comparé à init.
 
-Systemd is rapidly taking over the way how linux systems are starting services and it is the current standard on all major linux distributions(even Ubuntu ). Systemd is not backward compatible how ever there are so mane scripts which convert sysv command into systemd command and lets you feel comfortable.
+Systemd s'est rapidement imposé comme manière pour les systèmes linux de démarrer les service et il est actuellement le standard de toutes les distributions majeurs de linux (même Ubuntu ). Systemd n'est pas retro-compatible cependant il y a de nombreux scripts qui convertissent les commandes sysv en commandes systemd .
 
-> if our system has a directory /usr/lib/systemd , we are on systemd
+> Si votre système a un dossier /usr/lib/systemd , vous utilisez systemd
 
 ```
 ### Ubuntu 16 or CentOS 7
@@ -259,17 +261,17 @@ root@ubuntu16-1:~# ls /usr/lib/systemd
 boot  catalog  network  user  user-generators
 ```
 
-**8-** Sysv or upstart or systemd (what ever your system service manager is) starts every thing. Prerequisites, services, ... and shell. and one the shell is present the user can log in.
+**8-** Sysv ou upstart ou systemd (peu importe le système de gestion de service) démarre tout. Les pré-requis, les services, ... et shell. Une fois le shell présent l'utilisateur peut se connecter.
 
 ## dmesg
 
-dmesg command is used to **display the kernel related messages** on Unix like systems. dmesg stands for “display message or display driver“. dmesg command retrieve its data by reading the kernel ring buffer.
+La commande dmesg est utilisé pour **afficher les messages liés au noyau** sur les systèmes Unix-like. dmesg attend pour “display message or display driver“. La commande dmesg retrouve ses donnant en lisant le tampon circulaire du noyau.
 
-The kernel ring buffer is a data structure that records messages related to the operation of the kernel. A ring buffer is a special kind of buffer that is always a constant size, removing the oldest messages when new messages come in.
+Le tampon circulaire du noyau est une structure de donnée qui enregistre les message liés aux opérations sur le noyau. Un tampon circulaire est un type spécial de tampon qui a toujours une taille constante, en supprimant les plus ancien message lorsque de nouveaux messages arrivent.
 
 ![](.gitbook/assets/boot-dmesgkrb.png)
 
-dmesg can be very useful when troubleshooting or just trying to obtain information about the hardware on a system. Its basic syntax is dmesg \[options].
+dmesg peut être utile en cas de problèmes ou juste pour essayer d'obtenir des information sur le matériel d'un système. La syntaxe basique est dmesg \[options].
 
 ```
 Options:
@@ -300,7 +302,7 @@ Options:
                                [delta|reltime|ctime|notime|iso]
 ```
 
-Using dmesg without any of its options causes it to write all the kernel messages to standard output. 
+En utilisant dmesg sans option permet d'afficher sur la sortie standard tous les messages du noyau. 
 
 ```
 root@ubuntu16-1:~# dmesg 
@@ -328,11 +330,11 @@ root@ubuntu16-1:~# dmesg
 [   13.740999] NET: Registered protocol family 40
 ```
 
-we can clear dmesg logs if required with `dmesg -c` command.
+On peut nettoyer les journaux de dmesg si nécessaire avec la commande `dmesg -c` .
 
 **/var/log/dmesg**
 
-The `dmesg` command shows the current content of the kernel syslog ring buffer messages while the `/var/log/dmesg` file contains what was in that ring buffer when the boot process last completed. try `cat /var/log/dmesg`. 
+La commande `dmesg` montre le contenu courant du journal du noyau avec les messages du tampon circulaire tandis que le fichier `/var/log/dmesg` contient ce que contenait le tampon circulaire lors du dernier processus de démarrage complet. Essayer `cat /var/log/dmesg`. 
 
 
 

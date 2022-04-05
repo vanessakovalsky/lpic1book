@@ -1,18 +1,18 @@
-# 101.1. Determine and configure hardware settings
+# 101.1. Déterminer et configurer les paramètres matériel
 
-## **101.1 Determine and configure hardware settings**
+## **101.1 Déterminer et configurer les paramètres matériel**
 
-**Weight:**2
+**Poids:**2
 
-**Description: **Candidates should be able to determine and configure fundamental system hardware.
+**Description: **Les candidats doivent être capatble de déterminer et de configurer les éléments matériels fondamentaux.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Tools and utilities to list various hardware information (e.g. lsusb, lspci, etc.)
-* Tools and utilities to manipulate USB devices
-* Conceptual understanding of sysfs, udev, dbus
+* Outils et utilitaires pour lister les informations diverses sur le matériel (ex: lsusb, lspci, etc.)
+* Outils et utilitaires pour manipuler les périphériques USB
+* Compréhension conceptuelles de sysfs, udev, dbus
 
-**The following is a partial list of the used files, terms and utilities:**
+**Voici une liste partielle des fichiers utilisés, des concepts et des utilitaires:**
 
 * /sys/
 * /proc/
@@ -22,11 +22,11 @@
 * lspci
 * lsusb
 
-Linux treat every thing as a file. It includes programs , hardware and even processes which are running. These files are organized in directories and standardize for easier access and administration. Lets see how linux dealing with devices:
+Linux traite chaque élément comme un fichier. Cela inclue les programmes, le matériel et même les processes qui sont entrain d'être exécutées. Ces fichiers sont organisés en dossier et standardisés pour un accès plus simple et l'administration. Voyons comment Linux interragit avec les périphériques :
 
 ### /proc
 
-The /proc is a virtual dicretory which contains a illusionary filesystem called procfs. It does not exist on a disk. Instead, the kernel creates it in memory. It is used to provide information about the system (originally about processes).
+Le /proc est un dossier virtuel qui contient un système de fichier illusoire appelé  procfs. Il n'existe pas sur un disque. A la place, le noyau le créé dans sa mémoire. Il est utilisé pour fournir des informations à propos du système (à la base à propos des processus).
 
 ```
 root@ubuntu16-1:~# ls /proc/
@@ -61,11 +61,11 @@ root@ubuntu16-1:~# ls /proc/
 1698  1851  2     214   2311  2599  4     843   devices    net
 ```
 
-Some of the more important files and directories are :
+Les fichiers et dossiers les plus importants sont :
 
-**/proc/1:** A directory with information about process number 1. Each process has a directory below /proc with the name being its process identification number.
+**/proc/1:** Un dossier avec des information sur le processus numéro 1. Chaque processus a un dossier dans  /proc avec le nom de son numéro d'identification de processus (PID: process identification number).
 
-**/proc/cpuinfo: **Information about the processor, such as its type, make, model, and performance.
+**/proc/cpuinfo: **Information sur le processeur, comme son type, son modèle, son fabricant et ses performances.
 
 ```
 root@ubuntu16-1:~# cat /proc/cpuinfo 
@@ -97,7 +97,7 @@ address sizes    : 43 bits physical, 48 bits virtual
 power management:
 ```
 
-**/proc/filesystems : **Filesystems configured into the kernel.
+**/proc/filesystems : **Les systèmes de fichiers configurés dans le noyau.
 
 ```
 root@blackfox:~# cat /proc/filesystems 
@@ -138,7 +138,7 @@ nodev	binfmt_misc
 
 ```
 
-**/proc/interrupts: **Shows which interrupts are in use, and how many of each there have been.
+**/proc/interrupts: **Montre les interruption utilisés, et combien de chaque ont été utilisé.
 
 ```
 root@ubuntu16-1:~# cat /proc/interrupts 
@@ -209,7 +209,7 @@ root@ubuntu16-1:~# cat /proc/interrupts
  PIW:          0   Posted-interrupt wakeup event
 ```
 
-**/proc/meminfo : **Information about memory usage, both physical and swap.
+**/proc/meminfo : **Information sur l'utilisation de la mémoire, à la fois physique et le swap (mémoire virtuelle).
 
 ```
 root@ubuntu16-1:~# cat /proc/meminfo 
@@ -263,13 +263,13 @@ DirectMap2M:      927744 kB
 DirectMap1G:           0 kB
 ```
 
-The way /proc virtual directory organize processes get noticed by developers and they started to use /proc for both reading and writing information. So guess what, little by little /proc become a place which stored different kind of information. Processes information, current running Kernel information, hardware information, system information. Some one should do some thing to stop this messy place and that cause /sys introducing in kernel 2.5 .
+La manière dont le dossier virtuel /proc organise les processus est gérés par les développeurs et  ils ont commencé à utiliser /proc pour lire et écrire des informations. De fait, petit à petit /proc est devenu un endroit où stocker différents types d'informations. Les informations sur les processus, les information sur le Noyau en cours d'utilisation, les informations matérielles, les informations sur le système. Quelqu'un devait faire quelque chose pour arrêter ce dépôtoir et cela a conduit à l'introduction de /sys dans le noyau 2.5 .
 
 ### /sys
 
-/sys it is a virtual directory with illusionary sysfs file system, which is created when system boots up and get vanished when system restarts or goes off.
+/sys est un répertoire virtuel avec un système de fichier illusoire sysfs, qui se crée lorsque le système démarre et disparait lorsque le système redémarre ou s'éteint.
 
-sysfs introduced to specifically store system information and its components (mostly attached and installed hardware). An as it was planned for that its seems more organized and more standardize than procfs.
+sysfs introduit un endroit spécifique pour stocker les informations systèmes et ses composant (principalement attaché et le matériel installé). Et comme prévu cela semble plus organisé et plus standardisé que procfs.
 
 ```
 root@ubuntu16-1:~# ls -l /sys/
@@ -291,35 +291,35 @@ breakpoint  isa          msr         platform  software  tracepoint
 cpu         LNXSYSTM:00  pci0000:00  pnp0      system    virtual
 ```
 
-sysfs hasn't caused all the stuff move from /proc to /sys , they still exist in /proc but /sys gives us a better view of current data.
+sysfs n'a pas amené a déplacé tout ce qui se trouvait dans */proc* vers */sys* , ils existent encore dans */proc* mais */sys* nous donne une meilleure vue des données courantes.
 
 {% hint style="info" %}
-**Linux kernel modules** (LKMs) are pieces of code which can be loaded into the kernel much like a hot-swappable piece of hardware. they can be inserted into the kernel and activated without the system needing to be rebooted.
+**Linux kernel modules** (LKMs) sont des pièce de code qui peuvent être chargée par le noyau un peu comme des pièces matériel que l'on peut brancher à chaud. Ils peuvent être inséré dans le noyau et activé sans avoir besoin de redémarrer le système.
 {% endhint %}
 
 ### udev
 
-The kernel is the central part of operating system to address the hardware. And to make sure that the hardware is available for the kernel udev plays an important role.
+Le noyau est la partie centrale du système d'exploitation pour aborder le matériel. Et pour s'assurer que le matériel est disponible pour le noyau *udev* jour un rôle important.
 
-udev is a replacement for the Device File System (DevFS) starting with the Linux 2.6 kernel series. udev plays role in Loading Kernel Module, Creating Device Files and making sure every thing is the order we need it to be. Lets see how it works:
+*udev* est un remplacement pour le the Device File System (DevFS) qui a débuté sur la série du noyau Linux 2.6. *udev* joue un rôle dans le chargement des Modules du Noyau (LKM: Loading Kernel Module), dans la création des fichiers de périphériques et en s'assurant que tout ce dont nous avons besoin est en ordre. Voyons comment il fonctionne :
 
 ![](.gitbook/assets/hw-udev.jpg)
 
-1. The linux kernel initiates the device loading and next sends out messages (uevents) to the udev daemon.
-2. udev daemon catches the event and decide how to handle based on the attributes that it has received in the event. udev load required kernel module with necessary information using **modprobe**.
+1. Le noyau linux intialise le chargement du périphérique et envoi des messages de sortie (uevents) au démon udev 
+2. Le démon udev récupère les évènements et décide comment gérer en s'appuyant sur les attributs qu'il a reçu de l'évènement. udev charge le module du noyau nécessaire avec les informations nécessaire en utilisant **modprobe**.
 
 {% hint style="success" %}
-what is modprobe?
+Qu'est ce que modprobe?
 
-**modprobe** is an intelligent command for listing, inserting as well as removing modules from the kernel.( Will be explained )
+**modprobe** est une commande intelligente pour lister, insérer et aussi supprimer des modules du noyau.( Nous l'expliquerons plus tard )
 {% endhint %}
 
-3 . udev next reads its rules . udev allows us to ban devices based on their properties, like vendor ID and device ID, ... .
+3 . udev lit ensuite ses règle. udev nous permet de banir des périphériques en utilisant leur propriété, comme un identifiant de fournisseur, un identifiant de périphérique, ... .
 
-* Default rules are in /lib/udev/rules.d
-* Cutom rules are in /etc/udev/rules.d
+* Les règles par défaut sont dans /lib/udev/rules.d
+* Les règles personnalisés sont dans /etc/udev/rules.d
 
-Lets see it in action, we use and then attach a usb storage:
+Voyons voir en action, nous utiliserons et attacherons une clé USB :
 
 ```
 root@ubuntu16-1:~# udevadm monitor 
@@ -365,13 +365,13 @@ KERNEL[12771.061812] add      /module/nls_iso8859_1 (module)
 UDEV  [12771.063716] add      /module/nls_iso8859_1 (module)
 ```
 
-udev write device information to the /sys virtual directory. Also udev works as an Hardware Abstaraction Layer(HAL) and creates device file entries under /dev directory in a structured way.
+udev écrit les informations du périphérique dans le dossier virtuel /sys. *udev* travaille aussi comme une couche d'abstraction maériel (Hardware Abstaraction Layer(HAL)) et crée un fichier d'entrée de périphérique dans le dossier  /dev de anièe structurée.
 
 {% hint style="success" %}
-What is HAL? In computers, a **hardware abstraction layer** (**HAL**) is a **layer** of programming that allows a computer OS to interact with a **hardware** device at a general or **abstract level** rather than at a detailed **hardware level**.
+Qu'est ce qu'un HAL? Dans l'informatique, un **hardware abstraction layer** (**HAL**) est une **couche** de programmation qui permet à un système d'exploitation de l'ordinateur d'interragir avec un périphérique **matériel** à un niveau général ou  **niveau abstrait** plutôt que dans un **niveau matériel** détaillé.
 {% endhint %}
 
-another example:
+Un autre exemple :
 
 ```
 root@ubuntu16-1:~# udevadm info --query=all --name=/dev/sdb
@@ -409,17 +409,17 @@ E: TAGS=:systemd:
 E: USEC_INITIALIZED=12770500291
 ```
 
-We have seen this information previously. Try `udevadm info --attribute-walk --name=/dev/sda` for your self. These device attributes can be used in udev rules.
+Nous avons vu précedemment ces informations. Essayer `udevadm info --attribute-walk --name=/dev/sda` vous-même. Ces attributs de périphériques peuvent être utilisés dans les règles udev.
 
 ### /dev
 
-This directory contains the **device files** for every hardware device attached to the system.
+Ce dossier contient les **fichiers de périphériques** pour chaque périphérique matériel attaché au système.
 
-> **Device files** are employed to provide the operating system and users an interface to the devices that they represent.
+> **Les fichiers de périphériques** sont utilisés pour fournir au système d'exploiation et aux utilisateurs une interface vers les périphériques qu'ils représentent.
 
-/dev exits from early beginning versions of linux and it was populated by devfs. (As we mentioned) devfs was a an **obsolete and no longer available.**
+/dev existe depuis les premières version de linux et il est rempli par devfs. (Comme mentionné) devfs est  **obsolete et plus disponible.**
 
- These days, it has been replaced by udev, a daemon that manages the contents of /dev in a temporary filesystem, **(**or by devtmpfs, which is a lightweight replacement for devfs that is used in some minimal systems).
+ Aujourd'hui, il a été remplacé par udev, un émon qui gère le cotntenu de /dev dans un système de fichier temporaire, **(**ou par devtmpfs, qui est une version plus légère de remplacement pour  devfs qui est utilisé sur certains systèmes minimalistes).
 
 ```
 root@ubuntu16-1:~# ls /dev/
@@ -450,9 +450,9 @@ hpet             network_throughput  tty0      tty31  tty54  ttyS18     userio
 hugepages        null                tty1      tty32  tty55  ttyS19     vcs
 ```
 
-Actually they are files and pointers to the under laying device hardware. Try`ls -l` to see that .
+En réalité ce sont des fichiers et des pointeurs vers la couche de périphériques matériels. Essayer `ls -l` pour voir ça .
 
-There are some common device names in .in linux World :
+Il y a quelques noms de périphérique commun dans le monde Linux :
 
 ```
 Name    Device
@@ -483,38 +483,38 @@ usb*    USB card and scanner
 video*    For use with a graphics card supporting video.
 ```
 
-with the special thanks of udev (as a Hardware Abstraction Layer) and the names it provides.
+avec un remerciement spécial à udev (en tant que Hardware Abstraction Layer) et pour les nom qu'il fournit.
 
 {% hint style="info" %}
 ### /sys vs /dev
 
-* The /sys filesystem (sysfs) contains files that provide information about devices: whether it's powered on, the vendor name and model, what bus the device is plugged into, etc. It's of interest to applications that manage devices.
-* The /dev filesystem contains files that allow programs to access the devices themselves: write data to a serial port, read a hard disk, etc. It's of interest to applications that access devices.
+* Le système de fichier /sys (sysfs) contient des fichier qui fournissent des information à propos des périphériques : quelque soit leur état (allumé ou non), le nom de leur fournisseur et le modèles, sur quel bus le périphique est branché, etc. C'est dans l'intérêt des applications de gérer ces périphériques.
+* Le système de fichier /dev contient des fichiers qui permettent aux programmes d'acéder aux périphériques eux-même : écrire des données sur un port série, lire un disque dur, ect. Cela permet aux application d'accéder aux périphériques.
 
-A metaphor is that /sys provides access to the packaging, while /dev provides access to the content of the box.
+Une métaphore est que /sys fournit accès au packaging, lorsque que /dev fournit accès auc contenu de la boite.
 
-The reason for /dev existing independently of /sys is partly historical: /dev dates back to the dawn of Unix, while /sys is a much more recent invention. If Linux was designed today with no historical background, /dev/sda might be /sys/block/sda/content.
+La raison de l'existence indépendante de /dev séparé de /sys est partiellement historique : /dev dates du démarrage d'Unix, alors que /sys est une invention un peu plus récente. Si Linux était conçu aujourd'hui sans background historique,  /dev/sda serait /sys/block/sda/content.
 {% endhint %}
 
 {% hint style="success" %}
-#### pesudo File Systems
+#### pseudo File Systems
 
-'Pseudo-' means false, pretend. So "pseudo-filesystem" means a filesystem that doesn't have actual files – rather, it has virtual entries that the filesystem itself makes up on the spot.
+'Pseudo-' veut dire faux, faire semblant. Donc un "pseudo-filesystem" signifie qu'un système de fichier qui n'ont pas vraiment de fichier - plutôt, il a des entrées virtuelles que le système de fichier lui-même crée à la volée.
 
-/dev, /proc and /sys are virtual "pseudo-filesystems" (not existing on harddisk, but only in RAM – so they do not consume any harddisk space and are completely created on boot).
+/dev, /proc et /sys sont des "pseudo-filesystems" virtuels (il n'existe pas sur le disque dur, mais seulement dans la RAM - de fait il ne consomme pas d'espace sur le disque dur et sont créé complétement au démarrage).
 {% endhint %}
 
 ### dbus
 
-D-Bus is a message bus system, a simple way for applications to talk to one another. Beside all of dbus benefits it can read information form /dev folder and relate them with user desktop programs using signals. In fact dbus make a kind of middle layer which keeps programs a way from difficulties of dealing with /dev and /sys directories.
+D-Bus est un bus système de message, une manière simple pour les applications de se parler entre elle. Le plus important des bénéfices de dbus est qu'il peut lire les informations depuis le dossier /dev et les envoyer aux programmes utilisateurs en utilisant les signaux. De fait dbus fait une sorte de couche intérmédiaire qui garde les programmes loin des diffcultés du traitement avec les dossiers /dev et /sys.
 
-**Notice : **udev and dbus can work in all distributions because sysfs has made required information standardize.
+**Note : **udev et dbus peuvent travailler dans toutes les distributions car sysfs a rendu obligatoire la standardisation des informations.
 
-From the administrative perspective there are some ls utilities ( lsusb, lspci , ... ) to show more information about the hardware which has been attached to our system. Lets take a quick look at them:
+D'un point de vue administrateur, il  y a des utilisataires ls ( lsusb, lspci , ... ) pour voir les infroamtions à propos du matériel qui a été attaché à votre système. Voyons les rapidement :
 
 ### lsusb
 
-The lsusb command allows you to display information about USB buses and devices that are attached to them.
+La commande lsusb permet d'afficher les ports USB et périphériques qui sont attaché à eux.
 
 ```
 root@ubuntu16-1:~# lsusb
@@ -525,7 +525,7 @@ Bus 002 Device 002: ID 0e0f:0003 VMware, Inc. Virtual Mouse
 Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
 ```
 
-lsusb has some options:
+lsusb a plusieurs options:
 
 ```
 root@ubuntu16-1:~# lsusb --help
@@ -549,7 +549,7 @@ List USB devices
       Show usage and help
 ```
 
-We can also use the `-v` command-line option to display more verbose output:
+Nous pouvons également utiliser l'option de la ligne de commande `-v` pour afficher plus d'information sur la sortie:
 
 ```
 root@ubuntu16-1:~# lsusb -v
@@ -584,7 +584,7 @@ Device Descriptor:
 [output truncated]
 ```
 
-`-t` tells lsusb to dump the physical USB device hierarchy as a tree. This overrides the v option.
+`-t` dit à lsusb de sauvegarder la hiérarchie des périphériques USB en tant qu'arbre. Cela surcharge l'option v.
 
 ```
 root@ubuntu16-1:~# lsusb -t
@@ -595,18 +595,18 @@ root@ubuntu16-1:~# lsusb -t
     |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=usb-storage, 480M
 ```
 
-`-V`or `--version` Print version information on standard output, then exit successfully.
+`-V`ou `--version` affiche l'information sur la version dans la sortie standard, puis quitte avec succès.
 
 ```
 root@ubuntu16-1:~# lsusb -V
 lsusb (usbutils) 007
 ```
 
-try `usb-devices` , it will give us more detailed info.
+Essayer `usb-devices` , cela vous donnera des informations plus détaillé.
 
 ### lscpu
 
-lscpu reports information about the cpu and processing units. It does not have any further options or functionality.
+lscpu remonte les information à propos du cpu et des unités de processeurs. Il n'a pas d'autres options ou fonctionnalités.
 
 ```
 root@ubuntu16-1:~# lscpu
@@ -638,9 +638,9 @@ Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca 
 
 ### lshw
 
-lshw is a general purpose utility, that reports detailed and brief information about multiple different hardware units such as cpu, memory, disk, usb controllers, network adapters etc. Lshw extracts the information from different /proc files.
+lshw est un utilitaire à visée générale, qui reporte des information détaillé et brèves à propos de nombreux matériels différents comme le cpu, la mémoire, les disques, les port sub, les adaptateurs réseaux, ect. Lshw extrait les information des différents fichiers de /proc.
 
-Do remember that the lshw command executed by root (superuser):
+Souvenez vous que la commande lshw s'exécute en root (superuser):
 
 ```
 root@ubuntu16-1:~# lshw --help
@@ -667,7 +667,7 @@ options can be
     -numeric        output numeric IDs (for PCI, USB, etc.)
 ```
 
-Lets try lshw -short :
+Essayer lshw -short :
 
 ```
 root@ubuntu16-1:~# lshw -short
@@ -695,7 +695,7 @@ H/W path             Device      Class       Description
 
 ### lspci
 
-lspci is a utility for displaying information about PCI buses in the system and devices connected to them.By default, it shows a brief list of devices.
+lspci est un utilitaire pour afficher des information à propos des port PCI du système et des périphériques connectés sur ceux-ci. Par défaut, il montre une liste courte des périphériques.
 
 ```
 root@ubuntu16-1:~# lspci
@@ -721,7 +721,7 @@ root@ubuntu16-1:~# lspci
 02:05.0 SATA controller: VMware SATA AHCI controller
 ```
 
-All of lspci switches:
+Toutes les options de lspci:
 
 ```
 root@ubuntu16-1:~# lspci --help
@@ -765,7 +765,7 @@ PCI access options:
 -F <file>    Read PCI configuration dump from a given file
 ```
 
-The `-t` option will display the output in tree format with information about bus, and how devices are connected to those buses. The output will be only using the numerical ids:
+L'option `-t` affichera la sortie sous format arbre avec les information à propos des ports, et comment les périphériques sont connectés aux ports. La sortire sera uniquement avec des identifiants numérique :
 
 ```
 root@ubuntu16-1:~# lspci -t
@@ -798,7 +798,8 @@ root@ubuntu16-1:~# lspci -t
            \-18.7-[22]--
 ```
 
-lspci has a very helpful switch to know the name of the kernel module that will be handling the operations of a particular device. (this option will work only on Kernel 2.6 version and above):
+lspci a certaine option pratique pour connaitre le nom du module kernel qui se chargera des opération d'un périphérique spécifique. (cette option ne fonctionne qu'avec une version 2.6 du noyau et supérieur)
+:
 
 ```
 root@ubuntu16-1:~# lspci -k
@@ -872,18 +873,18 @@ root@ubuntu16-1:~# lspci -k
     Kernel modules: ahci
 ```
 
-lets try a tool in order to see whether these modules have been loaded.
+Essayons maintenant un outil pour voir l'ordre dans lequel les modules ont été chargés.
 
 ### lsmod
 
-lsmod is a very simple program with no options.
+lsmod est un programme très simple sans option.
 
 ```
 root@ubuntu16-1:~# lsmod --help
 Usage: lsmod
 ```
 
-it nicely formats the contents of the file /proc/modules, which contains information about the status of all currently-loaded Linux Kernel Modules (LKMs).
+Il formate lisiblement le contenu du fichier /proc/modules, qui contient des information sur le statut de tous les modules de noyau Linux chargé actuellement (LKMs).
 
 ```
 root@ubuntu16-1:~# lsmod
@@ -959,20 +960,20 @@ pata_acpi              16384  0
 fjes                   77824  0
 ```
 
-try `cat /proc/modules` and compare the results.
+Essayer `cat /proc/modules` et comparer les résulats.
 
-There is nothing like Drivers in linux and as we said, udev is responsible for calling related module with required information using modprobe.
+Il n'y a pas d'équivalent aux Drivers dans linux et comme nous le disions, udev est responsable de l'appel relatif au module qui ont besoin d'information en utilisant modprobe.
 
 ### modprobe
 
-modprobe intelligently adds or removes a module from the Linux kernel. For demonstration lets remove and add e1000 module which is for Ethernet car on my system:
+modprobe ajoute ou supprime intelligemment un module au noyau Linux. Pour la demonstration supprimons et ajouton un module e1000 qui permet de connecter internet sur mon système:
 
 ```
 root@ubuntu16-1:~# modprobe -r e1000
 root@ubuntu16-1:~# modprobe e1000
 ```
 
-and we would get disconnected and then connected again. modprobe has a long list of options try`modprobe --help` to see them.
+et nous serons déconnectés et de nouveau connécté à internet. modprobe a une longue liste d'option. Essayer `modprobe --help` pour les voir.
 
 .
 

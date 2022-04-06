@@ -1,19 +1,19 @@
-# 103.1. Work on the command line
+# 103.1. Travailler en ligne de commande
 
-### **103.1 Work on the command line**
+### **103.1 Travailler en ligne de commande**
 
-**Weight**: 4
+**Poids**: 4
 
-**Description:**Candidates should be able to interact with shells and commands using the command line. The objective assumes the Bash shell.
+**Description:** Les candidats doivent être capable d'interragir avec shells et les commande en utilisant la ligne de commande. L'objectif s'appuie sur le shell Bash.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Use single shell commands and one line command sequences to perform basic tasks on the command line
-* Use and modify the shell environment including defining, referencing and exporting environment variables
-* Use and edit command history
-* Invoke commands inside and outside the defined path
+* Utiliser des commandes shell seule et des séquences de commandes sur une ligne pour effectuer des tâches basiques avec la ligne de commande
+* Utiliser et modifier l'environnement du shell, incluant la définition, le référencement et l'export de variables d'environnement
+* Utiliser et modifier l'historique des commandes
+* Appelé des commandes dans et en dehors d'un chemin défini
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * bash
 * echo
@@ -27,21 +27,21 @@
 * history
 * .bash_history
 
-**What's A "Terminal?"**
+**Qu'est ce qu'un "Terminal?"**
 
-It's a program called a terminal emulator. This is a program that opens a window and lets you interact with the **shell**. There are a bunch of different terminal emulators we can use. Most Linux distributions supply several, such as: gnome-terminal, konsole, xterm, **... ,** It is also called Console.
+C'est un programme appelé émulateur de terminal. C'est un programme qui oubre une fenêter qui vous laisse interragir avec le **shell**. Il y a de nombreux émulateurs de terminal différent que nous pouvons utiliser. La plupart des distributions Linux en fournissent plusieurs comme : gnome-terminal, konsole, xterm, **... ,** Il est aussin appelé Console.
 
-**What is "The Shell"?**
+**Qu'est ce que "le Shell"?**
 
-Simply put, the shell is a program that takes commands from the keyboard and gives them to the operating system to perform. In the old days, it was the only user interface available on a Unix-like system such as Linux. Nowadays, we have graphical user interfaces (GUIs) in addition to command line interfaces (CLIs) such as the shell.
+De manière simple, le shell est un programme qui reçoit des commandes depuis le clavier et les donnes à effectuer au système d'exploitation. Dans le passé, c'était la seule interface disponible pour les utilisateurs sur les système de type Unix comme Linux. Aujourd'hui, nous avons des interfaces utilisateurs graphiques (GUI) en plus des interface en ligne de commande (CLI) comme le shell.
 
 ![](.gitbook/assets/commandintro-shell.jpg)
 
-**What is The "bash"?**
+**Qu'est ce que le "bash"?**
 
-On most Linux systems a program called **bash acts as the shell** program. bash stands for **Bourne Again SHell**, an enhanced version of the original Unix shell program, sh, written by Steve Bourne
+Sur la plupart des systèmes Linux, un programme appelé **bash agit comme le programme shell**. Bash signifie **Bourne Again SHell**, une version améliorée du programme shell Unix Original, sh, écrit par Steve Bourne.
 
-Besides, There are other shell programs that can be installed in a Linux system. These include: ksh, tcsh and zsh.
+De plus, il y a d'autres programmes shell qui peuvent être installé sur un système Linux. Cela inclut : ksh, tcsh and zsh.
 
 ```
 [root@centos7-1 ~]# ls -ls /bin/sh
@@ -61,52 +61,52 @@ Last login: Wed Dec 12 14:34:32 EST 2018 on pts/0
 [root@centos7-1 ~]# 
 ```
 
-**Standard Input, Standard Output and Standard Error**
+**Entrée standard, sortie standard, et erreur standard**
 
-In general, a command (a program):
+En général, une commande (un programme):
 
-* Gets data to process from standard input or **stdin **(default: keyboard).
-* Returns processed data to standard output or **stdout **(default: screen).
-* If program execution causes errors, error messages are sent to standard error or **stderr **(default: screen).
+* Reçoit des données à traiter de l'entrée standard (standard input) ou **stdin** (par défaut: clavier).
+* Renvoit els données traités sur la sortie standard (standard output) ou **stdout** (par défaut: écran).
+* Si l'exécution du programme a causer des erreurs, les messages d'erreurs sont envoyé à l'erreur standard (standard error) ou  **stderr** (par défaut : écran).
 
 ![](.gitbook/assets/commandintro-InputOutput.jpg)
 
 ### echo
 
-echo is one of the most commonly and widely used built-in command for Linux bash and C shells, that typically used in scripting language and batch files to display a line of text/string on standard output or a file.
+echo est une des plus communes et largement utilisé des commandes fournis du bash Linux et des shells C, qui utilise un langage de scripte et traite les fichiers pour affier une  ligne de texte/chaine de caractère sur la sortie standard ou dans un fichier.
 
-The syntax for echo is: `echo [option(s)] [string(s)]`
+La syntaxe pour echo est: `echo [option(s)] [string(s)]`
 
-example : Input a line of text and display on standard output:
+exemple : Entrée une ligne de texte et l'afficher sur la sortie standard :
 
 ```
 [root@centos7-1 ~]# echo  Lets start learning Linux
 Lets start learning Linux
 ```
 
-The echo command has a couple of options. Normally, echo will append a trailing new line character to the output. Use the`-n`option to suppress this:
+La commande echo a plusieurs options. Normalement, echo ajoute un caractère de nouvelle ligne à la sortie. Utiliser l'option `-n` pour le supprimer :
 
 ```
 [root@centos7-1 ~]# echo -n Lets start learning Linux
 Lets start learning Linux[root@centos7-1 ~]# 
 ```
 
-#### Special Characters or Meta Characters
+#### Caractères spéciaux ou méta caractères
 
-What makes a character special? If it has a meaning beyond its literal meaning, a meta-meaning, then we refer to it as a special character or metacharacters  like : **``| & ; ( ) < > [ ] { } * ! ? ` ' " $ \ / # ``**
+Qu'est ce qui rend un caractère spécial ? Il a un sens derrière son sens littéral, un meta-sens, qui fait qu'on se réfère à lui comme caractère spécial ou méta-caractère comme : **``| & ; ( ) < > [ ] { } * ! ? ` ' " $ \ / # ``**
 
 **pound sign (#)**
 
-Everything written after a pound sign (#) is ignored by the shell. This is useful to write a shell comment, but has no influence on the command execution or shell expansion.
+Tout ce qui est écrit après un signe dièse (#) est ignoré par le shell. C'est utile pour écrire des commentaire shell, mais n'a aucune influence sur l'éxécution des commandes.
 
 ```
 [root@centos7-1 temp]# ls # ls /etc
 zip-3.0-11.el7.x86_64.rpm  zip.cpio
 ```
 
-**end of line backslash \\**
+**Antislash en fin de ligne \\**
 
-Lines ending in a backslash are continued on the next line. The shell does not interpret the newline character and will wait on shell expansion and execution of the command line until a newline without backslash is encountered.
+Les lignes qui se termine par un antislash (backslash) sont continué sur la ligne suivante. Le shelle n'interprète pas le caractère de nouvelle ligne et attent la suite et l'exécution de la ligne de commande jusqu'à ce qu'une nouvelle ligne sans anti-slash soit rencontrée.
 
 ```
 [root@centos7-1 ~]# echo first line second line \
@@ -115,9 +115,9 @@ Lines ending in a backslash are continued on the next line. The shell does not i
 first line second line 2nd line 3rd line
 ```
 
-**escaping special characters  **
+**Echappement des caractère spéciaux**
 
-The backslash  character enables the use of control characters, but without the shell interpreting it, this is called **escaping characters**.
+Le caractère anti-slash permet l'utilisation de caractère de contrôle, sans que shell les interprèté, c'est ce qu'on appelle **l'échappement de caractère**.
 
 ```
 [root@centos7-1 ~]# echo hello | by
@@ -132,9 +132,9 @@ hello ; by
 ```
 
 {% hint style="info" %}
- **Double quotes " " **
+ **Guillemets doubles(Double quotes) " "**
 
-Enclosing characters in double quotes (`"`) preserves the literal value of all characters within the quotes, \[_with the exception of `$`, `` ` ``, `\`, and, when history expansion is enabled, `! `_ ._The characters `$` and `` ` `` retain their special meaning within double quotes_`].`
+Entourer des caractères dans des guillemets doubles (`"`)  préserve la valeur litéral de chaque caractère dans les guillemets, \[_a l'exception de `$`, `` ` ``, `\`, et, lorsque l'expansion de l'historique est activé, `! `_ ._Les caractères `$` et `` ` `` garde leur sens spécial au sin des guillemets doubles`].`
 
 ```
 [root@centos7-1 ~]# echo "hello | by"
@@ -144,7 +144,7 @@ hello ; by
 ```
 {% endhint %}
 
-Lets take a look at other options of echo command:
+Regardons les autres options de la commande echo:
 
 ```
        -n     do not output the trailing newline
@@ -163,7 +163,7 @@ Lets take a look at other options of echo command:
                \v     vertical tab
 ```
 
-Use the`-e`option to enable certain backslash **escaped characters** to have special meaning.
+Utiliser l'option`-e` pour activer certain **caractères echappées** avec un antislash pour qu'ils aient un sens spécial.
 
 | Escape sequence | Function                                               |
 | --------------- | ------------------------------------------------------ |
@@ -176,7 +176,7 @@ Use the`-e`option to enable certain backslash **escaped characters** to have spe
 | \t              | Horizontal tab                                         |
 | \v              | vertical tab                                           |
 
-Some examples:
+Quelques exemples:
 
 ```
 [root@centos7-1 ~]# echo -e "Lets \vstart \vlearning \vLinux"
@@ -188,28 +188,28 @@ Lets
 Lets     start     learning     Linux
 ```
 
-One of echo command usage is getting variable values with `echo $VARIABLENAME` command. We will see that.
+Un des usage de la commande echo est d'obtenir la valeurs des variables avec la commande `echo $VARIABLENAME`. Nous verrons cela.
 
 ```
 [root@centos7-1 ~]# echo $LD_LIBRARY_PATH
 
 ```
 
-### **Control Operators**
+### **Opérateurs de contrôles**
 
-Certain metacharacters or pairs of metacharacters also serve as control operators:** `|| && & ; ;; | ()`**
+Certains méta-caractères ou pair de méta-caractère serve aussi comme opérateurs de contrôle: **`|| && & ; ;; | ()`**
 
-Some of these control operators allow you to create sequences or lists of commands.
+Certain de ces opérateurs de contrôle vous permete de créer des séquence ou des listes de commandes.
 
-#### Linux command chaining
+#### Enchainement de commandes Linux
 
-Sometimes we would want to run multiple commands in succession or simultaneously. This allows us to automate a process that include several commands that may or may not depend on the result of the previous command.
+Parfois vous voudrez lancer de multiple commande en cascade ou en simultané. Cela nous permet d'automatiser un processus qui inclu plusieurs commandes et peut ou pas dépendre du résultat de la commande précédente.
 
-**Linux command chaining** is the method of combining several different commands such that each of them can execute in succession based on the operator that separate them. The important part of chaining is the operators that we use to combine them. These operators determine how the commands execute.
+**Enchainement de commandes Linux** est la méthode de combinaisons de plusieurs commandes différentes de sorite à ce que chacune soit exécuter en cascade en s'appuyant sur l'opérateur qui les sépare. La partie importante de l'enchainement est l'opérateur que nous utilisons pour les combiner. Ces opératers détermine comment la commande s'exécute.
 
-Lets take a look at some of operators that are used mostly to combine different commands :
+Voyons les opérateurs les plus utilisés pour combiner différentes commandes :
 
-**Semi-Colon** (**;**) : The succeeding commands will execute regardless of the exit status of the command that precedes it.
+**Point-virgule(Semi-Colon)** (**;**) : Les commandes se succédant seront exécuter sans tenir compte sur statut de sortie de la commande qui le précède.
 
 ```
 [root@centos7-1 ~]# ls /root/ ; ls /home/
@@ -220,39 +220,39 @@ managersou.ldif              temp
 ldapadm  pabros  payam  user1  user2
 ```
 
-**Logical AND** (**&&**) : This command that follows this operator will execute only if the preceding command executes successfully.
+**Et logique (Logical AND)** (**&&**) : La commande qui suit cette opérateur sera exécutée seulement si la commande précédente a été exécutée avec succès.
 
 ```
 [root@centos7-1 ~]# true && ls /home/
 ldapadm  pabros  payam  user1  user2
 ```
 
-**Logical OR** (**||**) : The command that follows will execute only if the preceding command fails.
+**Ou logique (Logical OR)** (**||**) : La commande qui suit sera exécutée seulement si celle-qui la précède a échoué.
 
 ```
 [root@centos7-1 ~]# false || ls /home/
 ldapadm  pabros  payam  user1  user2
 ```
 
-## Environment Variables
+## Variables d'environnement
 
-Environment Variables are some special variables that are defined in shell and are needed by programs while execution. They can be system defined or user defined.
+Les variables d'environnement sont des variables spéciales qui sont défini dans shell et sont nécessaire aux programmes pendant leur exécution. Elles peuvent être définies par le système ou définies par l'utilisateur.
 
-System defined variables are those which are set by system and are used by system level programs. 
+Les variables définies par le sysème sont celle qui sont crée par le système et utilisée par les programmes au niveau du système. 
 
-The whole concept of setting and un-setting environment variables revolves around some set of files and few commands and different shells.
+Le concept complet de définir et supprimer des variables d'environnement tourne autour de certains ensemble de fichiers et quelques command et des différents shells.
 
-an environment variable can be in three types:
+Une variable d'environnement peut être de trois types :
 
-**1. Local Environment Variable** :One defined for the current session. These environment variables last only till the current session, be it remote login session, or local terminal session. These variables are not specified in any configuration files and are created, and removed by using a special set of commands.
+**1. Variable d'environnement Local** : Défini pour la session courante. Ces variables d'environnement resteront uniquement dans la session courante, que ce soit une session de connexion à distance, ou une session locale du terminal. Ces variables ne sont pas définis dans des fichiers de configuration et sont créés, et suprimés en utilisant un ensemble de commande.
 
-**2. User Environment Variable** : These are the variables which are defined for a particular user and are loaded every time a user logs in using a local terminal session or that user is logged in using remote login session. These variables are typically set in and loaded from some configuration files which are present in user’s home directory.
+**2. Variable d'environnement de l'utilisateur** : Ce sont les variables qui sont définis pour un utilisateur spécifique et qui sont chargés à chaque fois qu'un utilisateur se connecte dans une session de terminal local ou dans une session de connexion à distance. Ces variables sont définis et chargés depuis des fichiers de configuration qui sont présent dans le dossier home de l'utilisateur.
 
-**3. System wide Environment Variables** :These are the environment variables which are available system-wide, i.e. for all the users present on that system. These variables are present in system-wide configuration files present in /etc directories and files.These variables are loaded every time system is powered on and logged in either locally or remotely by any user.
+**3. variables d'environnement système** : Ce sont les variables d'environnement qui sont disponible du côté du système, c'est à dire, pour tous les utilisateurs présents sur ce système. Ces variablees sont présente dans des fichiers de configuration du système dans les dossier /etc et des fichiers. Ces variables sont chargés à chaque fois que le système est démarré ou qu'une connexion a lieu qu'elle soit locale ou distante.
 
 ### env
 
-By default, "env" command lists all the current environment variables.
+Par éfautl, la commande "env" liste toutes variables d'environnement courante.
 
 ```
 [root@centos7-1 ~]# env
@@ -279,15 +279,15 @@ _=/bin/env
 OLDPWD=/etc
 ```
 
-These varibales make working with shell easier. Some of most important ones are:
+Ces variables rendent le travail avec shell plus simple. Les plus importantes sont:
 
-* **HOSTNAME**:The name of the your computer.
-* **SHELL**: This describes the shell that will be interpreting any commands you type in. In most cases, this will be bash by default, but other values can be set if you prefer other options.
-* **TERM**: This specifies the type of terminal to emulate when running the shell. Different hardware terminals can be emulated for different operating requirements. We usually won't need to worry about this though.
-* **USER**: The current logged in user.
-* **LS_COLORS**: This defines color codes that are used to optionally add colored output to the ls command. This is used to distinguish different file types and provide more info to the user at a glance.
-* **MAIL**: The path to the current user's mailbox.
-* **PATH**: A list of directories that the system will check when looking for commands. When a user types in a command, the system will check directories in this order for the executable.
+* **HOSTNAME**: Le nom de votre ordinateur.
+* **SHELL**: Décrit le shell qui interprète cette commande. Dans la plupart des cas, ce sera bash par défaut, mais d'autres valeurs peuvent être définies si vous préférez d'autres options.
+* **TERM**: Spécifie le type de terminal à émuler lorsque vous lancer le shell. Des terminaux matériels différents peuvent être émulé pour les besoins de différentes opréation. Généralement, nous n'avons pas besoin de nous en occuper.
+* **USER**: L'utilisateur actuellement connecté.
+* **LS_COLORS**: Définie le code couleur qui est utilisé pour ajouté des couleurs sur les sorties de la commande LS. Elle est utilisé pour distinguer différents types de ficheirs et fournir plus d'information aux utilisateurs en un coup d'oeil.
+* **MAIL**: Le chemin vers la boite mail de l'utilisateur courant.
+* **PATH**: Une liste des dossier que le système vérifie lorsqu'il cherche des commandes. Lorsqu'un utilisateur tape une commande, le système vérifie ces dossier dans cet ordre pour les exécutables.
 
 ```
 [root@centos7-1 ~]# echo $PATH
@@ -300,13 +300,13 @@ firefox is /bin/firefox
 firefox: /usr/bin/firefox /usr/lib64/firefox /etc/firefox /usr/share/man/man1/firefox.1.gz
 ```
 
-> For running other scripts or commands we can add them to path, or use full path or relative path (. and ..)** **
+> Pour lancer d'autres scripts ou commande, nous pouvons les ajouter au  path, ou utiliser le chemin complet ou chemin relatif (. et ..)** **
 >
 > PATH=$PATH:/tmp/mybin
 
-* **PWD**: The current working directory.
+* **PWD**: Le dossier courant de travail.
 
-> We use pwd command to see that:
+> Nous utilisons la commande pwd pour voir ça:
 >
 > ```
 > [root@centos7-1 ~]# pwd
@@ -316,13 +316,13 @@ firefox: /usr/bin/firefox /usr/lib64/firefox /etc/firefox /usr/share/man/man1/fi
 > /etc
 > ```
 
-* **LANG**: The current language and localization settings, including character encoding.
-* **HOME**: The current user's home directory.
-* **\_**: The most recent previously executed command.
-* **OLDPWD**: The previous working directory. This is kept by the shell in order to switch back to your previous directory by running cd -.
+* **LANG**: La langue courante et les paramètres de localisatio, incluant l'encodage des caractères.
+* **HOME**: Le dossier home de l'utilisateur courant.
+* **\_**: La dernière commande exécutée.
+* **OLDPWD**: Le dossier de travail précédent. C'est gardé par shell afin de pouvoir revenir au dossier précédent en utilisant la commande `cd -.`
 
 {% hint style="info" %}
-The exit code of the previous command is stored in the shell variable $?. Actually $? is a shell parameter and not a variable, since you cannot assign a value to $?.
+Le code de sortie de la commande précédente est stockée dans la variable shell `$?`. Actuellement $? est un paramètre shell et non une variable, puisque l'on ne peut pas assigner de valeur à  $?.
 
 `[root@centos7-1 ~]# touch my.txt `
 
@@ -331,7 +331,7 @@ The exit code of the previous command is stored in the shell variable $?. Actual
 ` 0`
 {% endhint %}
 
-To see the value of a variable use `echo $VARIABLENAME` :
+Pour voir la valeur d'une variable utiliser `echo $VARIABLENAME` :
 
 ```
 [root@centos7-1 ~]# echo $MAIL
@@ -342,7 +342,7 @@ root
 /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 ```
 
-To set a Local Variable we create a local variable VAR1 and set it to any value( Historically it is recommended to use upper case for variables but you are free to use what ever case you want):
+Pour définir des variables locales, nous créons une variable local VAR1 et nous lui assignons n'importe quel valeur( Historiquement il est recommandé d'utiliser les majuscule pour les variables mais vous être libre de faire ce que vous voulez) :
 
 ```
 [root@centos7-1 ~]# VAR1="Lets Learn Linux"
@@ -350,7 +350,7 @@ To set a Local Variable we create a local variable VAR1 and set it to any value(
 Lets Learn Linux
 ```
 
-By default variables are local, so What will happen to our Variable if we start a new sub shell ?
+Par défaut les variables sont locales, donc qu'arrive t'il à notre variable si nous ouvrons un nouveau shell ?
 
 ```
 [root@centos7-1 ~]# VAR1="Lets learn Linux"
@@ -360,16 +360,16 @@ Lets learn Linux
 [root@centos7-1 ~]# echo $VAR1
 ```
 
-It shows nothing. Why?
+Il montre rien. Pourquoi. Why?
 
-**Child vs Parent process**
+**Process enfant vs process parent (Child vs Parent process)**
 
-Any process can be a parent and child process at the same time. The only exception is the init process, which is always marked with PID ( process ID ) 1. Therefore, init is a parent of all processes running on your Linux system.
+Chaque processus peut être à la fois un processus parent et un processus enfant. La seule exception est le processus init, qui est toujours marqué avec le PID 1. Cependant init est le parent de tous les processus qui tourne sur un système Linux.
 
 ![](.gitbook/assets/commandintro-parentchild.jpg)
 
-Any process created will normally have a parent process from which it was created and will be considered as a child of this parent process.\
-`echo $$` print a PID for a current shell
+Chaque processus créé aura normalement un processus parent depuis lequel il a été créé et sera considéré comme enfant de ce processus parent.\
+`echo $$` affiche un PID pour le shell courant
 
 ```
 [root@centos7-1 ~]# echo $$
@@ -383,17 +383,17 @@ exit
 24370
 ```
 
-When creating a new child process (a sub shell in our example) an export command simply ensures that any exported variables in the parent process are available in the child process.
+Lorsque nous créons un nouveaux processus enfant (un sous-shell dans notre exemple) une commande export assure simplement que les variables exportées dans le processus parents soient aussi disponible dans le processus enfant.
 
-We can terminate a shell using the exit command or simply press ctrl+d keys.
+Nous pouvons terminer un shell en utilisant la commande exit ou simplement en appuyant sur les touches ctrl+d.
 
 {% hint style="info" %}
-**( )** : parentheses really put the command in a subshell. try(exit)
+**( )** : les parenthèses mettent réellement la commande dans un sous-terminal. Essayer : (exit)
 {% endhint %}
 
 ### export
 
-export command is one of the bash shell builtin commands, marks an environment variable to be exported to child-processes, so that the child inherits them.
+La commande export est une des commandes fournis par le bash shell, elle marque une variable d'environnement pour être exportée dans les processus enfant, pour que l'enfant hérite d'elle.
 
 ```
 [root@centos7-1 ~]# VAR2="Linux is Fun"
@@ -409,9 +409,9 @@ Linux is Fun
 Linux is Fun
 ```
 
-Syntax:`export [-fn] [name[=value] ...] or export -p`
+Syntaxe :`export [-fn] [name[=value] ...] or export -p`
 
-The export command is fairly simple to use as it has straightforward syntax with only three available command options.
+La commande export est assez simple à utiliser avec une syntaxe légère puisqu'il n'y a que trois options :
 
 ```
 -p    List of all names that are exported in the current shell
@@ -419,7 +419,7 @@ The export command is fairly simple to use as it has straightforward syntax with
 -f    Names are exported as functions
 ```
 
-Following our example:
+Continuons notre exemple :
 
 ```
 [root@centos7-1 ~]# export -p | grep -i var2
@@ -431,7 +431,7 @@ declare -x VAR2="Linux is Fun"
 
 ### set
 
-`set`is a shell built-in that (If no options or arguments are supplied) displays all shell variables, not only the environment ones, and also shell functions, which is what you are seeing at the end of the list.
+`set` est une commande fourni par shell (si aucune option ou argument ne lui est fourni) affiche toutes les variables, pas seulement celles d'environnement, et aussi les fonction shell, ce que vous voyez à la fin de la liste.
 
 ```
 [root@centos7-1 ~]# set
@@ -537,29 +537,29 @@ __HOSTNAME ()
 
 > **set vs env**
 >
-> Long story short: set can see shell-local variables, env cannot.
+> Version courte: `set` peut voir les variables locale du shell, `env` ne peut pas.
 >
-> As we have mentioned, shells can have variables of 2 types: locals, which are only accessible from the current shell, and (exported) environment variables, which are passed on to every executed program.
+> Comme nous l'avons mentionnés, les shell peuvent avoir des variables de 2 types : locales, qui sont uniquement accessible dans le shell courante, et variables d'environnement (exportées), qui sont passé à chaque programme exécutés.
 >
-> Since set is a built-in shell command, it also sees sees shell-local variables (including shell functions). env on the other hand is an independent executable; it only sees the variables that the shell passes to it, or environment variables
+> Puisque `set` est une commande native du shell, il est aussi possible de voir des variables local à shell (incluant des fonctions shell). `env` d'un autre côté est un exécutable indépendant; il peut seulement voir les variables que shell lui a passer, ou les variables d'environnement
 
-In bash like in any Bourne-like shell, set is the command to set options (shell configuration settings like -f, -C, -o noclobber...) and positional parameters ($1, $2...).
+Dans un équivalent de bash comme n'importe quel shell Bourne-like, `set` est la commande pour définir des options (les paramètres de configuration shell comme -f, -C, -o noclobber...) et les paramètres de position ($1, $2...).
 
 ```
 set [--abefhkmnptuvxBCEHPT] [-o option-name] [argument …]
 set [+abefhkmnptuvxBCEHPT] [+o option-name] [argument …]
 ```
 
- Use  - and + signs for enabling and disbaling options.Try`help set | less`  .
+ Utiliser les signes  - et + pour activer ou désactiver les options. Essayer : `help set | less`  .
 
-To see the current shell options use `echo $-` :
+Pour voir les options courantes du shell, utiliser `echo $-` :
 
 ```
 [root@centos7-1 ~]# echo $-
 himuBH
 ```
 
- For example -u treat unset variables as an error when substituting:
+ Par exemple `-u` traite les variables non définies comme une erreur lors de leur remplacement :
 
 ```
 root@ubuntu16-1:~# echo $-
@@ -576,7 +576,7 @@ root@ubuntu16-1:~# echo $-
 himBH
 ```
 
-We can use `set -o` without any option to get the current state of shell options :
+Nous pouvons utiliser `set -o` sans autre option pour obtenir l'état courant des options shell :
 
 ```
  [root@centos7-1 ~]# set -o
@@ -609,7 +609,7 @@ vi                 off
 xtrace             off
 ```
 
-set +o turns off specified option and set -o turns it on .For example lets disable and enable History Storing with -o option:
+`set +o` désactive les options spécifiés et `set -o` les actives. Par exemple, désactivons et réactivons `History Storing` avec l'option= `-o` :
 
 ```
 [root@centos7-1 ~]# set +o history
@@ -620,9 +620,9 @@ history            off
 history            on
 ```
 
-One of important options you might be asked for in the exam is noclobber, The noclobber option prevents you from overwriting existing files with the > operator (Discussed in next courses).
+Une autre options importante que vous devez connaitre pour l'examene est `noclobber`, L'option `noclobber` vous empêche de surcharger des fichiers existants avec l'opérateur > (Expliqué dans le prochain cours) .
 
-set is not for setting variables. Do not make mistake!
+`set` ne sert pas à définir des variable. Ne faite pas l'erreur!
 
 ```
 [root@centos7-1 ~]# set VAR4="My Forth Variable"
@@ -631,11 +631,11 @@ set is not for setting variables. Do not make mistake!
 [root@centos7-1 ~]#
 ```
 
-Set has lots of options which are used to change bash behaviour.
+`Set` a de nombreuses options qui sont utilisés pour changer le comportement de bash.
 
 ### unset
 
-unset command is used to unset any local environment variable temporarily:
+La commande `unset` est utilisé pour supprimé des variable d'environnement local temporairement:
 
 ```
 [root@centos7-1 ~]# VAR5="Linux Linux Linux"
@@ -650,20 +650,20 @@ bash: ls: No such file or directory
 ```
 
 {% hint style="success" %}
-So `set` is not set, but `unset` is unset.
+`set` ne sert pas à définir, mais `unset` supprime les variables.
 {% endhint %}
 
 {% hint style="info" %}
-We can also use `env VARNAME=VALUE`  and `env -u VARNAME`    to set and unset a variable.
+Nous pouvons aussi utiliser  `env VARNAME=VALUE` et `env -u VARNAME` pour définir et supprimer une variable.
 {% endhint %}
 
-## Understanding Bash History
+## Comprendre l'historique de Bash
 
-History of all commands which are executed by all users are stored.History is maintained both in ram and in a file_.bash_history._ History which is maintained in ram, manipulated with the command`history`and environment variables. It is important to note that the history contained in ram is only written after a user logs out of his or her session.
+L'historique de toutes les commands qui ont été exécutée par tous les utilisateur sont stockés. History est maintenu à la fois dans la RAM et dans un fichier _.bash_history._  History qui est maintenu dans la ram, peut être manipulé avec la commande `history` et les variables d'environnement. Il est important de noter que l'historique contenu dans la RAM est écrit seulement après la déconnexion d'un utilisateur de sa session.
 
 ### history
 
-history shows the current content of Bash's history list in memory for the current session.
+`history` montre le contenu courant de la liste de l'historique de Bash dans la mémoire pour la session courante.
 
 ```
 [root@centos7-1 ~]# history 
@@ -690,40 +690,40 @@ history shows the current content of Bash's history list in memory for the curre
 <output has been trancuated>
 ```
 
-How many lines are stored in RAM version of History list? It is defined by HISTSIZE variable.
+Combien de lignes sont stockée dans la version RAM de la liste d'historique ? C'est défini via la variable HISTSIZE.
 
-* **HISTSIZE** : This variable contains the maximum number of lines that be contained in the in-ram version of history.
+* **HISTSIZE** : Cette variable contient le nombre maximum de ligne qui peuvent être contenu dans la version en ram de l'historique.
 
 ```
 [root@centos7-1 ~]# env | grep -i histsize
 HISTSIZE=1000
 ```
 
-and that would be 1000 lines! to see just 5 lines for example use`history 5` .
+Et cela est maintenant 1000 lignes! pour voir seulement 5 lignes par exemple utiliser `history 5` .
 
-**Repeat previous command quickly(3 methods)**
+**Répéter la commande précédente rapidement (3 méthodes)**
 
-1. Use the **up arrow** to view the previous command and press enter to execute it.
-2. **Type !! and press enter **from the command line.(or** !!number** )
-3. **Press Control+P** will display the previous command, press enter to execute it
+1. Utiliser la **flèche vers le haut** pour voir la commande précédente et appuyez sur entrée pour l'exécuter.
+2. **Taper !! et appuyer sur entrée** depuis la ligne de commande.(ou **!!number** )
+3. **Appuyez sur Ctrl+P** affichera la commande précédente, puis presser entrée pour l'exécuter
 
-**Search the history(3 methods)**
+**Rechercher dans l'historique (3 méthodes)**
 
-1. **Control+R: **Press Control+R and type the keyword.
-2. **!string** Refers to the most recent command starting with string.
-3. **!?string?** Refers to the most recent command containing string (the ending ? is optional).
+1. **Control+R:** Appuyez sur Control+R et taper le mot-clé.
+2. **!string** Fait référence à la commande la plus récente qui commence avec la chaine de caractère (string).
+3. **!?string?** Fait référence à la commande la plus récente qui contient la chaine de caractère (string) (le ? final est optionnel).
 
-**Clear all the previous history : **Use history -c option.
+**Nettoyer tous les historiques précédents :**Utiliser l'option `-c` de la commande `history`.
 
 ### **\~/.bash_history**
 
-When user closes shell , Bash will save its history list to the disk by appending the contained entries to his/her **\~/.bash_history** hidden file. **\~/.bash_history **is controlled by some variables:
+Lorsqu'un utilisateur ferme son shell, Bash enregistre son historique sur le disque en ajoutant le contenu des entrée dans son **~/.bash_history** qui est contrôlé par quelques variables:
 
-* **HISTFILE    **This variable contains the location of the history file. When bash is logged out of, the contents of the history command will be written to this file.
-*   **HISTFILESIZE    **The variable contains the maximum number of lines that may be in the history file. When bash writes to the history file, the oldest commands that go over this maximum number will be deleted.
+* **HISTFILE** Cette variable contient la localisation du fichier d'historique. Lorsque bash est déconnecté le contenu de la commande history sera écrit dans ce fichier.
+* **HISTFILESIZE** La variable contient le nombre maximum de ligne qui peuvent être dans le fichier d'historique, les plus vieilles commandes qui vont au delà de ce maximum seront supprimés.
 
-     it acts the same as HISTSIZE.
-* **HISTCONTROL    **This variable contains instructions for what should be ignored when added to the history file. has four settings:
+     il agit comme  HISTSIZE.
+* **HISTCONTROL** Cette variable contient des instructions pour ce qui doit être ignoré lors de l'ajout dans le fichier d'historique. Il a 4 paramètres :
 
 ```
 Setting Name    Setting Effect
@@ -733,14 +733,14 @@ Ignoreboth    When this setting is used it implies the conditions of both ignore
 Not Defined    If HISTCONTROL is not defined no conditions will be applied before the line is entered into the history
 ```
 
-To see the **.bash_history** hidden file we should use ls with `-a` switch:
+Pour voir le fichier caché **.bash_history** nous devons utiliser `ls` avec l'option `-a`:
 
 ```
 [root@centos7-1 ~]# ls -la | grep  .bash_history
 -rw-------.  1 root root   9779 Dec  9 14:29 .bash_history
 ```
 
-What about other users?
+Quid des autres utilisateurs ?
 
 ```
 [root@centos7-1 ~]# find /home/ -iname .bash_history
@@ -750,7 +750,7 @@ What about other users?
 /home/user2/.bash_history
 ```
 
-As an instance lets find out what user1 has done:
+En tant qu'instance on nous laisse trouver ce qu'à fait user1:
 
 ```
 [root@centos7-1 ~]# cat /home/user1/.bash_history
@@ -758,25 +758,25 @@ ls
 exit
 ```
 
-He/she has done nothing:). **.bash_history** by default keeps 500 or 1000 of command which has been used.So we can go back to some thing we have done long time ago. history -c does not clear that and it remains after user log off, so if you don't like it you should remove it.
+Il/elle n'a rien fait :). **.bash_history** par défaut garde 500 ou 1000 commande qui ont été utilisé. Nous pouvons donc remonter à quelque chose qui a été fait il y a longtemps. `history -c` n'efface pas ça et il reste après la deconnexion de l'utilisateur, donc si vous n'aimez pas ça, vous devez le supprimer.
 
 ### uname
 
-uname command without any switch will print system information :
+La commande `uname` sans option permet d'afficher des information sur le système :
 
 ```
 [root@centos7-1 ~]# uname
 Linux
 ```
 
-Its syntax is like `uname [OPTION] ...` .For example`-a, --all`Prints all information:
+Sa syntaxe est comme `uname [OPTION] ...` . Par exemple `-a, --all` affiche toutes les informations :
 
 ```
 [root@centos7-1 ~]# uname -a
 Linux centos7-1 3.10.0-693.el7.x86_64 #1 SMP Tue Aug 22 21:09:27 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
-If -a (--all) is specified, the information is printed in the following order of individual options:
+Si l'option `-a` (--all) est spécifié, les informations sont affichés avec l'ordre suivant des options individuelles:
 
 ```
 -s, --kernel-name    Print the kernel name.
@@ -791,61 +791,61 @@ If -a (--all) is specified, the information is printed in the following order of
 --version    Display version information, and exit.
 ```
 
-Processor information (-p) and Hardware-Platform(-i) are omitted if they are unknown.
+Les informations sur le processeurs (-p)  et sur la plateforme matériel sont omises si elle ne sont pas connues.
 
 ### man
 
-In Unix-like operating systems, a man page (in full manual page) is a documentation for a terminal-based program/tool/utility (commonly known as a command). It contains:
+Dans les systèmes d'exploitation Unix-like, une page man (en entier une page de manuel) est une documentation pour un programme/outil/utilitaire basé sur le terminal (connu sous le nom de commande). Il contient:
 
-* ** the name of the command**
-* **syntax for using it**
-* **a description**
-* **options available**
-* **author**
-* **copyright**
-* **related commands and ... .**
+* **le nom de la commande**
+* **la syntaxe pour l'utiliser**
+* **une description**
+* **options disponible**
+* **auteur**
+* **licence**
+* **Commandes liés et ... .**
 
-To read a manual page for a Unix command, a user can type:
+Pour lire une page de manuel d'une commande Unix, un utilisateur peut taper :
 
 ```
 man <command_name>
 ```
 
-For example try `man man` :
+Par exemple essayer `man man` :
 
 ![](.gitbook/assets/commandintro-manman.jpg)
 
-By default, man typically uses a terminal pager program such as **more** or **less **to display its output.
+Par défaut, man utilise un programme de pagination du terminal comme **more** ou **less** pour afficher sa sortie.
 
-The manual is generally split into eight or nine numbered sections, organized as follows :
+Le manuel est généralement écoupé en huit ou neuf sections numérotées, organisées comme suit :
 
-1. **Executable programs or shell commands**
-2. **System calls** (functions provided by the kernel)
-3. **Library calls** (functions within program libraries)
-4. **Special files** (usually found in /dev)
-5. **File formats and conventions** eg /etc/passwd
-6. **Games**
-7. **Miscellaneous **(including macro packages and conventions), e.g. man(7), groff(7)
-8. **System administration commands** (usually only for root)
-9. **Kernel routines** \[Non standard]
+1. **Programme exécutable ou commande shell**
+2. **Appel système** (fonctions fournis par le noyau)
+3. **Appel aux bibliothèque** (fonctions venant des bibliothèques)
+4. **Fichiers spéciaux** (souven trouvé dans /dev)
+5. **Format des fichiers et conventions** exemple /etc/passwd
+6. **Jeux**
+7. **Divers**(incluant les macro paquets et les convention), exemple. man(7), groff(7)
+8. **Commande d'administration système** (généralement seulement pour root)
+9. **Routines du noyau** \[Non standard]
 
-To make man display manual page from specific sections use `man [section-num] [command/tool name]` :
+Pour demander à man d'afficher la page d'une section spécifique utiliser `man [section-num] [command/tool name]` :
 
 ```
 man 1 echo
 ```
 
-man will search for the desired manual pages within the index database caches. So there is no need to remember section numbers for manual entries .
+man cherche la page désiré du manuel dans le cache d'index de la base de données. Il n'a donc pas besoin de se rappeler des numéros de section pour les entrées de manuel.
 
 #### mandb
 
-mandb is used to initialise or manually update index database caches\
-that are usually maintained by man. The caches contain information\
-relevant to the current state of the manual page system and the\
-information stored within them is used by the man-db utilities to\
-enhance their speed and functionality.
+mandb est utilisé pour initalisé ou mettre à jour manuellement le cache d'index de la base de données\
+qui sont généralement maintenus par man. Le cache contient les informations\
+pertinente sur l'état courante du système de page de manuel et les \
+informations stockés dans celle-ci sont utilisé par l'utilitaire man-db pour\
+améliorer leur vitesse et fonctionnalité.
 
-the cache consistency check can be slow on systems with many manual pages installed, so mandb is not performed by default, and system administrators may wish to run mandb every week or so to keep the database caches fresh.
+La vérification de la consistance du cache peut ralentir sur les systèpe avec de nombreuses pages de manuel installées, donc mandb n'est pas exécuté par défaut, et les administrateurs système pourrait vouloir faire tourner mandb toutes les semaines pour garder le cache de base de données propre.
 
 ```
 [root@centos7-1 ~]# mandb
@@ -866,9 +866,9 @@ Purging old database entries in /usr/share/man/ja...
 0 old database entries were purged.
 ```
 
-**Most useful man command options:**
+**Options les plus utiles de la commande man:**
 
-`-f, --whatis`Display a short description from the manual page
+`-f, --whatis` Affiche une description courte de la page de manuel
 
 ```
 [root@centos7-1 ~]# man -f ls
@@ -876,14 +876,14 @@ ls (1)               - list directory contents
 ls (1p)              - list directory contents
 ```
 
-`-w, --where, --location` Don't actually display the manual pages, but do print of the source off files
+`-w, --where, --location` N'affiche pas les pages de manuels, mais affiche les fichiers sources
 
 ```
 [root@centos7-1 ~]# man -w ls
 /usr/share/man/man1/ls.1.gz
 ```
 
-`-k, --apropos` Equivalent to apropos. Search the short manual page descriptions for keywords and display any matches.
+`-k, --apropos` Equivalent à apropos. Recherche la description courte de la page de manuel pour les mots clés et affiche les correspondances.
 
 ```
 [root@centos7-1 ~]# man -k echo
@@ -899,7 +899,7 @@ ping6 (8)            - send ICMP ECHO_REQUEST to network hosts
 
 ### apropos
 
-apropos command is used to search and display a short man page description of a command/program as follows.
+La commande `apropos` est utiliser pour rechercher et afficher une description courte des pages de manuel d'une commande comme suit :
 
 ```
 [root@centos7-1 ~]# apropos echo
@@ -913,7 +913,7 @@ ping (8)             - send ICMP ECHO_REQUEST to network hosts
 ping6 (8)            - send ICMP ECHO_REQUEST to network hosts
 ```
 
-That is all!
+C'est terminé!
 
 .
 

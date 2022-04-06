@@ -9,7 +9,7 @@
 * [102.3. Gérer les bibliothèques partagées](1023-manage-shared-libraries.md)
 * [102.4. Utiliser le gestionnaire de paquet Debian](1024-use-debian-package-management.md)
 * [102.5. Utiliser les gestionnaire de paquets RPM et YUM](1025-use-rpm-and-yum-package-management.md)
-* [103.1. Work on the command line](1031-work-on-the-command-line.md)
+* [103.1. Travailler en ligne de commande](1031-work-on-the-command-line.md)
 * [103.2. Process text streams using filters](1032-process-text-streams-using-filters.md)
 * [103.3. Perform basic file management](1033-perform-basic-file-management.md)
 * [103.4. Use streams, pipes and redirects](1034-use-streams-pipes-and-redirects.md)

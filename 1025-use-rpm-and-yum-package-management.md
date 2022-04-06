@@ -1,18 +1,18 @@
-# 102.5. Use RPM and YUM package management
+# 102.5.  Utiliser les gestionnaire de paquets RPM et YUM
 
-## **102.5 Use RPM and YUM package management**
+## **102.5 Utiliser les gestionnaire de paquets RPM et YUM**
 
-**Weight:** 3
+**Poids:** 3
 
-**Description:** Candidates should be able to perform package management using RPM and YUM tools.
+**Description:** Les candidats doivent être capable de gérer les paquets en utilisant l'outil de paquets RPM et YUM.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Install, re-install, upgrade and remove packages using RPM and YUM
-* Obtain information on RPM packages such as version, status, dependencies, integrity and signatures
-* Determine what files a package provides, as well as find which package a specific file comes from
+* Installation, reinstallation, mise à jour et suppression des paquets en utilisant RPM et YUM
+* Obtenir les informations sur les paquets RPM comme la version, le statut, les dépendances, l'intégrité et les signatures
+* Determiner quels fichiers le paquet fournit, et trouver de quel paquet vient un fichier spécifique 
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * rpm
 * rpm2cpio
@@ -21,32 +21,32 @@
 * yum
 * yumdownloader
 
-In this lesson we learn how to work with packages in RedHat Distributions. If you are not familiar with Package and package Manager concepts in linux please study first part of previous lesson.
+Dans cette leçon nous allons apprendre comment fonctionne les paquets dans les distributions RedHat. Si vous n'êtes pas familier avec les paquets et les concepts de gestionnaire de paquets dans linux merci d'étudier la permière partie de la leçon précédente.
 
 ![](.gitbook/assets/redpack-red.jpg)
 
 ## rpm
 
-RPM (Red Hat Package Manager) is a powerful Package Manager, which can be used to build, install, query, verify, update, and erase individual software packages.
+RPM (Red Hat Package Manager) est un gestionnaire de paquet puissant, qui est utilisé pour construire, installer, requêter, vérifier, mettre à jour et supprimer des paquets logiciels individuels.
 
-A package consists of an archive of files and meta-data used to install and erase the archive files. The meta-data includes helper scripts, file attributes, and descriptive information about the package.
+Un paquet consiste en une archive de fichiers et de méta-donées utilisé pour installer et supprimer des fichiers archives. Les méta-données inclus des scripts d'aide,  des attributs de fichier et des information descriptive à propos du paquet.
 
-Packages come in two varieties:** binary packages**, used to encapsulate software to be installed, and **source packages**, containing the source code and recipe necessary to produce binary packages. RPM is the only way to install packages under Linux systems, if you’ve installed packages using source code, then rpm won’t manage it.
+Les paquets vienne avec deux variantes : **paquets binaires**, utilisé pour encapsulé les logiciel à installer, et **paquets source**, contenant le code source et les recette nécessaires pour produire le paquet binaire. RPM est la seule manière d'installer des paquets sur les système Linux, si vous avez installé des pquets en utilisé le code source, alors RPM ne pourra pas les gérer.
 
 ![](.gitbook/assets/redpack-rpmbox.jpg)
 
-RPM deals with .rpm files, which contains the actual information about the packages such as: what it is, from where it comes, dependencies info, version info etc.
+RPM travaille avec des fichiers .rpm, ce sont eux qui contiennent les informations à propos des paquets comme : ce que c'est, d'où il vient, les informations de dépendances, les informations de versions, etc.
 
-### Where to find RPM packages
+### Où trouver des paquets RPM
 
-list of rpm sites, where we can find and download all RPM packages:
+La liste des sites rpm, où vous pouvez trouver et télécharger tous les paquets RPM :
 
 * [http://rpmfind.net](http://rpmfind.net)
 * [http://www.redhat.com](http://www.redhat.com)
 * [http://freshrpms.net/](http://freshrpms.net)
 * [http://rpm.pbone.net/](http://rpm.pbone.net)
 
-RPM keeps the information of all the installed packages under /var/lib/rpm database.
+RPM garde l'information de tous les paquets installé dans la base de données dans /var/lib/rpm.
 
 ```
 [root@centos7-1 ~]# ls -l /var/lib/rpm
@@ -69,19 +69,19 @@ total 86688
 -rw-r--r--. 1 root root     8192 Dec  5 10:02 Triggername
 ```
 
-They are all binary files, try `cat Basenames` to see.
+Il y a tous les fichiers binaires, essayez `cat Basenames` pour voir.
 
-There are five basic modes for RPM command:
+Il y a cinq mode basique pour la commande RPM:
 
-* Install : It is used to install any RPM package.
-* Remove : It is used to erase, remove or un-install any RPM package.
-* Upgrade : It is used to update the existing RPM package.
-* Verify : It is used to verify an RPM packages.
-* Query : It is used query any RPM package.
+* Install : Est utilisé pour installé n'importe quel paquet RPM.
+* Remove : Est utilisé pour effacer, supprimer ou désinstaller n'importe quel paquet RPM.
+* Upgrade : Est utilisé pour mettre à jour les paquets RPM existants.
+* Verify : Est utilisé pour vérifier un paquet RPM.
+* Query : Est utilisé pour requêter n'importe quel paquet RPM.
 
-#### Install an RPM Package
+#### Installer un paquet RPM
 
-\-i is used for installing an rpm software package
+\-i est utilisé pour installer un paquet logiciel RPM
 
 ```
 [root@centos7-1 ~]# rpm -ivh zip-3.0-11.el7.x86_64.rpm 
@@ -90,21 +90,21 @@ Updating / installing...
    1:zip-3.0-11.el7                   ################################# [100%]
 ```
 
-`-v` verbose for a nicer display\
-,`-h` print hash marks as the package archive is unpacked.
+`-v` verbose pour un affichage plus complet\
+,`-h` affiche la marcque chiffré lors de l'extraction de l'archive.
 
-#### Check an Installed RPM Package
+#### Vérifier un paquet RPM installé
 
-`-q` option query a package:
+`-q` option pour requêter un paquet:
 
 ```
 [root@centos7-1 ~]# rpm -q zip
 zip-3.0-11.el7.x86_64
 ```
 
-#### List all files of an installed RPM package
+#### Lister tous les fichiers d'un paquet RPM installé
 
-Use `-ql` **(query list)** with rpm command:
+Utiliser `-ql` **(query list)** avec la commande rpm :
 
 ```
 [root@centos7-1 ~]# rpm -ql zip
@@ -127,18 +127,18 @@ Use `-ql` **(query list)** with rpm command:
 /usr/share/man/man1/zipsplit.1.gz
 ```
 
-#### Query a file that belongs which RPM Package
+#### Requêter un fichier qui appartient à un paquet RPM
 
-`-qf` **(query file) **option help us to find out which package belongs to a file.
+`-qf` **(query file) **option pour nous aider à trouver à quel paquet appartient un fichier.
 
 ```
 [root@centos7-1 ~]# rpm -qf /usr/bin/zipsplit 
 zip-3.0-11.el7.x86_64
 ```
 
-#### Query a Information of Installed RPM Package
+#### Requêter une information sur un paquet RPM installé
 
-`-qi` **(query info)** option will print the available information of the installed package.
+`-qi` **(query info)** option affiche les information disponibles sur un paquet installé.
 
 ```
 [root@centos7-1 ~]# rpm -qi zip
@@ -169,9 +169,9 @@ Install the zip package if you need to compress files using the zip
 program.
 ```
 
-#### Get the Information of RPM Package Before Installing
+#### Obtenir les informations sur un paquet RPM avant l'installation
 
-`-qip` **(query info package)** will print the information of a package , as the package has not been installed there is nothing to read by rpm in its data base, so we need to give full name of the package and it would provide required information directly from rpm package:
+`-qip` **(query info package)** affiche les infromation d'un paquet, alors que le paquet n'a pas encore été installé et qu'il n'y a rien à lire sur le rpm dans la base de donnée, nous devons donc lui donner le nom complet du paquet et il  nous fournira les informations directement depuis le paquet:
 
 ```
 [root@centos7-1 ~]# rpm -qip htop-2.2.0-1.el7.x86_64.rpm 
@@ -198,11 +198,11 @@ htop is an interactive text-mode process viewer for Linux, similar to
 top(1).
 ```
 
-`-p` is used to query information from rpm package. We can omit -p and use Package name instead `rpm -qi htop` .
+`-p` est utilisé pour requêter des informations depuis un paquet rpm. Nous pouvons ne pas mettre l'option -p et il utilisera le nom du paquet à la place `rpm -qi htop` .
 
-#### check dependencies of RPM Package before Installing
+#### Vérifier les dépendances du paquet RPM avant son installation
 
-Use `-qpR` options to do a dependency check before installing or upgrading a package
+utiliser les options `-qpR` pour vérifier les dépendances avant l'installation ou la mise à jour d'un paquet
 
 ```
 [root@centos7-1 ~]# rpm -qpR htop-2.2.0-1.el7.x86_64.rpm 
@@ -228,11 +228,11 @@ rtld(GNU_HASH)
 rpmlib(PayloadIsXz) <= 5.2-1
 ```
 
-`-R` List capabilities on which this package depends. we can easily use `rpm -qR PackageName` to query an installed package.
+`-R` Listes les dépendances du paquet. Nous pouvons facilement utilisé `rpm -qR PackageName` pour requêter un paquet installé.
 
-**Query configuration file of Installed RPM Packae**
+**Requêter le fichier de configuration d'un paquet RPM installé**
 
-`-qc` **(query configuration file) **will query an installed package for its configuration files, if it has any:
+`-qc` **(query configuration file)** requête pour un paquet installé de ses fichiers de configuration, s'il en a :
 
 ```
 [root@centos7-1 ~]# rpm -qc vsftpd
@@ -243,11 +243,11 @@ rpmlib(PayloadIsXz) <= 5.2-1
 /etc/vsftpd/vsftpd.conf
 ```
 
-If the package is not installed use `-qpc` instead to query a rpm package.
+Si le paquet n'est pas installé utiliser `-qpc` à la place pour requêter un paquet rpm.
 
-#### Query documentation of Installed RPM Package
+#### Requêter la documentation d'un paquet RPM installé
 
-`-qdf`**(query document file) **gives a list of available documentation of an installed package:
+`-qdf`**(query document file)** donne une liste des documentation disponible pour un paquet installé:
 
 ```
 [root@centos7-1 ~]# which zip
@@ -267,38 +267,38 @@ If the package is not installed use `-qpc` instead to query a rpm package.
 /usr/share/man/man1/zipsplit.1.gz
 ```
 
-#### Verify a installed Package
+#### Vérifier un paquet installé
 
-`-V`**(verify) **verifies a package:
+`-V`**(verify)** vérifie un paquet :
 
 ```
 [root@centos7-1 ~]# rpm -V telnet
 [root@centos7-1 ~]#
 ```
 
-No news is good news.When verifying a package, RPM produces output only if there is a verification failure. When a file fails verification, the format of the output is a bit cryptic, but it packs all the information you need into one line per file. Here is the format: **`SM5DLUGT c <file>`**` . As an example:`
+Aucune information est une bonne chose. Lors de la vérification 'un paquet, RPM produit une sortie seulement s'il y a une errreur sur la vérification. Lorsqu'un fichier échoue la vérification, le format de sortie est un peu complexe, mais il rassemble toutes les informations dont vous avez besoin en une ligne par fichier. Voici le fomat : **`SM5DLUGT c <file>`**` . As an example:`
 
 ```
 [root@centos7-1 ~]# rpm -V vsftpd 
 S.5....T.  c /etc/vsftpd/ftpusers
 ```
 
-Where:
+Où:
 
-* **S **is the file size.
-* **M** is the file's mode.
-* **5** is the MD5 checksum of the file.
-* **D** is the file's major and minor numbers.
-* **L** is the file's symbolic link contents.
-* **U** is owner of the file.
-* **G** is the file's group.
-* **T** is the modification time of the file.
-* **c** appears only if the file is a configuration file. This is handy for quickly identifying config files, as they are very likely to change, and therefore, very unlikely to verify successfully.
-* **\<file>** is the file that failed verification. The complete path is listed to make it easy to find.
+* **S** est la taille du fichier.
+* **M** est le mode du fichier.
+* **5** est la vérification de la signature MD5 du fichier.
+* **D** est le numéro de version majeur et mineur du fichier.
+* **L** est le contenu du lien symbolique d fichier.
+* **U** est le propriétaire du fichier.
+* **G** est le groupe du fichier.
+* **T** est l'heure de modification du fichier.
+* **c** apparait seulement si c'est un fichier de configuration. C'est pratique pour l'identification rapide des fichiers de configurations, comme ils changent souvent, et aussi peut pratique pour le succès de la vérification.
+* **\<file>** est le fichier qui a échoué la vérification. Le chemin complet est listé pour le trouver plus facilement.
 
 #### Verify all RPM Packages
 
-Use `-Va`**(Verify all)** to verify all the installed rpm packages.
+Utiliser `-Va`**(Verify all)** pour vérifier tous les paquets rpm installé.
 
 ```
 [root@centos7-1 ~]# rpm -Va
@@ -319,13 +319,13 @@ S.5....T.  c /etc/sysconfig/authconfig
 missing     /var/run/wpa_supplicant
 ```
 
-use `rpm -Vac` to just verify configuration files.There would be some common system script which are routinely changed.
+Utiliser `rpm -Vac` pour vérifier seulement les fichiers de configuration. Il y a des scripts systèmes communs qui changent régulièrement.
 
-#### Verify a RPM Package
+#### Vérifier un paquet RPM 
 
-Verifying a package compares information of installed files of the package against the rpm database.
+Vérifie un paquet en comparant les informations des fichiers installés avec celle du paquet dans la base de données.
 
-The`-Vp` **(verify package)** is used to verify a package.
+The`-Vp` **(verify package)** est utilisé pour vérifier un paquet.
 
 ```
 [root@centos7-1 ~]# rpm -Vp zip-3.0-11.el7.x86_64.rpm 
@@ -342,9 +342,9 @@ missing   d /usr/share/man/man1/htop.1.gz
 missing     /usr/share/pixmaps/htop.png
 ```
 
-#### List all Installed RPM Packages
+#### Lister tous les paquets RPM installés
 
-`-qa` **(query all)** option, will list all the installed rpm packages.
+L'option `-qa` **(query all)**, liste tous les paquets rpm installés.
 
 ```
 [root@centos7-1 ~]# rpm -qa
@@ -364,11 +364,11 @@ mozilla-filesystem-1.9-11.el7.x86_64
 <the output has been truncated>
 ```
 
-use `--last` option to list recently installed RPM Packages.
+Utiliser l'option `--last` pour lister les paquets RPM installé récemment.
 
-#### Upgrade a RPM Package
+#### Mettre à jour un paquet RPM
 
-`-U` upgrades or installs the package currently installed to a newer version. This is the same as install, except all other version(s) of the package are removed after the new package is installed.
+`-U` met à jour ou installe le paquet actuellement installé vers une nouvelle version. C'est la même chose, à part que les autres versions du paquets sont supprimé après que le nouveau paquet soit installé.
 
 ```
 [root@centos7-1 ~]# rpm -Uvh telnet-0.17-64.el7.x86_64.rpm 
@@ -377,19 +377,19 @@ Updating / installing...
    1:telnet-1:0.17-64.el7             ################################# [100%]
 ```
 
-One of the major advantages of using this option is that it will not only upgrade the latest version of any package, but it will also maintain the backup of the older package so that in case if the newer upgraded package does not run the previously installed package can be used again.(via rpm   --oldpackage switch  or using yum downgrade )
+Un des avantages majeurs à l'utilisation de cette option est qu'il ne va pas seulement mettre à jour tous les paquets, mais qu'il va aussi garder une sauvegarde de l'ancien paquet de sorte à ce que si le nouveau paquet mis à jour ne fonctionne pas, le précédent paquet puisse être encore utilisé. (via rpm   --oldpackage switch ou en utilisant la commande `yum downgrade` )
 
 > **rpm -ivh vs rpm -Uvh**
 >
-> rpm -ivh just installs a package and if the package is already installed it won't do any things, but rpm -Uvh installs it, even if it exists.
+> `rpm -ivh` installe seulement un paquet et si le paquet est déjà installé il ne fait rien, alors que  `rpm -Uvh` l'installe même s'il existe.
 >
-> Also rpm -ivh might cause having multiple version of a package at the same time but by using rpm -Uvh we are sure that we just have the latest version.
+> Egalement, `rpm -ivh` peut causer le fait d'avoir de multiples versions d'un paquet en même temps, alors qu'en utilisant `rpm -Uvh` nous sommes sur d'avoir seulement la dernière version.
 
-\-F will upgrade packages, but only ones for which an earlier version is installed.( means upgrade if installed other wise do noting)
+\-F met à jour le paquet, mais seulement ceux dont une version précédente est installé.( signifie met à jour si installé sinon ne fait rien)
 
-#### Remove a RPM Package
+#### Supprimer un paquet RPM
 
-`-e`** (erase) **option is used to remove package (add `v` or `vv` for more verbosity):
+L'option `-e`**(erase)**  est utilisé pour supprimé un paquet (ajouter `v` ou `vv` pour plus d'informations):
 
 ```
 [root@centos7-1 ~]# rpm -evv zip
@@ -487,37 +487,37 @@ D: closed   db index       /var/lib/rpm/Packages
 D: closed   db environment /var/lib/rpm
 ```
 
-rpm take care of dependencies while removing a package and does not remove package dependencies. on the other hand if a package is required by other pacakage(d) rpm avoid removing that.The `–nodeps` **(Do not check dependencies)** option** forcefully** remove the rpm package from the system. But keep in mind removing particular package may break other working applications.
+rpm s'occupe des dépendance lorsqu'il supprime un paquet et ne supprime pas les dépendance du paquet. D'un autre côté si un paquet est requis par un autre paquet rpm évide de le supprimer. L'option  `–nodeps` **(Do not check dependencies)**  **force** la suppression du paquet rpm du système. Mais garder en tête que supprimer certains paquets particulier peut casser d'autres applications qui tournent.
 
-note:If you've made changes to a configuration file that was originally installed by RPM, your changes won't be lost if you erase the package. 
+note: Si vous avez fait des modifications sur un fichier de configuration installé à la base par RM, les modification ne seront pas perdues si vous effacer le paquet. 
 
-What you can do is just run "rpm -qc packageName" which will show you which configuration files were installed on your system by an rpm. When you have uninstalled the rpm, you can search on your system if any of the files or their backups remain on your system and remove them manually.
+Ce que vous pouvez faire est juste lancer `rpm -qc packageName` qui vous montrera quels sont les fichiers de configuration qui ont été installé sur votre système par un paquet rpm. Lorsque vous désinstaller le paquet rpm, vous pouvez rechercher dans votre sysème si les fichiers ou leurs sauvegardes reste sur votre système et les supprimer manuellement.
 
 ### rpm2cpio
 
-From time to time, we might find it necessary to extract one or more files from a package file. One way to do this would be to:
+De temps en temps, nous pouvons avoir besoin d'extraire un ou plusieurs fichiers d'un paquet. Une manière de le faire est de :
 
-1. Install the package
-2. Make a copy of the file(s) you need
-3. Erase the package
+1. Installer le paquet
+2. Faire une copie du fichier dont vous avez besoin
+3. Supprimer le paquet
 
-An easier way would be to use **rpm2cpio**.
+Une manière plus simple est d'utiliser **rpm2cpio**.
 
-**What Files Are In a RPM Package?**
+**Quels sont les fichiers dans un paquet RPM ?**
 
 ![](.gitbook/assets/redpack-rpm.jpg)
 
-A rpm package is consist of some of files and directories which has been archived in cpio format, in addition some descriptions and dependencies have been added to that.
+Un paquet rpm est constitué de plusieurs fichiers et dossier qui sont archivé au format cpio, de plus certaines description et dépendances ont été ajouté à ça.
 
-**What does rpm2cpio do?**
+**Que fait rpm2cpio ?**
 
-As the name implies, rpm2cpio takes an RPM package file and converts it to a cpio archive. next we need to open cpio archive in order to have orginal file structure.
+Comme son nom implique, rpm2cpio prend un fichier de paquet RPM et le convertit en archive cpio. Ensuite nous avons besoin d'ouvrir l'archive cpio pour voir la structure originale des fichiers.
 
 ![](.gitbook/assets/redpack-rpm2cpio.jpg)
 
-In this case, the cpio options`-i` Extract one or more files from an archive, `-v`verboe, list the files processed, and `-d`Create leading directories where needed.(We will talk about cpio in next courses)
+Dans ce cas, l'option `-i` extrait un ou plusieurs fichiers d'une archive, `-v`verbose, liste les fichiers présent et  `-d`crée les dossiers nécessaires (nous parlerons de cpio dans un prochain cours)
 
-rpm2cpio takes only only one argument, and even that's optional! The optional argument is the name of the package file to be converted. (If there is no filename specified on the command line, rpm2cpio will simply read from standard input and convert that to a cpio archive.)
+rpm2cpio prend seulement un argument, et même celui-ci est optionnel! L'argument optionnel est le nom du fichier de paquet qui doit être converti. (Si aucun nom de fichier n'est spécifié à la ligne de commande, rpm2cpio lira l'enrée standard et la convertira en archive cpio.)
 
 ```
 [root@centos7-1 temp]# ls
@@ -609,23 +609,23 @@ zip-3.0-11.el7.x86_64.rpm  zip.cpio
 zip-3.0-11.el7.x86_64.rpm  zip.cpio
 ```
 
-we used the`-t` option to direct cpio to produce a "table of contents" of the archive created by rpm2cpio. This can make it much easier to get the right filename and path when you want to extract a file. An easier way  to exctract would be `rpm2cpio package.rpm | cpio id .`
+Nous utilisons l'option`-t` pour que cpio produise directement une "table des matières" de l'archive qu'il a créa avec rpm2cpio. Cela rend plus facile d'avoir le bon nom de fichier et le chemin pour extraire un fichier. Une manière plus simple d'extraire serait  `rpm2cpio package.rpm | cpio id .`
 
 {% hint style="danger" %}
-Warning! Becarefull when removing extracted package (usr vs /usr)
+Attention! Soyez prudent lorsque vous supprimé un paquet extrait (usr vs /usr)
 {% endhint %}
 
 ## YUM
 
-The YUM (Yellowdog Updater Modified) is an open-source command-line package-management utility for Linux operating systems using the RPM Package Manager. Yum allows automatic updates, package and dependency management, on RPM-based distributions.
+YUM (Yellowdog Updater Modified) est un utilitaire de gestion de paquet en ligne de commande open-source pour les système d'exploitation Linux qui utilise les gestionnaires de paquet RPM. Yum permet des mises à jour automatique, la gestion des paquets et des dépendances, sur les distributions basés sur RPM.
 
-As a high-level tool,like the Advanced Packaging Tool (APT) from Debian, yum works with software repositories (collections of packages), which can be accessed locally or over a network connection.
+En tant qu'outil haut-niveau, comme Advanced Packaging Tool (APT) sur Debian, yum travaillle avec des dépôts de logiciels (collections de paquets), qui peuvent être accéder localement ou au travers d'une connexion réseau.
 
-Yum is implemented as libraries in the Python programming language, with a small set of programs that provide a command-line interface. GUI-based wrappers such as **yumex **also exist.
+Yum est implémenté comme bibliothèques dans le langage de programmation Pytho, avec un petit ensemble de programmes qui fournisse une interface en ligne de commande. Des interfaces graphiques qui s'appuie sur YUM comme **yumex** existe également.
 
 ### /etc/yum.conf
 
-The configuration file for yum and related utilities is located at /etc/yum.conf.
+Le fichier de configuration pour yum et les utilitaires liés se trouve dans /etc/yum.conf.
 
 ```
 [root@centos7-1 ~]# cat /etc/yum.conf 
@@ -657,11 +657,11 @@ distroverpkg=centos-release
 # in /etc/yum.repos.d
 ```
 
-This file contains one mandatory \[main] section, which allows us to set Yum options that have global effect, and can also contain one or more \[repository] sections, which allow us to set repository-specific options. However, it is recommended to define individual repositories in new or existing .repo files in the /etc/yum.repos.d/ directory.
+Ce fichier contient une section obligatoire \[main] , qui nous permet de définir des optoiins à Yum qui ont un effet globales, et peut aussi contenir une ou plusieurs sections \[repository], qui nous permette de définir des options spécifiques à un dépôt. Cependant, il est recommandé de définir des dépôt individuel dans des fichiers nouveaux ou existants dans le dossier /etc/yum.repos.d/ .
 
 ### /etc/yum.repos.d
 
-YUM Repository configuration files are stored in /etc/yum.repos.d directory. It contains several .repo files.
+Les fichiers de configuration des dépôt de YUM son stockés dans le dossier /etc/yum.repos.d. Il contient différents fichiers .repo.
 
 ```
 [root@centos7-1 ~]# ls /etc/yum.repos.d/
@@ -670,7 +670,7 @@ CentOS-CR.repo         CentOS-Media.repo      epel.repo
 CentOS-Debuginfo.repo  CentOS-Sources.repo    epel-testing.repo
 ```
 
-Lets take a look at CentOS-Base.repo file:
+Voyons le contenu du fichier CentOS-Base.repo :
 
 ```
 [root@centos7-1 ~]# cat /etc/yum.repos.d/CentOS-Base.repo 
@@ -719,25 +719,25 @@ enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 ```
 
-Repository configuration files tell yum information about the actual repository (where package files are physically located). While there are a number of optional elements, each .repo file is required to have:
+Les fichiers de configuration du dépôt dise à yum les information sur le dépôt actuel (où sont les fichiers de paquets physiquement). Alors qu'il y a de nombreux éléments optionnels, chaque fichier .repo doit contenir les éléments suivants :
 
-* **Repository ID** - A one word unique repository ID e.g. \[localrepo].
-* **Name** - A human readable name for the repository e.g. name=Awesome Local Repo
-* M**irrorList** : A mirror list is a list of URLs where Package repositories are stored/present.
-* **Baseurl** - A URL to the repodata directory (where the actual files are kept). file://path, ftp://link, [http://link](http://link), and [https://link](https://link) addresses are all valid options.
-* **Enabled** - Whether or not to enable the repository for use when performing updates and installs e.g. enabled=1 (1 means "use this repository", 0 defines "do not use this repository").
-* **Gpgcheck **- Enable/disable GPG signature checking (example: gpgcheck=1)
-* **Gpgkey **- URL to the GPG key (example: gpgkey=[http://mirror.cisp.com/CentOS/6/os/i386/RPM-GPG-KEY-CentOS-6\\](http://mirror.cisp.com/CentOS/6/os/i386/RPM-GPG-KEY-CentOS-6\)/)
+* **Repository ID** - Un identifiant unique en un mot du dépôt par exemple \[localrepo].
+* **Name** - Un nom lisible pour un humain du dépôt par exemple. name=Awesome Local Repo
+* **MirrorList** : Une liste de mirroir qui est une liste d'URLs où les dépôt de paquets sont stockés / présents.
+* **Baseurl** - Une URL vers le dossier qui contient les données sur le dépôt (où les fichiers actuels sont gardés). Les adresses file://path, ftp://link, [http://link](http://link), et [https://link](https://link) sont toutes des options valides.
+* **Enabled** - Si oui ou non le déoôt est activer pour l'utilisation lors des actions de mise à jour et d'installation par exemple enabled=1 (1 signifie "utiliser ce dépôt", 0 signifie "ne pas utiliser ce dépôt").
+* **Gpgcheck **- Activer/ désactiver la vérification de signature GPG  (exemple: gpgcheck=1)
+* **Gpgkey **- URL de la clé GPG (exemple: gpgkey=[http://mirror.cisp.com/CentOS/6/os/i386/RPM-GPG-KEY-CentOS-6\\](http://mirror.cisp.com/CentOS/6/os/i386/RPM-GPG-KEY-CentOS-6\)/)
 
 {% hint style="info" %}
-GPG is a digital signature check , which is used to verify the package is modified in between your downloads or after making the package, It help to verify the that you are installing the correct package with out any modification from 3 party or a hacker.
+GPG est une vérification de signature digitale, qui est utilisé pour vérifié si un paquet a été modifié entre les téléchragement ou après avoir construit le paquet. Il aide à vérifier que vous installer des paquets corrects dans aucune modification tieres ou d'un hacker.
 {% endhint %}
 
-YUM can use numerous third party repositories to install packages automatically by resolving their dependencies issues.
+YUM peut utiliser de nombreux dépôts tiers pour installer ces paquets automatiquement et résoudre les problèmes liés aux dépendances.
 
-### List Enabled Yum Repositories
+### Lister les dépôts YUM activés
 
-`yum repolist` list all enabled Yum repositories in your system:
+`yum repolist` lister tous les dépôts Yum activés sur votre système :
 
 ```
 [root@centos7-1 ~]# yum repolist 
@@ -755,13 +755,13 @@ updates/7/x86_64         CentOS-7 - Updates                                     
 repolist: 24,684
 ```
 
-To list all Enabled and Disabled Yum Repositories use `yum repolist all` command.
+Pour lister les dépôts activés et désactivés utiliser la commande `yum repolist all`.
 
-### Install a Package with YUM
+### Installer un paquet avec YUM
 
-We can install new software on Red Hat/CentOS Linux with `yum install packagename` command from console.
+Nous pouvons installer de nouveaux logiciels sur les distributions Linux Red Hat/CentOS avec la commande `yum install packagename` dans une console.
 
-Running this command first checks for existing YUM Repository configuration files in /etc/yum.repos.d/ directory. It reads each YUM Repository configuration file to get the information required to download and install new software, resolves software dependencies and installs the required RPM package files.
+Lancer la commande va d'abord vérifier que les ficheirs de configuration du dépôt YUM existe dans le dossier /etc/yum.repos.d/. Il lit chaque fichier de configuration de dépôt YUM et obtient les informations nécessaire pour télécharger et installer le nouveau logiciel, résoudre ses dépendances et installer les fichiers requis du paquet RPM.
 
 ```
 [root@centos7-1 ~]# yum install zip
@@ -806,11 +806,11 @@ Installed:
 Complete!
 ```
 
-use `-y` option if you do not like to be asked for confimation. If you have a rpm package use `yum localinstall abc.rpm` .
+Utiliser l'option `-y` si vous ne voulez pas que l'on vous demande une confirmation. Si vous avez un paquet rpm sur votre machine utiliser `yum localinstall abc.rpm` .
 
-### Removing a Package with YUM
+### Supprimer un paquet avec YUM
 
-`yum remove packagename` remove a package completely with their all dependencies.
+`yum remove packagename` supprime un paquet complètement avec toutes ses dépendances.
 
 ```
 [root@centos7-1 ~]# yum remove zip
@@ -848,11 +848,11 @@ Removed:
 Complete!
 ```
 
-Same way the remove command will ask confirmation before removing a package. To disable it just add option `-y` .
+De la même façon la commande remove vous demandera confirmation avant de supprimer un paquet. Pour la désactiver ajouter juste l'option `-y` .
 
-### Search for a Package using YUM
+### Recherche un paquet en utilisant YUM
 
-Use `yum search` function to search all the available packages to match the name of the package you specified.
+Utiliser la fonction `yum search` pour rechercher dans tous les paquets disponibles ceux qui correspondent au nom de paquet que vous avez specifié.
 
 ```
 [root@centos7-1 ~]# yum search firefox
@@ -881,9 +881,9 @@ webextension-token-signing.x86_64 : Firefox extension for signing with your eID 
   Name and summary matches only, use "search all" for everything.
 ```
 
-### Get Information of a Package using YUM
+### Obtenir des informations sur un paquet en utilisant YUM
 
-With`yum info packagename` we can get information of a package before installing or an installed package:
+Avec `yum info packagename` nous pouvons obtenir des information sur un paquet avant de l'installé ou sur un paquet déjà installé :
 
 ```
 [root@centos7-1 ~]# htop
@@ -910,9 +910,9 @@ Description : htop is an interactive text-mode process viewer for Linux, similar
             : top(1).
 ```
 
-### Get information about dependencies of a package
+### Obtenir des information sur les dépendances d'un paquet
 
-Use yum deplist command to know about dependencies of a package which would be installed on our system:
+Utiliser la commande `yum deplist` pour connaitre les dépendances d'un paquet qui est installé sur notre système :
 
 ```
 [root@centos7-1 ~]# yum deplist htop
@@ -944,11 +944,11 @@ package: htop.x86_64 2.2.0-1.el7
    provider: glibc.i686 2.17-222.el7
 ```
 
-`yum install`automatically installs all of them.
+`yum install` les installe toutes automatiquement.
 
-### Yum Provides Function
+### Fonctions fournies par Yum
 
-`yum provide` finds packages that provide the queried file:
+`yum provide` trouve des paquet qui fournisse les fichiers demandés:
 
 ```
 [root@centos7-1 ~]# yum provides /etc/updatedb.conf 
@@ -971,44 +971,44 @@ Matched from:
 Filename    : /etc/updatedb.conf
 ```
 
-also we can use`yum whatprovide /*filename` instead.
+Nous pouvons aussi utiliser `yum whatprovide /*filename` à la place.
 
-### List all Available Packages
+### Lister tous les paquets disponibles
 
-`yum list` list all the available packages in the Yum database.
+`yum list` liste tous les paquets disponibles dans la base de données de Yum.
 
 ```
 [root@centos7-1 ~]# yum list
 ```
 
-### List all Installed Packages using YUM
+### Lister tous les paquets installés en utilisant YUM
 
 ```
 [root@centos7-1 ~]# yum list installed
 ```
 
-### Working with yum** Cache**
+### Travailler avec le **cache** de yum
 
-By default, yum deletes downloaded data files when they are no longer needed after a successful operation. This minimizes the amount of storage space that yum uses. However, we can enable caching, so that the package files downloaded by yum stay in cache directories. By using cached data, you can carry out certain operations without a network connection, we can also copy packages stored in the caches and reuse them elsewhere.
+Par défaut, yum supprime les fichiers de données téléchargés lorsqu'il ne sont plus nécessaire après une opération réussie. Cela permet de minimiser la quantité de stockage que yum utilise. Cependant, nous popuvons activer du cache, pour que chaque fichier de paquet télécharger par yum reste dans un dossier de cache. En utilisant les données mises en cache, vous pouvez effectuer certaines opérations sans avoir besoin d'une connexion réseau, nous pouvon aussi copier les paquets stockés dans le cache et les réutiliser ailleurs.
 
-Yum stores temporary files in the`/var/cache/yum/$basearch/$releasever/`directory,
+Yum stocke les fichiers temporaires dans le dossier `/var/cache/yum/$basearch/$releasever/`,
 
 ```
 [root@centos7-1 ~]# ls /var/cache/yum/x86_64/7/
 base  epel  extras  timedhosts  timedhosts.txt  updates
 ```
 
-Each configured repository has one subdirectory.T o change the default cache location, modify the **cachedir **option in the **\[main] **section of the `/etc/yum.conf`configuration file.
+Chaque dépôt configura a un sous-dossier. Pour changer la localisation du cache par défaut, modifier l'option **cachedir** dans la section **\[main]** du fichier de configuration `/etc/yum.conf`.
 
-**Enabling the cache**
+**Activer le cache**
 
-To retain the cache of packages after a successful installation, we can enable the cache** **editing **keppcache = 1** in the \[main] section of`/etc/yum.conf`.
+Pour garder le cache des paquet après une installation réussi, nous pouvons activer le cache en modifiant **keppcache = 1** dans la section \[main] de`/etc/yum.conf`.
 
-To download and make usable all the metadata for the currently enabled yum repositories, use `yum makecache` command.It makes sure that the cache is fully up to date with all metadata.This make sure that the cache is fully up to date with all metadata. To set the time after which the metadata will expire, use the **metadata-expire** setting in`/etc/yum.conf`.
+Pour télécharger et rendre utilisable toutes les métadonnées sur les dépôts activés de yum, utiliser la commande `yum makecache`. Cela permet de s'assurer que le cache est complètement à jour avec toutes les métadonnées. Pour définir une période après laquelle les métadonnées expirent, utiliser le paramètre **metadata-expire** dans `/etc/yum.conf`.
 
-**Using yum in Cache-only Mode**
+**Utiliser le mode Cache-only de yum**
 
-To carry out a yum command without a network connection, add the `-C` (not `-c` )or `--cacheonly` command-line option. With this option, yum proceeds without checking any network repositories, and uses only cached files. In this mode, yum may only install packages that have been downloaded and cached by a previous operation.
+Pour exécuter une commande yum sans connexion réseau, ajouter l'option `-C` (pas `-c` )ou `--cacheonly` à la ligne de commande. Avec cette option, yum travaille sans aucune vérificcation des dépôts sur le réseau, et utilise uniquement les fichiers mis en cache. Dans ce mode, yum pourra seulement installé les paquets qui ont été téléchargés et mis en cache par une opération précédente.
 
 ```
 [root@centos7-1 ~]# yum -C install zip
@@ -1035,13 +1035,13 @@ Installed size: 796 k
 Is this ok [y/d/N]:
 ```
 
-**clearing the yum caches**
+**Vider le cache de yum**
 
-It is often useful to remove entries accumulated in the `/var/cache/yum/` directory. If we remove a package from the cache, we do not affect the copy of the software installed on our system. To remove all entries for currently enabled repositories from the cache, run `yum clean all` as a root.
+C'est souvent utile de supprimer les entrées accumulés dans le dossier  `/var/cache/yum/`. Si nous supprimons un paquet du cache, cela n'affecte pas la copie du logiciel installée sur notre système. Pour supprimer toutes les entrées des dépôts actuellement activtés depuis le cache, lancer en tant que root la commande  `yum clean all` .
 
-### Check for Available Updates using Yum
+### Vérifier la disponibilité des mises à jour en utilisant Yum
 
-use `yum check-update` To find how many of installed packages on our system have updates available:
+Utiliser `yum check-update` pour trouver combien de paquets installés sur notre système ont des mises à jour disponibles :
 
 ```
 [root@centos7-1 ~]# yum check-update 
@@ -1067,9 +1067,9 @@ NetworkManager-wifi.x86_64                1:1.10.2-16.el7_5              updates
 <output has been truncated>
 ```
 
-### Update System using Yum
+### Mettre à jour le système en utilisant Yum
 
-yum update keep our system up-to-date with all security and binary package updates
+yum update garde notre système à jour avec toutes les mises à jours de sécurités et binaires des paquets
 
 ```
 [root@centos7-1 ~]# yum update 
@@ -1123,9 +1123,9 @@ Is this ok [y/d/N]: y
 ...
 ```
 
-### Updating a Package using YUM
+### Mettre à jour un paquet en utilisant YUM
 
-`yum update packagename`will update a package and automatically resolves all dependencies issues and install them.
+`yum update packagename` met à jour un paquet et résout automatiquement tous les problèmes de dépendances et les installe.
 
 ```
 [root@centos7-1 ~]# yum update firefox -y
@@ -1190,20 +1190,20 @@ Dependency Updated:
 Complete!
 ```
 
-If you have a rpm package you can use `yum localupdate abc.rpm` .
+Si vous avez un paquet rpm vous pouvez utiliser `yum localupdate abc.rpm` .
 
 > ### YUM update vs YUM upgrade
 >
-> `yum upgrade` and `yum update` will perform the same function that update to the latest current version of package.
+> `yum upgrade` et `yum update` effectue la même fonction qui met à jour vers la dernière version du paquet.
 >
-> `yum upgrade` **forces **the removal of obsolete packages, while `yum update` may or may not also do this. The removal of obsolete packages can be risky, as it may remove packages that you use.\
-> This makes `yum update` the safer option.
+> `yum upgrade` **forces** la suppression du paquet obsolète, alors que `yum update`peut ou pas faire ça. La suppression des paquets obsolètes peut être risquées, car cela peut entrainer la supppression de paquet que vous utilisez.\
+> Cela fait de `yum update` une option plus sûre.
 >
-> note: The behaviour might be different based on your distribution and version.
+> note: Le comportement peut être différent en fonction de votre distribution et version.
 
-### Working with Group Packages
+### Travailler avec les groupes de paquets (Group Packages)
 
-In Linux, number of packages are bundled to particular group , called** Group Packages**. Instead of working with individual packages with yum, we can work particular group that will install/remove/update all the related packages that belongs to the group.
+Dans Linux, de nombreux paquets sont rassemblé dans un groupe particulier, appelé **Group Packages**. Au lieu de travailler avec des paquets individuelles avec yum, vous pouvez travailler avec un groupe particulier qui installera / supprimera / mettra à jour tous les paquets qui appartiennetn au groupe.
 
 ```
 # yum grouplist :
@@ -1214,7 +1214,7 @@ In Linux, number of packages are bundled to particular group , called** Group Pa
 
 ## YUM Shell
 
-Yum utility provides a custom shell where you can execute multiple commands.
+L'utilitaire Yum fournit un shell personnalisé où vous pouvez exécuter de nombreuses commandes.
 
 ```
 [root@centos7-1 ~]# yum shell 
@@ -1230,14 +1230,14 @@ Leaving Shell
 
 ## yumdownloader
 
-How do I use yum to download a package without installing it? There are multiple ways in which you can download a yum package without installing it. The 2 most commonly used methods are described here in the post.
+Comment utiliser yum pour télécharger un paquet sans l'installer ? Il y a de nombreuses manières pour télécharger un paquet sans l'installer. Les deux méthodes les plus communes sont décrites ici.
 
-1. using the “downloadonly” plugin for yum
-2. using “yumdownloader” utility.
+1. En utilisant le plugin de yum “downloadonly” 
+2. En utilisant l'utilitaire “yumdownloader” .
 
-**Method 1** : using the “**downloadonly**” plugin for yum:
+**Méthode 1** : En utilisant le plugin de yum “downloadonly”:
 
-First install the package including “downloadonly” plugin:
+En premier nous devons installer le paquet qui inclut le plugin “downloadonly” :
 
 ```
 (RHEL5)
@@ -1247,41 +1247,41 @@ First install the package including “downloadonly” plugin:
 # yum install yum-plugin-downloadonly
 ```
 
-syntax:
+syntaxe:
 
 ```
 yum install --downloadonly --downloaddir=[directory] [package]
 ```
 
-If you do not use `--downloaddir` option, it would be saved in `/var/cache/yum/ in rhel-{arch}-channel/packages directory`.
+Si vous n'utiliser pas l'option, il sera enregistré dans `/var/cache/yum/ in rhel-{arch}-channel/packages directory`.
 
-example:
+exemple:
 
 ```
  yum install --downloadonly --downloaddir=/tmp firefox
 ```
 
-**Method 2 **: using the “**yumdownloader**” utility
+**Méthode 2 **: En utilisant l'utilitaire “yumdownloader”
 
-First install the yum-utils package:
+En premier nous installons le paquet yum-utils:
 
 ```
 yum install yum-utils
 ```
 
-syntax:
+syntaxe:
 
 ```
 yumdownloader --destdir [directory] [package]
 ```
 
-example:
+exemple:
 
 ```
 yumdownloader --destdir /tmp firefox
 ```
 
-try`yumdownloader --help` to see some of usefull switches such as :
+Essayer `yumdownloader --help` pour voir les options utiles comme :
 
 ```
 --urls     Instead of downloading RPMs, list the URLs that would be downloaded.
@@ -1290,11 +1290,11 @@ try`yumdownloader --help` to see some of usefull switches such as :
 ...
 ```
 
- the `--resolve` switch is usefull inorder to download a package ant its dependencies and lets us to use them in other system.
+L'option`--resolve` est utile pour télécharger un paquet et ses dépendances et l'utiliser dans d'autres systèmes.
 
-### to view history of Yum commands (update, install, remove)
+### Pour voir l'historique des commandes Yum (update, install, remove)
 
-We can either use `yum history` command :
+Vous pouvez utiliser la commande `yum history`  :
 
 ```
 [root@centos7-1 ~]# yum history 
@@ -1315,7 +1315,7 @@ ID     | Login user               | Date and time    | Action(s)      | Altered
 history list
 ```
 
-or see yum log file in `/var/log/yum` directory:
+Ou voir le fichier journal de yum dans le dossier `/var/log/yum` :
 
 ```
 [root@centos7-1 ~]# tail -5 /var/log/yum.log 
@@ -1326,16 +1326,16 @@ Dec 05 10:02:37 Updated: nss-tools-3.36.0-7.el7_5.x86_64
 Dec 05 10:02:37 Updated: 1:dbus-x11-1.10.24-7.el7.x86_64
 ```
 
-### Summary
+### Résumé
 
-Fedora Family System:
+Système de la famille Fedora/Red Hat :
 
 * **Red Hat Package Manager (rpm)**:
-  * low-level or underlying packet manager
+  * gestionnaire de paquet bas-niveau ou sous-jacent
 * **Yellowdog Updater (yum)**:
-  * The high-level package manager differs between distribution but yum is commonly used
+  * Le gestionnaire de paquet haut-niveau qui diffère selon les distributions mais yum est souvent utilisé
 * **Dandified Yum (dnf)**:
-  * It is the next-generation version of yum
+  * La prochaine génération de version de yum
 
 .
 

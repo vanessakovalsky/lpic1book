@@ -577,15 +577,15 @@ Note: La numérotation des partitions a changé dans GRUB2. La première partiti
 
 ### Installation de GRUB
 
-Normalement lorsque nous installons un système GRUB est installé pour nous Normally when we setup a system GRUB is installed for us but there are some cases which we might need to install GRUB ourselves. There are different ways to install GRUB.
+Normalement lorsque nous installons un système GRUB est installé pour nous  mais dans certain cas nous devrons installer GRUB nous-même. Il y a plusieurs façons d'installer GRUB.
 
-If we are on old system with GRUB legacy we can run grub-install command or using setup command in GRUB shell.
+Si vous êtes sur un ancien système avec GRUB legacy vous pouvez lancer la commande grub-install ou utiliser la commande setup dans le shell GRUB.
 
 ```
 [root@centos5-1 ~]# grub-install /dev/sdb
 ```
 
-If we are on GRUB2 we can use one of GRUB2 utilities.
+ISi vous êtes sur GRUB2 vous pouvez utiliser un des utilitaires de GRUB2.
 
 ```
 [root@centos7-1 ~]# grub2-
@@ -602,7 +602,7 @@ grub2-menulst2cfg          grub2-mkstandalone         grub2-syslinux2cfg
 
 ### grub2-install
 
-grub-install installs GRUB onto a device. This includes copying GRUB images into the target directory (generally /boot/grub), and on some platforms may also include installing GRUB onto a boot sector.
+grub-install installer GRUB sur un périphérique. Cela inclut la copie des images GRUB sur le dossier cible (généralement /boot/grub), et sur certaines plateformes cela peut aussi inclure l'installation de GRUB sur le secteur de démarrage.
 
 ```
 [root@centos7-1 ~]# grub2-install --help
@@ -673,12 +673,12 @@ also install GRUB into the boot sector.
 Report bugs to <bug-grub@gnu.org>.
 ```
 
-as an example `grub2-install /dev/sdb` will install grub on sdb device, to the master boot record of my hard disk.
+Par exemple `grub2-install /dev/sdb` installera grub sur le périphérique sdb, sur le master boot record de mon disque dur.
 
-How ever instaling GRUB a from running system seems cool, but most of the time there is a problem during boot process and we can not get into our system any more, so we need to reinstall GRUB from GRUB shell. Unfortunately the setup command has been removed from GRUB2 shell and it would need more efforts. We need to bring up the system in rescue mode using a live cd and then install GRUB on our hard disk using current temporary root system file:
+Cependant même si installer GRUB sur un système qui fonctione semble cool, la plupart du temps il y a un problème durant le processu de démarrage et nous ne pourront plus accéder à notre système, nous devons donc réinstaller GRUB depuis le shell GRUB. Malheureseument la commande setup a été supprimé du shell de GRUB2 et cela demandera plus d'effort. Nous devons mettre notre système en mode restauration en utilisant un live CD et installer GRUB sur notre disque dur en utilisant un système de fichier racine temporaire:
 
 {% hint style="danger" %}
-it is just an example and do not run it because you would mess up your current system!
+ce n'est qu'un example, ne pas le lancer car cela endommagerai votre système actuel!
 {% endhint %}
 
 `grub2-install --boot-directory=/tmp/root/boot /dev/sda`

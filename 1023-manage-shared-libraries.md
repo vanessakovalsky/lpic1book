@@ -1,56 +1,56 @@
-# 102.3. Manage shared libraries
+# 102.3. Gérer les bibliothèques partagées
 
-## **102.3 Manage shared libraries**
+## **102.3 Gérer les bibliothèques partagées**
 
-**Weight:** 1
+**Poids:** 1
 
 **Description:** Candidates should be able to determine the shared libraries that executable programs depend on and install them when necessary.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
 * Identify shared libraries
 * Identify the typical locations of system libraries
 * Load shared libraries
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * ldd
 * ldconfig
 * /etc/ld.so.conf
 * LD_LIBRARY_PATH
 
-#### What is a library?
+#### Qu'est ce qu'une bibliothèque?
 
-In programming, a library is an assortment of pre-compiled pieces of code that can be reused in a program. Libraries simplify life for programmers, in that they provide reusable functions, routines, classes, data structures and so on (written by a another programmer), which they can use in their programs.
+En programmation, un bibliothèque est un assortiment de pièce pré-compilé de code que nous pouvons réutilisés dans un programme. Les bibliothèques simplifie la vie pour les développeurs, dans le sens où elles fournissent des fonctions réutilisables, des routines, des classes, des structures de données et d'autres choses (écrites par un autre développeur), qui peuvent être utiliser dans leurs programmes.
 
 ![](.gitbook/assets/sharedlib-intro.jpg)
 
-Linux supports two classes of libraries, namely:
+Linux supporte deux classes de bibliothèque, nommées :
 
-* Static libraries – are bound to a program statically at compile time.
-* Dynamic or shared libraries – are loaded when a program is launched and loaded into memory and binding occurs at run time.
+* Bibliothèque statique - sont lié à un programme de manière statique lors de la compilation.
+* Bibliothèques dynamiques ou partagées – sont chargé lors du lancement d'un programme et chargé en mémoire et la liaison intervient lors de l'éxecution.
 
-**Static libraries vs Shared libraries**
+**Bibliothèque statique vs Bibliothèques partagées**
 
-* Each program using routines from a static library has a copy of them in the executable file. This wastes disk space and (if more than one such program is in use at the same time) RAM as well. Also, when a static library is updated, all the programs using it must be recompiled in order to take advantage of the new code. 
-* When a program uses a shared library instead, the program binary does not include a copy of the code, but only a reference to the library. The run time loader, finds the library and loads it into memory at the same time as the program.** **One advantage of using dynamic library is that when a library is updated ( security issues ) all other programs take advantage of new code without recompiling.
+* Chaque programme utilise des routine depuis une bibliothèque statique a une copie de celle-ci dans le fichier exécutable. Cela gaspille de l'espace disque et (dans le cas ou plus d'un programme utilise celle-ci en même temps) de la RAM également. Aussi, lors de la mise à jour d'une bibliothèque statique, tous les programmes qui l'utilise doivent être recompilé afin de bénéficier du nouveau code. 
+* Alors que, lorsqu'un programme utilise une bibliothèque partagée, le binaire du programme n'inclut pas de copie du code, mais seulement une référence vers la bibliothèque. Lors du chargement du programme, la bibliothèque est trouvé et chargé en mémoire au même moment que le programme.** ** Un avantage de l'utilisation des bibliothèque dynamique est que lors de la mise à jour de la bibliothèque (pour des raisons de sécurités) tous les programmes bénéficie du nouveau code sans besoin d'être recompilé.
 
 {% hint style="info" %}
-Dynamic or shared libraries can further be categorized into two groups ( beyond the scope of LPIC exam):
+Les bilbiothèques paragées ou dynamique peuvent être catégorisé en deux groupe (selon le périmètre de l'exam LPIC) :
 
-* **Dynamically linked libraries** – here a program is linked with the shared library and the kernel loads the library (in case it’s not in memory) upon execution.
-* **Dynamically loaded libraries** – the program takes full control by calling functions with the library.
+* **Bibliothèque dynamiquement liées (Dynamically linked libraries)** – ici un programme est lié avec une bibliothèque partagée et le noyau charge la bibliothèque (dans le cas où elle n'est pas déjà en mémoire) lors de l'exécution.
+* **Bibliothèque dynamiquement chargées (Dynamically loaded libraries)** – le programme prend le contrôle complet en appelant des fonctions avec la bibliothèque.
 {% endhint %}
 
-### Libraries locations in linux
+### Localisation des bibliothèques sur linux
 
-Depending on library, Linux stores its libraries mainly in three locations:
+En fonction des bibliothèques, Linux stocke ses bibliothèques principalement dans trois localisations :
 
 * **/lib**
 * **/usr/lib**
 * **/usr/local/lib**
 
-**/lib **: The /lib directory contains those **shared library images needed to boot** the system and run the commands in the root filesystem, ie. by binaries in /bin and /sbin.
+**/lib** : Le dossier /lib contient les **images de bibliothèques partagées nécessaire au démarrage** que le système lance et ceux des commandes du système de fichier racine, comme par exemple ceux des binaires de /bin et /sbin.
 
 ```
 root@ubuntu16-1:~# ls /lib
@@ -62,22 +62,22 @@ firmware  lsb                                   sysvinit
 hdparm    modprobe.d                            terminfo
 ```
 
-The /lib folder sister folders are /lib32 and /lib64.
+Le dossier /lib et ses dossiers associés qui sont /lib32 et /lib64.
 
-**/usr/lib** :** All software libraries** are installed here. This **does not contain system default or kernel libraries**.
+**/usr/lib** :**Toutes les bibliothèques des logiciels** sont installés ici. Cela **ne contient pas les bibliothèques du système par défaut ou les bibliothèques du noyau**.
 
 ```
 root@ubuntu16-1:~# ls /usr/lib/
 ```
 
-**/usr/local/lib**: To place **extra system library files** here. These library files can be used by different applications.
+**/usr/local/lib**: Pour placer des **fichiers de bibliothèques supplémentaires**. Ces fichiers de bibliothèques peuvent être utiliser dans différentes applications.
 
 ```
 root@ubuntu16-1:~# ls /usr/local/lib/
 python2.7  python3.5
 ```
 
-Also **/var/lib** Directory, holds **dynamic data libraries/files** like the rpm/dpkg database and game scores.
+Noter aussi que le dossier **/var/lib**, contient **les fichiers / données des bibliothèques dynamiques** comme la base de données rpm/dpkg et les scores des jeux.
 
 ```
 root@ubuntu16-1:~# ls /var/lib/
@@ -101,43 +101,43 @@ emacsen-common       mlocate          ubuntu-release-upgrader
 fail2ban             NetworkManager   ucf
 ```
 
-In this article we will discuss specifically about Shared Libraries.
+Dans cette section nous verrons plus spécifiquement les bibliothèques partagées.
 
-### Shared Library Naming Conventions
+### Convention de nommage des bibliothèques partagées
 
-Shared libraries are named in three ways:
+Les bibliothèques partagées sont nommées de trois manières :
 
-* library name (a.k.a "soname")  
-* filename  (a.k.a "real name")(absolute path to file which stores library code)
+* nom de la bibliothèque (aussi appelé "soname")  
+* nom du fichier (aussi appelé "real name")(chemin absolu ver le fichier qui stocke le code de la bibliothèque)
 * "linker name"
 
-**1)**Every shared library has a special name called the **"soname''**. The soname has the prefix "**lib**'', the name of the library, the phrase "**.so**'', followed by a period and a **version number** that is incremented whenever the interface changes . 
+**1)**Chaque bibliothèque partagée à un nom special appelé **"soname''**. Le soname a le préfixe "**lib**'', le nom de la bibliothèque, l'extension "**.so**'', suivi par une période et un  **numéro de version** qui est incrémenté lors des changements d'interface . 
 
 ```
 libreadline.so.6
 ```
 
-A fully-qualified soname includes as a prefix the directory it's in.
+Un soname complet inclut en préfix le dossier dans lequel il se trouve.
 
 ```
 /usr/lib/libreadline.so.6
 ```
 
-On a working system a fully-qualified soname is simply a symbolic link to the shared library's "real name''.
+Sur un sysème fonctionnel un soname complet est simplement un lien symbolique vers le "real name" de la bibliothèque partagée.
 
-**2)**Every shared library also has a **"real name''**, which is the filename containing the actual library code. The real name adds to the soname a period, a minor number, another period, and the release number. The last period and release number are optional.
+**2)**Chaque bibliothèque partagé a aussi un **"real name''**, qui est le nom du fichier qui contient le code actuel de la bibliothèque. Le nom réel ajoute au soname une période, un numéro mineur, une autre période et un numéro de publication (release number). La dernière période et le numéro de publication sont optionnels.
 
 ```
 libreadline.so.6.3
 ```
 
-**3)**In addition, there's the name that the compiler uses when requesting a library, (I'll call it the **"linker name''**), which is simply the soname without any version number.
+**3)**De plus, il y a le nom que le compilateur utilise lorsqu'il appelle une bibliothèque (qui est appelé **'linker name'**), qui est simplement le soname sans aucune numéro de version.
 
 ```
 libreadline.so
 ```
 
-Okey lets explain all in an example:
+Illustrons cela avec un exemple :
 
 ```
 root@ubuntu16-1:/lib/x86_64-linux-gnu# ls -l | grep libread
@@ -145,11 +145,11 @@ lrwxrwxrwx 1 root root      18 Nov 26  2017 libreadline.so.6 -> libreadline.so.6
 -rw-r--r-- 1 root root  282392 Feb  4  2016 libreadline.so.6.3
 ```
 
-Thus, `/usr/lib/libreadline.so.6` is a fully-qualified soname, which is set to be a symbolic link to some realname like `/usr/lib/libreadline.so.6.3`. There should also be a linker name, `/usr/lib/libreadline.so` which could be a symbolic link referring to `/usr/lib/libreadline.so.6`.
+Ce, `/usr/lib/libreadline.so.6` est le soname complet, qui est défini comme un lien symbolique vers le nom réel comme `/usr/lib/libreadline.so.6.3`. Il devrait y avoir un nom lié(linker name), `/usr/lib/libreadline.so` qui pourrait être un lien symbolique se référent à  `/usr/lib/libreadline.so.6`.
 
 ### ldd
 
-To **get a list of all shared library dependencies for a binary file**, you can use the ldd utility**. **For example lets see what shared libraries are required by ls command:
+Pour **obtenir une liste de toutes les bibliothèques partagées dont dépendant un fichier binaire**, vous pouvez utiliser l'utilitaire ldd. Par exemple voyons quels sont les bibliothèques partagées requises par la commande ls :
 
 ```
 root@ubuntu16-1:~# which ls
@@ -164,30 +164,30 @@ root@ubuntu16-1:~# ldd /bin/ls
     libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f687c955000)
 ```
 
-Try `ltrace ls` to get surprised! But how poor ls can find its required shared libraries?
+Essayer `ltrace ls` pour obtenir une surprise! Mais comment ls peut trouver ses bibliothèque partagées ?
 
-### Locating Shared Libraries in Linux
+### Trouver les bibliothèques partagées sur Linux
 
-A program can call a library using its library name or filename, and a library path stores directories where libraries can be found in the filesystem. But How it can find them? Lets show the structure in a picture:
+Un programme peut appelé une bibliothèque en utilisant le nom de la bibliothèque ou le nom du fichier, et un chemin de bibliothèque stocke les dossier dans lequel les bibliothèques peuvent être trouvées sur le système de fichier. Mais comment les retrouver ? Voyons la structure avec une image :
 
 ![](.gitbook/assets/sharedlib-filestructure.jpg)
 
-These three files helps programs to find their required shared libraries.
+Ces trois fichiers aide les programme à trouver les bibliothèques partagées dont elles ont besoin.
 
 ### ld.so.conf
 
-ld.so.conf file tells the system where to look for library files, that is kind of an address book.
+Le fichier ld.so.conf dit au système où chercher les fichier de bibliothèques, comme une sorte de carnet d'adresses.
 
 ```
 root@ubuntu16-1:~# cat /etc/ld.so.conf
 include /etc/ld.so.conf.d/*.conf
 ```
 
-Traditionally in the past, it included all the paths which libraries existed. Today more abstraction has been implemented and it just points to ld.so.conf.d directory. Simply it says go to the ld.so.conf.d directory and load any configuration files.
+Historiquement, il incluait aussi tous les chemins dans lesquels les bibliothèques existaient. Aujourd'hui, plus d'abstraction a été mise en place et il pointe seulement vers le dossier ld.so.conf.d. Simplement il dit va dans le dossier ld.so.conf.d et charge tous les fichiers de configuration.
 
 ### /etc/ld.so.conf.d
 
-ld.so.conf.d directory contains several configuration files for the kernel or for other third party applications.
+Le dossier ld.so.conf.d contient différents fichiers de configuration pour le noyau ou pour les autres applications tiers.
 
 ```
 root@ubuntu16-1:~# ls -la /etc/ld.so.conf.d/
@@ -202,7 +202,7 @@ lrwxrwxrwx   1 root root    43 Nov 26  2017 x86_64-linux-gnu_EGL.conf -> /etc/al
 lrwxrwxrwx   1 root root    42 Nov 26  2017 x86_64-linux-gnu_GL.conf -> /etc/alternatives/x86_64-linux-gnu_gl_conf
 ```
 
-Lets see what is inside configuration files :
+Voyons ce qu'il y a dans ces fichiers de configuration :
 
 ```
 root@ubuntu16-1:~# cat /etc/ld.so.conf.d/libc.conf 
@@ -221,17 +221,17 @@ root@ubuntu16-1:~# cat /etc/ld.so.conf.d/vmware-tools-libraries.conf
 /usr/lib/vmware-tools/lib64/libDeployPkg.so
 ```
 
-We can add a new configuration file or edit any of them in order to include a new path.
+Nous pouvons ajouter un nouveau fichier de configuration ou modifier n'importe lequel afin d'inclure de nouveau chemin.
 
 ### ldconfig
 
-Because shared libraries can exist in many different directories, searching through all of these directories when a program is launched would be greatly inefficient, which is one of the likely disadvantages of dynamic libraries. Therefore a mechanism of caching employed, performed by a the program ldconfig.
+Puisque les bibliothèques partagées peuvent exister dans de nombreux dossiers différents, rechercher dans tous ces dossier lorsqu'un programme est lancé serait grandement inefficace, ce qui est un des grand inconvénient des bibliothèques partagées. Cependant un mécanisme de cache est utilisé, il est mis en place par le programme  ldconfig.
 
-By default, ldconfig reads the content of /etc/ld.so.conf, creates the appropriate symbolic links in the dynamic link directories, and then writes a cache to /etc/ld.so.cache which is then easily used by other programs.
+Par défaut, ldconfig lit le contenu de /etc/ld.so.conf, crée les liens symboliques appropriés dans le dossier des liens dynamique, et il écrit un cache dans  /etc/ld.so.cache qui est facilement utilisable par d'autres programmes.
 
 ### ld.so.cache
 
-This is a binary file, so that is not something we usually like to see :
+C'est un fichier binaire, donc quelque chose que nous avons pas l'habitude de voir qui ressemble à ça :
 
 ```
 root@ubuntu16-1:~# cat /etc/ld.so.cache 
@@ -247,9 +247,9 @@ vv@vKvpv}v�v�v�v�vww<wMwxw�w�w�w�w�wx5x
 <The out put has been truncuated>
 ```
 
-use `string` command intead and it just shows human readable binary files, also `lconfig -p` prints cache.
+Utiliser la commande `string` a la place et vous aurez un contenu lisible par un humain du fichier binaire, à noter aussi que `lconfig -p` affiche le cache.
 
-This is very important especially when we have just installed new shared libraries or created our own, or created new library directories. We need to run ldconfig command to effect the changes.(The out put has been truncated):
+Ceci est très important spécialement lorsque nous venons d'installer un nouvelle bibliothèque partagée ou que nous en avons créé une, ou créer un nouveau dossier de bibliohtèque. Nous avons besoin de lancer la commande ldconfig pour que les changements soient appliqués.(La sortie a été tronquée):
 
 ```
 root@ubuntu16-1:~# ldconfig -v
@@ -340,7 +340,7 @@ d.so
     libfsplib.so.0 -> libfsplib.so.0.0.0
 ```
 
-ldconfig command has some options:
+La commande ldconfig a quelque options:
 
 ```
 root@ubuntu16-1:~# ldconfig --help
@@ -370,35 +370,35 @@ For bug reporting instructions, please see:
 <https://bugs.launchpad.net/ubuntu/+source/glibc/+bugs>.
 ```
 
-After creating our shared library, we need to install it.
+Après avoir créer une bibliothèque partagée, nous avons besoin de l'installer.
 
-### Installing a Dynamic Library: <a href="f3ce" id="f3ce"></a>
+### Installer une bibliothèque dynamique: <a href="f3ce" id="f3ce"></a>
 
-There are several ways to install a dynamic library:
+Il y a différentes manière d'installer une bibliothèque partagée : 
 
-**1)**We can either move it into any of the standard directories mentioned above, and run the ldconfig command.
+**1)**Nous pouvons la déplacer dans un des dossier standard mentionné précédemment et lancer la commande ldconfig.
 
-**2)**The method above sets the library path permanently. To set it temporarily, use the LD_LIBRARY_PATH environment variable on the command line.
+**2)**La méthode ci-dessus rend le chemin de la bibliothèque permanenent. Pour le définir de manière temporaire, utiliser la variable d'environnement LD_LIBRARY_PATH depuis la ligne de commande.
 
 ## LD_LIBRARY_PATH
 
-In Linux, the environment variable LD_LIBRARY_PATH is a colon-separated set of directories where libraries should be searched for first, before the standard set of directories; this is useful when debugging a new library or using a nonstandard library for special purposes.
+Dans Linux, la variable d'environnement LD_LIBRARY_PATH est un ensemble de dossier séparé par des ':' où les bibliothèques partagées doivent être rechercher en premier, avant l'ensemble de dossiers standard; c'est utile pour débogguer une nouvelle bibliothèque ou utiliser une bibliothèque non standard pour un besoin spécifique.
 
 ```
 root@ubuntu16-1:~# echo $LD_LIBRARY_PATH
 ```
 
-The usual dynamic linker on Linux uses a cache to find its libraries, So there is no default value for LD_LIBRARY_PATH, default library lookup doesn’t need it at all. If LD_LIBRARY_PATH is defined, then it is used first, but doesn’t disable the other lookups (which also include a few default directories).
+Les liens dynamiques habituels sur linux utilise un cache pour rechercher ses bibliothèques. Donc il n'y a pas de valeur par défaut pour LD_LIBRARY_PATH, la recherche par défaut des bibliothèques n'en a pas besoin. Si LD_LIBRARY_PATH est défini, alors il sera utilsié en premier, mais ne désactive pas les autres recherche (qui inclut également quelques dossiers par défaut).
 
-Whether it has a default value or not we can use blow command to add our new library path:
+Qu'il y ait ou non une valeur par défaut, vous pouvez utiliser la commande ci-dessous pour ajouter notre chemin vers la nouvelle bibliothèque :
 
 ```
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/custom/path/
 ```
 
-Do not forget that these changes are not permanent and If you want to keep the changes permanent, then add above line in the shell initialization file**/etc/profile**(global) or**\~/.profile**(user specific), which will be discussed in next lessons.
+N'oubliez pas que ces modifications ne sont pas permanentes et si vous voulez rendre ces changements permanent, ajouter la ligne ci-dessus à l'initilisation du shell dans le fichier**/etc/profile**(global) or**\~/.profile**(spécifique à l'utilisateur), ce que nous verrons dans la prochaine.
 
-That's all!
+C'est terminé!
 
 .
 

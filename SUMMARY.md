@@ -5,7 +5,7 @@
 * [101.2. Démarrage du système](1012-boot-the-system.md)
 * [101.3. Changer le niveau d'exécution / les cibles de démarrage et arrêter ou redémarrer le système](1013-change-runlevels-boot-targets-and-shutdown-or-reboot-system.md)
 * [102.1. Modèle de conception d'un disque dur](1021-design-hard-disk-layout.md)
-* [102.2. Install a boot manager](1022-install-a-boot-manager.md)
+* [102.2. Installation d'un gestionnaire de démarrage](1022-install-a-boot-manager.md)
 * [102.3. Manage shared libraries](1023-manage-shared-libraries.md)
 * [102.4. Use Debian package management](1024-use-debian-package-management.md)
 * [102.5. Use RPM and YUM package management](1025-use-rpm-and-yum-package-management.md)

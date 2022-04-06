@@ -100,9 +100,9 @@ Des systèmes de fichiers différents ont une structure différente pour déterm
 * **Btrfs**: Btrfs — “better file system” — est un nouveau système de fichier Linux qui est encore en développement. Ce n'est pas celui utilisé par défaut sur la plupart des distribution Linux, mais il remplacera probablement Ext4 un jour. L'objectif est de fournir des fonctionnalités supplémentaire pour permettre à Linux de se mettre à l'échelle sur des stockage plus important.
 * **Swap**: Sur Linux, le système de fichier “swap” n'est pas vraiment un système de fichier. Une partition formatté comme “swap” peut seulement être utilisé comme espace swap par le système d'exploitation 
 
-#### Linux Directory Structure
+#### Structure des dossiers Linux
 
-Linux uses a hierarchical file system structure, much like an upside-down tree, with root (/) at the base of the file system and all other directories spreading from there. The linux directory consists of many file systems that can be on many devices even on many servers.
+Linux utilise un système structuré hiérarhique de fichier, qui est plus ou-moins un arbre à l'envers, avec la racine (/) à la base du système de fichier et tous les autres dossiers qui commence depuis. L'arborescence de linux consiste en de nombreux système de fichier qui peuvent être sur de nombreux périphériques et même sur différents serveurs.
 
 ```
 [root@centos7-1 ~]# tree / -L 1
@@ -130,83 +130,83 @@ Linux uses a hierarchical file system structure, much like an upside-down tree, 
 19 directories, 0 files
 ```
 
-Lets explain what they are for:
+Expliquons ce que sont ces dossier:
 
-* **/** (root): the root filesystem, mounted before the kernel loads the first process. The bootloader tells the kernel what to use as the root filesystem (it's usually a disk partition but could be something over the network).
-* **/bin** : All the executable binary programs (file) required during booting, repairing, files required to run into single-user-mode, and other important, basic commands.
-* **/boot** : Holds important files during boot-up process, including Linux Kernel.
-* **/dev** : an in-memory filesystem where device files are automatically created by udev based on available hardware.Contains device files for all the hardware devices on the machine e.g., cdrom, cpu, etc
-* **/etc** : Contains Application’s configuration files, startup, shutdown, start, stop script for every individual program.
-* **/home** : Home directory of the users. Every time a new user is created, a directory in the name of user is created within home directory which contains other directories like Desktop, Downloads, Documents, etc.
-* **/lib** : The Lib directory contains kernel modules and shared library images required to boot the system and run commands in root file system.
-* **/media **: Temporary mount directory is created for removable devices .
-* **/mnt** : Temporary mount directory for mounting file system.
-* **/opt** : Optional is abbreviated as opt. Contains third party application software.
-* **/proc** : A virtual and pseudo file-system which contains information about running process with a particular Process-id aka pid.
-* **/root **: This is the home directory of root user and should never be confused with ‘/‘
-* **/run** : This directory is the only clean solution for early-runtime-dir problem.
-* **/sbin** : Contains binary executable programs, required by System Administrator, for Maintenance.
-* **/srv** : Service is abbreviated as ‘srv‘. This directory contains server specific and service related files.
-* **/sys** : Modern Linux distributions include a /sys directory as a virtual filesystem, which stores and allows modification of the devices connected to the system.
-* **/tmp **:System’s Temporary Directory, Accessible by users and root. Stores temporary files for user and system, till next boot.
-* **/usr** : Contains executable binaries, documentation, source code, libraries for second level program.
-* **/var** : Stands for variable. The contents of this file is expected to grow. This directory contains log, lock, spool, mail and temp files.
+* **/** (racine): le système de fichier racine, monté avant que le noyau ne charge le premier processus. Le chargeur de démarrage dit au noyau ce qu'il doit utiliser comme système de fichier racine (c'est généralement une partition du disque mais peut être quelque chose sur le réseau).
+* **/bin** : Tous les programmes binaire exécutables (fichier) nécecssaire pendant le démarrage, la réparation, fichier nécessaire au fonctionnement en mode utilisateur unique, et autres commandes basiques importante.
+* **/boot** : Contient les fichiers important utiliser durant le processus de démarrage, incluant le noyau Linux.
+* **/dev** : un système de fichier en-mémoire où les fichiers de priphériques sont automatiquement créé par udev qui s'appuie sur le matériel disponible. Contient les fichiers de périphériques pour tous les périphériques matériel de la machine, par exemple un lecteur cd, le cpu, etc
+* **/etc** : Contient les fichiers de configuration des appplications, les script de démarrage, d'arrêt, de rédémarrage pour chaque programme individuel.
+* **/home** : Dossier privé des utilisateurs. Chaque fois qu'un nouvel utilisateur est créé, un dossier du nom de l'utilisateur est créé dans ce dossier home qui contient d'autres dossiers comme Bureau(Desktop), Téléchargements(Downloads), Documents, etc.
+* **/lib** : Le dossier Lib contient les modules du noyau et les image partagés des bibliothèques nécessaire au démarrage du système et pour lancer des commande dans le système de fichier racine.
+* **/media** : Dossier de montage temporaire créé pour les périphériques amovibles .
+* **/mnt** : Dossier de montage temporaire pour monter des systèmes de fichier.
+* **/opt** : Optional abrégé comme opt. Contient des logiciels tiers.
+* **/proc** : Un pseudo  et virtuel système de fichier qui contient des information sur les processus en cours avec un Process-id aka pid particulier.
+* **/root**: C'est le répertoire privé de l'utlisateur racine et  ne doit pas être jamais être confondu avec ‘/‘
+* **/run** : Ce dossier est la seule solution propre pour les problème early-runtime-dir.
+* **/sbin** : Contient les binaires exécutables des programmes, requis par l'administrateur Système, pour les maintenances.
+* **/srv** : Service abrégé comme ‘srv‘. Ce dossier contient les éléments spécifique du serveur et les fichiers liés aux services.
+* **/sys** : Les distributions Linux modernes inclus un dossier /sys qui est un systme de fichier virtuel, qui stocke et permet la modification des périphériques connectés au système.
+* **/tmp** : Dossier temporaire du système, accessible aux utilisateurs et à l'utilisateur racine. Stocke les fichiers temporaires pour les utilisateur et le système, jusqu'au prochain démarrage.
+* **/usr** : Contient les binaires exécutables, la documentation, le code source, les bibliothèque pour les programme de second niveau.
+* **/var** : Signifie variable. Le contenu de ce fichier est prévu pour grossir. Ce dossier contient les journaux, les verrous, les messages, ls mails et les fichiers temporaires.
 
 {% hint style="danger" %}
-Almost all of linux directories can be a separated partition, except /etc directory because it contains scripts which are required during boot process so it can be mounted with / partition and accessible at the very beginning boot process.
+Presque tous les dossier de linux peuvent être sur des partitions séparée, sauf le dossier /etc car il contient des fichiers nécessaire pendant le processus de démarrage donc il doit être monté avec la partition / et accessible au tout début du processus de démarrage.
 {% endhint %}
 
-### Designing Hard Disk Layout
+### Modèle de conception des disques durs
 
-Of course just because we can partition a disk doesn't mean we should! The more partitions we create, the more there is to manage. So we shouldn't make extra partitions unless we consider the extra work they create to be worth the additional protections they provide.
+Bien sur ce n'est pas parce que nous pouvons partionner un disque, que nous devons systèmatiquement le faire. Plus nous créons de partitions, plus il faudra en gérer. Nous ne devrions donc pas créer de partitions supplémentaire sans avoir considérer le travail supplémentaire que leur création et leur maintenance engendre.
 
-If the root partition runs out of space the system will crash. If some non-root partition runs out of space, the system will remain up and the System Administrator can login and fix things. Thus the directories such as /home, /tmp, and /var that users can easily fill with downloads, email, etc., are prime candidates for extra partitions. So are any other directories that might grow (directories for FTP uploads, database files, etc.).
+Si la partition racine n'a plus d'espace le système plantera. Si certaines partitions non-racines n'ont plus d'espace, le système fonctionnera et l'administrateur Système peut se connecter et corriger les choses. Ces dossier comme /home, /tmp, et /var que les utilisateurs peuvent facilement remplir sotn les premier candidats pour des partitions supplémentaires. Il y a aussi d'autre dossier qui peuvent grossier (les dossiers de transfert de fichier, les fichiers de base de données, etc).
 
-If the partition containing the log files runs out of space, the system won't be able to write any log messages that could help an System Administrator to determine what went wrong. On the other hand some rapidly recurring error (or attack) can cause log files to grow very large very quickly, filling the partition containing them. So the directory containing log files, (usually /var/log), is a good choice for a separate partition.
+Si la partition qui contient les fichiers journaux n'a plus d'espace, le système ne pourra plus écrire aucune message de journal qui pourrait aider l'administrateur système à comprendre ce qui ne fonctionne pas. D'un autre côté des erreurs répétées rapidement (ou des attaques) peuvent causer l'augmenttion très importante et rapide des fichiers jouraux et remplir la partition qui les contient. Donc le dossier qui contient les fichiers journaux, (généralement /var/log) est un bon choix pour une partition séparée.
 
-All in all try to follow vendor-recommended standard disk layout if not, be smart and do partitioning based on the server type and behaviour of your application(s).
+Plus que tout essayer de suivre les recommandations des fournisseurs standard de disque, si non soyez malin et faites votre paritionnement en vous basant sur le type de serveur et le comportement de vos applications.
 
 {% hint style="success" %}
 #### Blocks vs. Sectors
 
-**A sector is a physical spot on a formatted disk that holds information.** When a disk is formatted, tracks are defined (concentric rings from inside to the outside of the disk platter). Each track is divided into a slice, which is a sector. On hard drives and floppies, each sector can hold 512 bytes of data.
+**Un secteur est un espace physique sur un disque formatté qui contient des informations.** Lorsqu'un disque est formatté, les pisestes sont définis (anneaux circulaires depuis l'intérieur vers l'extérieur sur le plateau du disque). Chqaue piste est divisé en morceau, qui sont un secteur. Sur les disques durs et les disquette, chaque secteur peut contenir 512 bytes de données.
 
-**A block, on the other hand, is a group of sectors that the operating system can address (point to). **A block might be one sector, or it might be several sectors (2,4,8, or even 16). The bigger the drive, the more sectors that a block will hold.
+**Un bloc, de l'autre côté, est un groupe de secteur auquel le système d'exploitation peut s'adressé (pointer vers).** Un block peut être un secteur, ou plusieurs secteurs (2,4,8, ou même 16). Plus grand est le disque, plus un block peut contenir de secteurs.
 
-**So why are there blocks? Why doesn't the operating system just point straight to the sectors?** Because there are limits to the number of blocks, or drive addresses, that an operating system can address. By defining a block as several sectors, an OS can work with bigger hard drives without increasing the number of block addresses.
+**Pourquoi il y a des blocs ? Pourquoi le système d'exploitation ne pointe pas directement vers les secteurs ?** Parce qu'il y a une limite au nombre de bloc, ou adresse de destitation, auquel le système d'exploitation peut s'adresser. En définissant un bloc pour plusieurs secteurs, un OS peut travailler avec des diques durs plus grand sans avoir besoin d'augmenter le nombre de blocs à adresser.
 {% endhint %}
 
-up to now we have talked about partitions, partitions are cool but partitions are fixed sized and that is not easy to resize in some cases. On a server we even need **more flexibility**. That is why **LVM** was invented.
+Jusqu'ici nous avons parler de partitions, les partitions sont pratique mais ont une taille fixe et il n'est pas toujour facile de les redimensionner. Sur un serveur nous avons souvent besoin de **plus de flexibilités**. C'est pourquoi **LVM** a été inventé.
 
 ### LVM
 
-Logical volume management (LVM) is a **form of storage virtualization** that offers system administrators a more **flexible** approach to managing disk storage space than traditional partitioning.
+Logical volume management (LVM) est une **forme de stockage virtualisé** qui offre aux administrateurs système une approche plus **flexible** pour gérer l'espace disque de stockage que le partitionnement classique.
 
-There are 3 concepts that LVM manages:
+Il y a 3 concepts que LVM gère :
 
-* **Logical Volumes (LV)**: A Logical Volume is the conceptual equivalent of a disk partition in a non-LVM system. Logical volumes **are block devices which are created from the physical extents present in the same volume group**. File systems are built on top of logical volumes.
-* **Volume Groups (VG)**: A Volume Group **gathers together a collection of Logical Volumes and Physical Volumes into one administrative unit**. Volume group is divided into fixed size physical extents.
-* **Physical Volumes (PV)**: Each Physical Volume can be a disk partition or whole disk.
+* **Logical Volumes (LV)**: Un Volume Logique est un concept équivalent à une parition disque avec un système non-LVM. Les volumes logiques **sont des périphériques blocs qui sont créé depuis leur présence physique dans un même groupe de volume**. Les systèmes de fichier sont construit au dessus des volumes logiques.
+* **Volume Groups (VG)**: Un groupe de Volume **rassemble une collection de volume logique et de volume physique dans une seule unité d'administration**. Les groupes de volumes sont divisés dans des éléments physiques à taille fixe.
+* **Physical Volumes (PV)**: Chaque volume physique peut êre une partition de disque ou un disque entier.
 
 ![](.gitbook/assets/disklayout-lvm.jpg)
 
-Logical Volume Management (LVM) makes it easier to manage disk space. If a file system needs more space, it can be added to its logical volumes from the free spaces in its volume group and the file system can be re-sized as we wish. If a disk **starts to fail**, replacement disk can be registered as a physical volume with the volume group and the logical volumes extents can be migrated to the new disk without data loss.
+Logical Volume Management (LVM) rend la gestion de l'espace disque plus facile. Si un système de fichier a besoin de plus d'espace, on peut en ajouter à son volume logique depuis l'espace disponible du groupe de volume et le système de fichier peut êre redimensionner comme nous le souhaitons. Si un disque **commence à ééchouer**, le remplacement de ce disque peut êre enregistré comme unvolume physique avec le groupe de volume et l'extension des volumes logiques peut être migrer sur le nouveau disque sans perte de données.
 
-**How LVM works?**
+**Comment fonctionne LVM ?**
 
-It works by chunking the physical volumes (PVs) into physical extents (PEs). The PEs are mapped onto logical extents (LEs) which are then pooled into volume groups (VGs). These groups are linked together into logical volumes (LVs) that act as virtual disk partitions and that can be managed as such by using LVM.
+Il fonctionne en découpant les volumes physiques (PVs) en niveau physique (Physical extents ou PEs). Les PEs sont mappés à des niveau logique (Logical extents ou LEs) qui sont ensuite réunis dans des groupes de volumes(VGs). Ces groupes sont liés ensemble dans des volumes logiques (LVs) qui agisse comme une parition disque virtuelle et qui peuvent être gérée comme telle en utilisant LVM.
 
 ![](.gitbook/assets/disklayout-lvmdetails.jpg)
 
 {% hint style="danger" %}
-There is one thing that we should know about LVM, we can not put intire server in LVM! Because there is a /boot directory and /boot directory must be available at the moment of booting, so it must be seen from master boot record (or GUID partition).
+Il y a un élément en plus que vous devriez connaitre à propos de  LVM, nous ne pouvons mettre 'lintégralité du serveur dans LVM! A cause du dossier /boot qui doit être disponible au moment du démarrage, il doit donc être vu par le MBR (ou la partition GUID) .
 
-And in order to see /boot directory at the moment of booting it should always be on a traditional partition.
+Afin de voir le dossier /boot au moment du démarrage il doit toujours être sur une partition classique.
 {% endhint %}
 
 ![](.gitbook/assets/disklayout-lvmboot.jpg)
 
-That is all.
+Terminé.
 
 .
 

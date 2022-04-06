@@ -1,50 +1,51 @@
-# 102.2. Install a boot manager
 
-## **102.2 Install a boot manager**
+# 102.2. Installation d'un gestionnaire de démarrage
 
-**Weight:** 2
+## **102.2 Installation d'un gestionnaire de démarrage**
 
-**Description:** Candidates should be able to select, install and configure a boot manager.
+**Poids:** 2
 
-**Key Knowledge Areas:**
+**Description:** Les candidas doivent être capable de sélectionner d'installer et de configurer un gestionnaire de démarrage.
 
-* Providing alternative boot locations and backup boot options
-* Install and configure a boot loader such as GRUB Legacy
-* Perform basic configuration changes for GRUB 2
-* Interact with the boot loader
+**Connaissances clés:**
 
-**The following is a partial list of the used files, terms and utilities:**
+* Fournir une alternative à la localisation du démarrage et aux options de sauvegarde du démarrage
+* Installer et configurer un gestionnaire de démarrage comme GRUB Legacy
+* Effectuer la configuration de base des changements pour GRUB 2
+* Interragir avec le gestionnaire de démarrage
+
+**Voici une liste partielle des fichiers utilisés, des concepts et des utilitaires:**
 
 * menu.lst, grub.cfg and grub.conf
 * grub-install
 * grub-mkconfig
 * MBR
 
-We have talked about linux boot process and boot loaders. We got introduced to LILO as a very old boot loader which was replaced by GRUB in late 1990s. In this course we take a closer look at GRUB and GRUB2 boot loaders .
+Nous avons parlé du processus de démarrage de linux et des chargeurs de démarrage. Nous avons introduit LILO en tant que très vieux système de chargement de démarrage qui a été remplacé par GRUB dans la fin des années 90. Dans ce cours nous allons détailler les chargeurs de démarrage GRUB et GRUB2.
 
 ## GRUB
 
 ![](.gitbook/assets/Grub_logo.png)![](.gitbook/assets/Grub_logo2.png)
 
-GRUB (GRand Unified Bootloader) is a boot loader package developed to support multiple operating systems and allow the user to select among them during boot-up.
+GRUB (GRand Unified Bootloader) est un packet de chargeur de démarrage qui support plusieurs systèmes d'exploitation et permet à l'utilisateur de choisir parmi eux pendant le démarrage.
 
 #### GRUB versions
 
-GRUB was created by Erich Stefan Boleyn and has been further developed under the GNU project as GNU GRUB. The original package is still available for download but no longer being developed.
+GRUB a été créé par Erich Stefan Boleyn et a été développé en tant que projet GNU comme GNU GRUB. Le paquet original est encore disponible pour le téléchargement mais n'est plus développé.
 
-**GRUB2** has replaced what was formerly known as GRUB (i.e. version 0.9x), which has, in turn, become **GRUB Legacy.** Enhancements to GRUB2 are still being made, but the current released versions are quite usable for normal operation.
+**GRUB2** a remplacé ce qui été précédemment connu comme GRUB (c'est-à-dire la version 0.9x), qui est, en retour, devenu **GRUB Legacy.** Des amélioration pour  GRUB2 sont encore faite, mais la version courante publié est utilisable pour des opérations normales.
 
-### How does GRUB work?
+### Comment fonctionne GRUB?
 
-When a computer boots, the BIOS transfers control to the first boot device, which can be a hard disk, a floppy disk, a CD-ROM, or any other BIOS-recognized device.
+Lors du démarrage d'un ordinateur, le BIOS transfert le contrôle au premier périphérique de démarrage, qui peut être un disque dur, une disque, un CD-ROM ou n'importe quel autre périphérique reconnu par BIOS.
 
 #### MBR
 
-The first sector on a hard is called the Master Boot Record (MBR). This sector is only 512 bytes long and contains a small piece of code (446 bytes) called the primary boot loader and the partition table (64 bytes) describing the primary and extended partitions.
+Le premier secteur d'un disque dur est appelé Master Boot Record (MBR). Ce secteur est long seulement de 512 bytes et contient de petites pièces de code (446 bytes) appelé premier chargeur de démarrage et la table de partitions (64 bytes) décrivant les partitions primaires et étendues.
 
 ![](.gitbook/assets/bootloader-mbr.jpg)
 
-GRUB replaces the default MBR with its own code:
+GRUB remplace le MBR par défaut avec son propre code:
 
 ```
 [root@centos7-1 ~]# xxd -l 512 /dev/sda
@@ -52,7 +53,7 @@ GRUB replaces the default MBR with its own code:
 
 ![](.gitbook/assets/mbr_color2.jpg)
 
-By default, MBR code looks for the partition marked as active and once such a partition is found, it loads its boot sector into memory and passes control to it.
+Par défaut, le code MCR cherche la partition marqué comme active et une fois qu'une telle partition est trouvé, il charge son secteur de démarrage dans la mémoire et lui passe le contrôle.
 
 ```
 [root@centos7-1 ~]# fdisk -l /dev/sda 
@@ -69,20 +70,20 @@ Disk identifier: 0x000a1a5f
 /dev/sda2         2099200   104857599    51379200   8e  Linux LVM
 ```
 
-Furthermore, GRUB works in stages.
+En détail, GRUB fonctionne en étapes.
 
-* **Stage 1** is located in the MBR and mainly points to Stage 2, since the MBR is too small to contain all of the needed data.
-* **Stage 2** points to its configuration file, which contains all of the complex user interface and options we are normally familiar with when talking about GRUB. Stage 2 can be located anywhere on the disk. If Stage 2 cannot find its configuration table, GRUB will cease the boot sequence and present the user with a command line for manual configuration.
+* **Etape 1** est localisé dans le MBR et pointe vers l'étape 2, puisque le MBR est trop petit pour contenir toutes les données nécessaires.
+* **Etape 2** pointe sur ses propres fichiers de configuration, qui contienne toute l'interface utilisateur complexe et les options que vous connaissez. L'étape 2 peut être positionné n'importe où sur le disque. Si l'étape 2 ne peut pas trouver son propre tableau de configuration, GRUB arrêtera la séquence de démarrage et propose à l'utilisateur une ligne de commande pour une configuration manuelle.
 
-The Stage architecture allows GRUB to be large (\~20-30K) and therefore fairly complex and highly configurable, compared to most bootloaders, which are sparse and simple to fit within the limitations of the Partition Table.
+L'architecture par étape permet à GRUB d'être large (\~20-30K) et pourtant très complexe et hautement configurable, comporé à la plupar des chargeur de démarrage, qui sont éparse et simple pour rentrer dans les limitations de la table de partition.
 
 ### GRUB Legacy vs GRUB2
 
-Lets draw a big picture:
+Voyons une vue d'ensemble :
 
 ![](.gitbook/assets/bootloader-grubvsgrub2.jpg)
 
-/boot/grub/menu.lst in GRUB Legacy has been replaced by /boot/grub/grub.cfg in GRUB2.
+/boot/grub/menu.lst dans GRUB Legacy a été remplacé par /boot/grub/grub.cfg dans GRUB2.
 
 ```
 ### GRUB Legacy
@@ -119,13 +120,13 @@ splash.xpm.gz
 device.map  fonts  grub.cfg  grubenv  i386-pc  locale
 ```
 
-Which version of linux use which grub ?
+Quelle version de linux utilise quel grub ?
 
 ![](.gitbook/assets/bootloader-grubdistro.jpg)
 
 **Demonstration**
 
-In order to show differences between GRUB Legacy and GRUB2, lets change `timeout` parameter in Two systems (CentsOS5 and Centos7) :
+Afin de voir les différences entre GRUB Legacy et GRUB2, changeons le paramètre `timeout` dans deux systèmes (CentsOS5 and Centos7) :
 
 ### menu.lst (GRUB Legacy)
 
@@ -150,11 +151,11 @@ title CentOS (2.6.18-398.el5)
         initrd /initrd-2.6.18-398.el5.img
 ```
 
-just make a change in menu.lst and save it and that is all.
+nous faisons seulement une modification dans menu.lst et enregistrons le fichier.
 
 ### grub.cfg (GRUB2)
 
-**grub.cfg** is overwritten by certain Grub 2 package updates, whenever a kernel is added or removed, or when the user runs update-grub.**Do not edit grub.cfg directly!!**
+**grub.cfg** est surchargé par certaines mises à jour de paquet de Grub 2, lorsque un noyau est ajouté ou enlevé, ou lorsque l'utilisateur lance update-grub.**Ne pas modifier grub.cfg directement!**
 
 ```
 [root@centos7-1 ~]# cat /boot/grub2/grub.cfg 
@@ -301,11 +302,11 @@ fi
 ### END /etc/grub.d/41_custom ###
 ```
 
-In order to make any changes in grub.cfg two steps are required.
+Afin de faire des modifications dans grub.cfg deux étapes sont requises.
 
 ### 1-/etc/default/grub
 
-first edit /etc/default/grub:
+En premier modifier /etc/default/grub:
 
 ```
 [root@centos7-1 ~]# cat /etc/default/grub
@@ -318,11 +319,11 @@ GRUB_CMDLINE_LINUX="crashkernel=auto rd.lvm.lv=centos/root rd.lvm.lv=centos/swap
 GRUB_DISABLE_RECOVERY="true"
 ```
 
-save chanages in /etc/default/grub. The configurations are written to /boot/grub2/grub.cfg using grub-mkconfig command
+Enregistrer les modifications dans /etc/default/grub. Les configurations sont écrite dans /boot/grub2/grub.cfg en utilisant la commande grub-mkconfig
 
 ### 2- grub-mkconfig
 
-grub-mkconfig Generate a GRUB configuration file.
+grub-mkconfig Génère un fichier de configuration GRUB.
 
 ```
 [root@centos7-1 ~]# grub2-mkconfig 
@@ -475,7 +476,7 @@ fi
 done
 ```
 
-It reads main grub script files from **/etc/grub.d **and setting from **/etc/default/grub** and print out generated configuration.
+Il lit les fichiers script principal de grub depuis  **/etc/grub.d** et les paramètres depuis  **/etc/default/grub** et affiche la configuration générée.
 
 ```
 [root@centos7-1 ~]# ls /etc/grub.d/
@@ -483,7 +484,7 @@ It reads main grub script files from **/etc/grub.d **and setting from **/etc/def
 00_tuned   10_linux  20_ppc_terminfo  40_custom     README
 ```
 
-grub2-mkconfig options:
+Options de grub2-mkconfig:
 
 ```
 [root@centos7-1 ~]# grub2-mkconfig --help
@@ -497,7 +498,7 @@ Generate a grub config file
 Report bugs to <bug-grub@gnu.org>.
 ```
 
-For saving generated configuration we use `-o` option (it is recommanded to take a backup from `/boot/grub2/grub.cfg` file, how ever this is not touching Master Boot Record and just re touches GRUB menu):
+Pour enregistrer la configuration généré nous utilisons l'option `-o` (il est recommandé de faire une sauvegarde du fichier `/boot/grub2/grub.cfg`, même si cela ne touche pas le Master Boot Record et modifie seulement le menu GRUB):
 
 ```
 [root@centos7-1 ~]# grub2-mkconfig -o /boot/grub2/grub.cfg 
@@ -509,19 +510,19 @@ Found initrd image: /boot/initramfs-0-rescue-1cf30b938dc94f2bb08fb045c7a0734e.im
 done
 ```
 
-We where able to use `grub2-mkconfig > /boot/grub2/grub.cfg` command too,and GRUB2 configuration steps finish here.
+Nous pouvons aussi utiliser la commande  `grub2-mkconfig > /boot/grub2/grub.cfg`,et l'étape de configuration de  GRUB2 s'arrête ici.
 
 #### grub-update
 
-When you run the update-grub command, GRUB automatically combines the settings from the /etc/default/grub file, the scripts from the /etc/grub.d/ directory, and everything else, creating a /boot/grub/grub.cfg file that’s read at boot.
+Lorsque vous lancer la commande update-grub, GRUB combine automatiquement les paramètres du fichier /etc/default/grub, les scripts du dossier /etc/grub.d/ , e tout le reste, créant un fichier /boot/grub/grub.cfg qui est lu lors du démarrage.
 
 ### GRUB Interfaces
 
-There are three interfaces in GRUB which all provide different levels of functionality. The Linux kernel can be booted by the users with the help of these interfaces. Details about the interfaces are:
+Il y a 3 interfaces dans GRUB qui fournisse différents niveau de fonctionnalités. Le noyau Linux peut être démarré par les utilisateurs avec l'aide de ces interfaces. Les détails de ces interfaces sont :
 
 **1-Menu Interface**
 
-The GRUB is configured by the installation program in the menu interface. It is the default interface available. It contains a list of the operating systems or kernels which is ordered by name. A specific operating system or kernel can be selected using the arrow keys and it can be booted using the enter key.
+GRUB est configuré par le programme d'installation dans l'interface de menu. C'est l'inerface disponible par défaut. Il contient une liste des système d'exploitation ou des noyau linux trié par nom. Un système d'exploitation spécifique ou un noyau peut être selectionné en utilisant les flèches du clabier et peut être démarrer en utilisant la touche entrée.
 
 GRUB Legacy
 
@@ -531,11 +532,10 @@ GRUB2
 
 ![](.gitbook/assets/bootloader-grub2menu.jpg)
 
-Missing 'a' hah!
 
 **2-Menu Entry Editor Interface**
 
-The e key (a key GRUB Legacy) in the boot loader menu is used to access the menu entry editor. All the GRUB commands for the particular menu entry are displayed there and these commands may be altered before loading the operating system.
+La touche e key (une touche pour GRUB Legacy) dans le menu de chargement du démarrage est utilisé pour accéder à l'éditeur d'entrée de menu. Toutes les commandes GRUB pour une entrée de menu particulière sont affichées et ces commandes peuvent être modifiées avant de charger le système d'exploitation.
 
 GRUB Legacy
 
@@ -547,13 +547,13 @@ GRUB2
 
 **3-Command Line Interface**
 
-This interface is the most basic GRUB interface but it grants the most control to the user. Using the command line interface, any command can be executed by typing it and then pressing enter. This interface also features some advanced shell features.
+Cette inerface est la plus basique des interface de  GRUB mail il permet plus de contrôle pour l'utilisateur. En utilisant l'interface ligne de commande, toute commande peut être exécutée en la tapant et en appuyant sur entrée. Cette interface fournit aussi des fonctionnalités avancées de shel.
 
 GRUB Legacy
 
 ![](.gitbook/assets/bootloader-grub1menucmd.jpg)
 
-It is possible to have GRUB Legacy command prompt after rebooting the system and gain information form there.
+Il est possible d'avoir une invie de commande de GRUB Legacy qui s'affiche après le redémarrage d'un système pour obtenir des informations.
 
 ```
 [root@centos5-1 ~]# grub
@@ -572,12 +572,12 @@ GRUB2
 ![](.gitbook/assets/bootloader-grub2menucmd.jpg)
 
 {% hint style="info" %}
-Note: Partition numbering has changed in GRUB2. The first partition is 1 in GRUB2 rather than 0 (GRUB Legacy). The first device/drive is still hd0 by default (no change).
+Note: La numérotation des partitions a changé dans GRUB2. La première partition est 1 dans GRUB2 plutôt que 0 (GRUB Legacy). Le premier périphérique/disque est toujours hd0 par défaut (pas de changement).
 {% endhint %}
 
-### GRUB Installation
+### Installation de GRUB
 
-Normally when we setup a system GRUB is installed for us but there are some cases which we might need to install GRUB ourselves. There are different ways to install GRUB.
+Normalement lorsque nous installons un système GRUB est installé pour nous Normally when we setup a system GRUB is installed for us but there are some cases which we might need to install GRUB ourselves. There are different ways to install GRUB.
 
 If we are on old system with GRUB legacy we can run grub-install command or using setup command in GRUB shell.
 

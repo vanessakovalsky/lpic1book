@@ -8,11 +8,11 @@
 
 **Connaissances clés:**
 
-* Provide common commands to the boot loader and options to the kernel at boot time
-* Demonstrate knowledge of the boot sequence from BIOS to boot completion
-* Understanding of SysVinit and systemd
-* Awareness of Upstart
-* Check boot events in the log files
+* Fournir les commandes communes au chargeur de démarrage et les options au noyau au moment du boot
+* Montrer ses connaisances de la séquence de démarrage depuis le BIOS jusqu'à la complétion du démarrage
+* Compréhension de SysVinit et systemd
+* Connaissance de Upstart
+* Vérifier les évènements du démarrage dans les fichiers journaux
 
 **Concepts et Utilitaires:**
 

@@ -10,6 +10,8 @@ By Vanessa Kovalsky
 * Site: [https://www.lpi.org/](https://www.lpi.org/)
 * GitBook: 
 
+Afin de faire les commandes nous vous invitons à installer un environnement de travail à base de machines virtuelles, pour cela vous pouvez le faire en suivant [l'installation des prérequis](prereqis-techniques.md)
+
 
 ![](.gitbook/assets/lpic1-101&102.jpg)
 

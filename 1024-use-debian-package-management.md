@@ -1040,6 +1040,99 @@ Système de la famille Debian
 * L'interface native se fait via les commandes apt-get et apt-cache
 * Habituellement une interface utilisateur est créé par dessus pour chaque distribution spécifique (Software updater est un exemple)
 
+## Exercices
+
+### xercices guidés
+
+1. Quelle est la commande pour installer un paquet nommé paquet.deb en utilisant dpkg ?
+<details>
+  <summary>Réponse</summary>
+    Passez le paramètre -i à dpkg :
+```
+    # dpkg -i paquet.deb
+```
+</details>
+
+2. En utilisant dpkg-query, trouvez le paquet qui contient un fichier nommé 7zr.1.gz.
+<details>
+  <summary>Réponse</summary>
+    Ajoutez le paramètre -S à dpkg-query:
+```
+    # dpkg-query -S 7zr.1.gz
+```
+</details>
+
+3. Pouvez-vous supprimer un paquet nommé unzip du système en utilisant dpkg -r unzip si le paquet file-roller en dépend ? Si ce n’est pas le cas, quelle serait la bonne façon de procéder ?
+<details>
+  <summary>Réponse</summary>
+    Non. dpkg ne résoudra pas les dépendances et ne vous permettra pas de supprimer un paquet si un autre paquet installé en dépend. Dans cet exemple, vous pourriez d’abord supprimer file-roller (en supposant que rien n’en dépend) et ensuite supprimer unzip, ou supprimer les deux en même temps avec :
+```
+    # dpkg -r unzip file-roller
+```
+</details>
+
+4. En utilisant apt-file, comment pouvez-vous savoir quel paquet contient le fichier unrar ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez le paramètre search suivi du chemin (ou du nom de fichier) :
+```
+    # apt-file search /usr/bin/unrar
+```
+</details>
+
+5. En utilisant apt-cache, quelle est la commande pour afficher les informations relatives au paquet gimp ?
+
+<details>
+  <summary>Réponse</summary>
+    Utilisez le paramètre show suivi du nom du paquet :
+```
+    # apt-cache show gimp
+```
+</details>
+
+### Exercices d’approfondissement
+
+1. Considérez un dépôt avec des paquets source Debian pour la distribution xenial, hébergé à http://us.archive.ubuntu.com/ubuntu/ et avec des paquets pour le composant universe. Quelle serait la ligne correspondante à ajouter à /etc/apt/sources.list ?
+<details>
+  <summary>Réponse</summary>
+    Les paquets sources sont du type deb-src, donc la ligne devrait être :
+```
+    deb-src http://us.archive.ubuntu.com/ubuntu/ xenial universe
+```
+    Cette ligne pourrait également être ajoutée dans un fichier .list dans /etc/apt/sources.list.d/. Vous êtes libre de choisir le nom, mais il est censé être descriptif, quelque chose comme xenial_sources.list.
+</details>
+    
+2. Lors de la compilation d’un programme, vous vous retrouvez confronté à un message d’erreur qui vous signale que le fichier d’en-tête zip-io.h n’est pas présent sur votre système. Comment pouvez-vous savoir quel paquet fournit ce fichier ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez apt-file search pour savoir quel paquet contient un fichier qui n’est pas présent sur le système :
+```
+    # apt-file search zzip-io.h
+```
+</details>
+  
+3. Comment pouvez-vous passer outre un avertissement de dépendance et supprimer un paquet en utilisant dpkg, même s’il y a des paquets qui en dépendent sur le système ?
+<details>
+  <summary>Réponse</summary>
+    Le paramètre --force peut être utilisé, mais cela ne devrait jamais être fait à moins que vous ne sachiez exactement ce que vous faites, car il y a un grand risque que votre système se retrouve dans un état inconsistant ou "cassé".
+</details>
+
+4. Comment pouvez-vous obtenir plus d’informations sur un paquet appelé midori en utilisant apt ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez apt-cache show suivi du nom du paquet :
+```
+    # apt-cache show midori
+```
+</details>
+
+5. Avant d’installer ou de mettre à jour des paquets avec apt, quelle commande doit être utilisée pour s’assurer que l’index des paquets est à jour ?
+<details>
+  <summary>Réponse</summary>
+    Il faut utiliser apt-get update. Cette opération va télécharger les derniers index de paquets depuis les dépôts renseignés dans le fichier /etc/apt/sources.list ou dans le répertoire /etc/apt/sources.list.d/.
+</details>
+
+
 .
 
 .

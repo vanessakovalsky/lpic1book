@@ -1337,6 +1337,72 @@ Système de la famille Fedora/Red Hat :
 * **Dandified Yum (dnf)**:
   * La prochaine génération de version de yum
 
+## Exercices
+
+### Exercices guidés
+
+1. En utilisant rpm sur un système Red Hat Enterprise Linux, comment installeriez-vous le paquet file-roller-3.28.1-2.el7.x86_64.rpm en affichant une barre de progression pendant l’installation ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez l’option -i pour installer un paquet et l’option -h pour activer les signes dièse # (hash marks) qui montrent la progression de l’installation. La réponse est donc : rpm -ih file-roller-3.28.1-2.el7.x86_64.rpm.
+</details>
+
+2. En utilisant rpm, trouvez le paquet qui contient le fichier /etc/redhat-release.
+<details>
+  <summary>Réponse</summary>
+    Vous demandez des informations sur un fichier, vous devez donc utiliser l’option -qf : rpm -qf /etc/redhat-release.
+</details>
+
+3. Comment utiliseriez-vous yum pour vérifier les mises à jour concernant tous les paquets du système ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez la commande check-update sans nom de paquet : yum check-update.
+</details>
+
+4. En utilisant zypper, comment feriez-vous pour désactiver un dépôt appelé repo-extras ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez la commande modifyrepo pour modifier les paramètres d’un dépôt, et l’option -d pour le désactiver : zypper modifyrepo -d repo-extras.
+</details>
+
+5. Si vous avez un fichier .repo qui décrit un nouveau dépôt, où devez-vous le ranger pour qu’il soit reconnu par DNF ?
+<details>
+  <summary>Réponse</summary>
+    Les fichiers .repo pour DNF doivent être rangés au même endroit que ceux utilisés par YUM, dans /etc/yum.repos.d/.
+</details>
+
+### Exercices d’approfondissement
+
+1. Comment utiliseriez-vous zypper pour savoir quel paquet détient le fichier /usr/sbin/swapon ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez la commande se (search) et l’option --provides : zypper se --provides /usr/sbin/swapon.
+</details>
+
+2. Comment peut-on obtenir une liste de tous les paquets installés sur le système en utilisant dnf ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez la commande list suivie de l’option --installed : dnf list --installed.
+</details>
+
+3. En utilisant dnf, quelle est la commande pour ajouter un dépôt disponible à l’adresse https://www.example.url/home:reponame.repo au système ?
+<details>
+  <summary>Réponse</summary>
+    Manipuler les dépôts reviens à gérer la configuration, il faut donc utiliser la commande config-manager et l’option --add-repo : dnf config-manager --add-repo https://www.example.url/home:reponame.repo.
+</details>
+
+4. Comment pouvez-vous utiliser zypper pour vérifier si le paquet unzip est installé ?
+<details>
+  <summary>Réponse</summary>
+    Vous devez effectuer une recherche (se) sur les paquets installés (-i) : zypper se -i unzip.
+</details>
+
+5. En utilisant yum, trouvez le paquet qui fournit le fichier /bin/wget.
+<details>
+  <summary>Réponse</summary>
+    Pour savoir quel paquet fournit un fichier, utilisez whatprovides et le nom du fichier : yum whatprovides /bin/wget.
+</details>
+
 .
 
 .

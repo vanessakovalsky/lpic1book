@@ -411,7 +411,7 @@ C'est terminé!
     
 <details>
   <summary>Réponse</summary>
-  
+
 | Nom complet du fichier | Nom de la bibliothèque | suffixe so | Numéro de version |
 | --------------- |---------------| --------------- | --------------- |
 | linux-vdso.so.1 | linux-vdso | so | 1 |
@@ -420,6 +420,7 @@ C'est terminé!
 | libc.so.6 | libc | so | 6 |
 | libsystemd.so.0 | libsystemd | so | 0 |
 | ld-linux-x86-64.so.2 | ld-linux-x86-64 | so | 2 |
+
 </details>
 
 2. Vous avez développé un logiciel et vous souhaitez ajouter un nouveau répertoire de bibliothèques partagées à votre système (/opt/lib/mylib). Vous écrivez son chemin absolu dans un fichier appelé mylib.conf.

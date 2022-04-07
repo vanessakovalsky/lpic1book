@@ -2,9 +2,9 @@
 
 ## **101.1 Déterminer et configurer les paramètres matériel**
 
-**Poids:**2
+**Poids:** 2
 
-**Description: **Les candidats doivent être capatble de déterminer et de configurer les éléments matériels fondamentaux.
+**Description:** Les candidats doivent être capatble de déterminer et de configurer les éléments matériels fondamentaux.
 
 **Connaissances clés:**
 
@@ -97,7 +97,7 @@ address sizes    : 43 bits physical, 48 bits virtual
 power management:
 ```
 
-**/proc/filesystems : **Les systèmes de fichiers configurés dans le noyau.
+**/proc/filesystems :** Les systèmes de fichiers configurés dans le noyau.
 
 ```
 root@blackfox:~# cat /proc/filesystems 
@@ -1021,29 +1021,20 @@ Quelle est la cause possible de cette erreur ?
 .
 #### Exercices d'approfondissement 
 
-1. Il n’est pas rare de tomber sur des machines anciennes dans des environnements de production, comme certains équipements qui utilisent une connectique obsolète pour communiquer avec l’ordinateur de contrôle, d’où la nécessité d’accorder une attention particulière à certaines particularités de ces machines anciennes. Certains serveurs x86 avec un ancien firmware BIOS, par exemple, ne démarreront pas si le clavier n’est pas détecté. Comment éviter ce problème particulier ?
-
-<details>
-  <summary>Réponse</summary>
-    L’utilitaire de configuration BIOS permet de désactiver le verrouillage de l’ordinateur en cas d’absence de clavier.
-</details>
-
-
-2. Les systèmes d’exploitation construits autour du noyau Linux sont également disponibles pour une grande variété d’architectures informatiques autres que x86, comme dans les ordinateurs monocartes basés sur l’architecture ARM. Un utilisateur attentif remarquera l’absence de la commande lspci sur de telles machines, comme le Raspberry Pi. Quelle différence avec les machines x86 justifie cette absence ?
-
+1. Les systèmes d’exploitation construits autour du noyau Linux sont également disponibles pour une grande variété d’architectures informatiques autres que x86, comme dans les ordinateurs monocartes basés sur l’architecture ARM. Un utilisateur attentif remarquera l’absence de la commande lspci sur de telles machines, comme le Raspberry Pi. Quelle différence avec les machines x86 justifie cette absence ?
 <details>
   <summary>Réponse</summary>
     Contrairement à la plupart des machines x86, un ordinateur basé sur ARM comme le Raspberry Pi n’a pas de bus PCI, de sorte que la commande lspci ne sert à rien.
 </details>
 
-3. De nombreux routeurs disposent d’un port USB permettant la connexion d’un périphérique externe, comme un disque dur USB. Comme la plupart d’entre eux utilisent un système d’exploitation basé sur Linux, comment un disque dur USB externe sera-t-il nommé dans le répertoire /dev/, en supposant qu’aucun autre périphérique bloc conventionnel ne soit présent dans le routeur ?
+2. De nombreux routeurs disposent d’un port USB permettant la connexion d’un périphérique externe, comme un disque dur USB. Comme la plupart d’entre eux utilisent un système d’exploitation basé sur Linux, comment un disque dur USB externe sera-t-il nommé dans le répertoire /dev/, en supposant qu’aucun autre périphérique bloc conventionnel ne soit présent dans le routeur ?
 
 <details>
   <summary>Réponse</summary>
     Les noyaux Linux modernes identifient les disques durs USB comme des périphériques SATA, le fichier correspondant sera donc /dev/sda puisqu’il n’existe aucun autre périphérique bloc conventionnel dans le système.
 </details>
 
-4. En 2018, la vulnérabilité matérielle connue sous le nom de Meltdown a été découverte. Elle concerne presque tous les processeurs des différentes architectures. Les versions récentes du noyau Linux peuvent indiquer si le système actuel est vulnérable. Comment obtenir ces informations ?
+3. En 2018, la vulnérabilité matérielle connue sous le nom de Meltdown a été découverte. Elle concerne presque tous les processeurs des différentes architectures. Les versions récentes du noyau Linux peuvent indiquer si le système actuel est vulnérable. Comment obtenir ces informations ?
 
 <details>
   <summary>Réponse</summary>

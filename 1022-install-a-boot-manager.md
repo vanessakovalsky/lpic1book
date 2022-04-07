@@ -725,6 +725,65 @@ ce n'est qu'un example, ne pas le lancer car cela endommagerai votre système ac
 
 ### Exercices d'approndissement
 
+1. Supposons qu’un utilisateur configure GRUB Legacy pour démarrer à partir de la deuxième partition du premier disque. Il crée l’entrée de menu personnalisée suivante :
+```
+    title Ma Distrib Linux
+    root (hd0,2)
+    kernel /vmlinuz root=/dev/hda1
+    initrd /initrd.img
+```
+    Pourtant, le système ne démarre pas. Qu’est-ce qui ne va pas ?
+<details>
+  <summary>Réponse</summary>
+    La partition de démarrage est mal renseignée. Rappelez-vous que, contrairement à GRUB 2, GRUB Legacy compte les partitions à partir de zéro. Ainsi, la bonne directive pour la deuxième partition du premier disque devrait être root (hd0,1).
+</details>
+
+2. Supposons que vous ayez un disque identifié en tant que /dev/sda avec plusieurs partitions. Quelle commande peut être utilisée pour déterminer la partition de démarrage d’un système ?
+<details>
+  <summary>Réponse</summary>
+    Invoquez fdisk -l /dev/sda. La partition de démarrage sera marquée d’un astérisque (*) dans le listing.
+</details>
+
+3. Quelle commande peut être utilisée pour déterminer l’UUID d’une partition ?
+<details>
+  <summary>Réponse</summary>
+    Utilisez ls -la /dev/disk/by-uuid/ et repérez l’UUID qui pointe vers la partition.
+</details>
+
+4. Considérez l’entrée suivante pour GRUB 2 :
+```
+    menuentry "OS principal" {
+        set root=(hd0,1)
+        linux /vmlinuz root=/dev/sda1 ro quiet splash
+        initrd /initrd.img
+    }
+```
+    Modifiez-la pour que le système démarre à partir d’un disque avec l’UUID 5dda0af3-c995-481a-a6f3-46dcd3b6998d.
+<details>
+  <summary>Réponse</summary>
+    Vous devrez modifier l’instruction set root. Au lieu de spécifier un disque et une partition, dites à GRUB de rechercher la partition avec l’UUID de votre choix.
+  ```
+      menuentry "OS principal" {
+          search --set=root --fs-uuid 5dda0af3-c995-481a-a6f3-46dcd3b6998d
+          linux /vmlinuz root=/dev/sda1 ro quiet splash
+          initrd /initrd.img
+      }
+  ```
+</details>
+    
+5. Comment pouvez-vous paramétrer GRUB 2 pour qu’il attende 10 secondes avant de démarrer l’entrée de menu par défaut ?
+<details>
+  <summary>Réponse</summary>
+    Ajoutez le paramètre GRUB_TIMEOUT=10 à /etc/default/grub.
+</details>
+
+6. Depuis un shell GRUB Legacy, quelles sont les commandes pour installer GRUB sur la première partition du second disque ?
+<details>
+  <summary>Réponse</summary>
+    grub> root (hd1,0)
+    grub> setup (hd1)
+</details>
+
 .
 
 .

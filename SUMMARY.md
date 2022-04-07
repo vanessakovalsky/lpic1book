@@ -1,6 +1,7 @@
 # Table of contents
 
 * [Introduction](README.md)
+* [Pré-requis techiniques](prereqis.md)
 * [101.1. Déterminer et configurer les paramètres matériel](1011-determine-and-configure-hardware-settings.md)
 * [101.2. Démarrage du système](1012-boot-the-system.md)
 * [101.3. Changer le niveau d'exécution / les cibles de démarrage et arrêter ou redémarrer le système](1013-change-runlevels-boot-targets-and-shutdown-or-reboot-system.md)

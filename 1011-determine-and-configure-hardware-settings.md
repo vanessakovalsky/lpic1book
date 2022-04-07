@@ -138,7 +138,7 @@ nodev	binfmt_misc
 
 ```
 
-**/proc/interrupts: **Montre les interruption utilisés, et combien de chaque ont été utilisé.
+**/proc/interrupts:** Montre les interruption utilisés, et combien de chaque ont été utilisé.
 
 ```
 root@ubuntu16-1:~# cat /proc/interrupts 
@@ -975,7 +975,36 @@ root@ubuntu16-1:~# modprobe e1000
 
 et nous serons déconnectés et de nouveau connécté à internet. modprobe a une longue liste d'option. Essayer `modprobe --help` pour les voir.
 
-.
+
+
+### Exercices :
+
+#### Exercices guidés :
+
+1. Admettons qu’un système d’exploitation soit incapable de démarrer après l’ajout d’un deuxième disque SATA au système. Sachant que tous les composants ne sont pas défectueux, quelle pourrait être la cause possible de cette défaillance ?
+
+>! L’ordre des périphériques d’amorçage doit être configuré dans l’utilitaire de configuration BIOS, faute de quoi le BIOS risque de ne pas pouvoir exécuter le chargeur de démarrage.
+
+2. Imaginons que vous vouliez vous assurer que la carte graphique externe connectée au bus PCI de votre nouvel ordinateur de bureau est bien celle annoncée par le fabricant, mais l’ouverture du boîtier du PC annulera la garantie. Quelle commande pourrait être utilisée pour lister les détails de la carte graphique tels qu’ils ont été détectés par le système d’exploitation ?
+
+>! La commande lspci fournira des informations détaillées sur tous les périphériques actuellement connectés au bus PCI.
+
+3. La ligne suivante est un extrait de la sortie générée par la commande lspci :
+```
+03:00.0 RAID bus controller: LSI Logic / Symbios Logic MegaRAID SAS 2208 [Thunderbolt] (rev 05)
+```
+Quelle commande devez-vous exécuter pour identifier le module du noyau utilisé pour ce périphérique spécifique ?
+
+>! La commande lspci -s 03:00.0 -v ou lspci -s 03:00.0 -k
+
+4. Un administrateur système veut essayer différents paramètres pour le module de noyau bluetooth sans redémarrer le système. Cependant, toute tentative de déchargement du module avec modprobe -r bluetooth entraîne l’erreur suivante :
+```
+modprobe: FATAL: Module bluetooth is in use.
+```
+Quelle est la cause possible de cette erreur ?
+
+>! Le module bluetooth est utilisé par un processus en cours.
+
 
 .
 

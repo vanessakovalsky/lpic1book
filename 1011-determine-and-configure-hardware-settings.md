@@ -977,9 +977,9 @@ et nous serons déconnectés et de nouveau connécté à internet. modprobe a un
 
 
 
-### Exercices :
+### Exercices
 
-#### Exercices guidés :
+#### Exercices guidés 
 
 1. Admettons qu’un système d’exploitation soit incapable de démarrer après l’ajout d’un deuxième disque SATA au système. Sachant que tous les composants ne sont pas défectueux, quelle pourrait être la cause possible de cette défaillance ?
 
@@ -991,7 +991,10 @@ et nous serons déconnectés et de nouveau connécté à internet. modprobe a un
 
 2. Imaginons que vous vouliez vous assurer que la carte graphique externe connectée au bus PCI de votre nouvel ordinateur de bureau est bien celle annoncée par le fabricant, mais l’ouverture du boîtier du PC annulera la garantie. Quelle commande pourrait être utilisée pour lister les détails de la carte graphique tels qu’ils ont été détectés par le système d’exploitation ?
 
->! La commande lspci fournira des informations détaillées sur tous les périphériques actuellement connectés au bus PCI.
+<details>
+  <summary>Réponse</summary>
+    La commande lspci fournira des informations détaillées sur tous les périphériques actuellement connectés au bus PCI.
+</details>
 
 3. La ligne suivante est un extrait de la sortie générée par la commande lspci :
 ```
@@ -999,7 +1002,10 @@ et nous serons déconnectés et de nouveau connécté à internet. modprobe a un
 ```
 Quelle commande devez-vous exécuter pour identifier le module du noyau utilisé pour ce périphérique spécifique ?
 
->! La commande lspci -s 03:00.0 -v ou lspci -s 03:00.0 -k
+<details>
+  <summary>Réponse</summary>
+    La commande lspci -s 03:00.0 -v ou lspci -s 03:00.0 -k
+</details>
 
 4. Un administrateur système veut essayer différents paramètres pour le module de noyau bluetooth sans redémarrer le système. Cependant, toute tentative de déchargement du module avec modprobe -r bluetooth entraîne l’erreur suivante :
 ```
@@ -1007,10 +1013,42 @@ modprobe: FATAL: Module bluetooth is in use.
 ```
 Quelle est la cause possible de cette erreur ?
 
->! Le module bluetooth est utilisé par un processus en cours.
-
+<details>
+  <summary>Réponse</summary>
+    Le module bluetooth est utilisé par un processus en cours.
+</details>
 
 .
+#### Exercices d'approfondissement 
+
+1. Il n’est pas rare de tomber sur des machines anciennes dans des environnements de production, comme certains équipements qui utilisent une connectique obsolète pour communiquer avec l’ordinateur de contrôle, d’où la nécessité d’accorder une attention particulière à certaines particularités de ces machines anciennes. Certains serveurs x86 avec un ancien firmware BIOS, par exemple, ne démarreront pas si le clavier n’est pas détecté. Comment éviter ce problème particulier ?
+
+<details>
+  <summary>Réponse</summary>
+    L’utilitaire de configuration BIOS permet de désactiver le verrouillage de l’ordinateur en cas d’absence de clavier.
+</details>
+
+
+2. Les systèmes d’exploitation construits autour du noyau Linux sont également disponibles pour une grande variété d’architectures informatiques autres que x86, comme dans les ordinateurs monocartes basés sur l’architecture ARM. Un utilisateur attentif remarquera l’absence de la commande lspci sur de telles machines, comme le Raspberry Pi. Quelle différence avec les machines x86 justifie cette absence ?
+
+<details>
+  <summary>Réponse</summary>
+    Contrairement à la plupart des machines x86, un ordinateur basé sur ARM comme le Raspberry Pi n’a pas de bus PCI, de sorte que la commande lspci ne sert à rien.
+</details>
+
+3. De nombreux routeurs disposent d’un port USB permettant la connexion d’un périphérique externe, comme un disque dur USB. Comme la plupart d’entre eux utilisent un système d’exploitation basé sur Linux, comment un disque dur USB externe sera-t-il nommé dans le répertoire /dev/, en supposant qu’aucun autre périphérique bloc conventionnel ne soit présent dans le routeur ?
+
+<details>
+  <summary>Réponse</summary>
+    Les noyaux Linux modernes identifient les disques durs USB comme des périphériques SATA, le fichier correspondant sera donc /dev/sda puisqu’il n’existe aucun autre périphérique bloc conventionnel dans le système.
+</details>
+
+4. En 2018, la vulnérabilité matérielle connue sous le nom de Meltdown a été découverte. Elle concerne presque tous les processeurs des différentes architectures. Les versions récentes du noyau Linux peuvent indiquer si le système actuel est vulnérable. Comment obtenir ces informations ?
+
+<details>
+  <summary>Réponse</summary>
+    Le fichier /proc/cpuinfo a une ligne qui affiche les bugs connus pour le CPU en question, comme bugs : cpu_meltdown.
+</details>
 
 .
 

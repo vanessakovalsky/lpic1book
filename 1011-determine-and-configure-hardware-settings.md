@@ -983,7 +983,11 @@ et nous serons déconnectés et de nouveau connécté à internet. modprobe a un
 
 1. Admettons qu’un système d’exploitation soit incapable de démarrer après l’ajout d’un deuxième disque SATA au système. Sachant que tous les composants ne sont pas défectueux, quelle pourrait être la cause possible de cette défaillance ?
 
->! L’ordre des périphériques d’amorçage doit être configuré dans l’utilitaire de configuration BIOS, faute de quoi le BIOS risque de ne pas pouvoir exécuter le chargeur de démarrage.
+
+<details>
+  <summary>Réponse</summary>
+    L’ordre des périphériques d’amorçage doit être configuré dans l’utilitaire de configuration BIOS, faute de quoi le BIOS risque de ne pas pouvoir exécuter le chargeur de démarrage.
+</details>
 
 2. Imaginons que vous vouliez vous assurer que la carte graphique externe connectée au bus PCI de votre nouvel ordinateur de bureau est bien celle annoncée par le fabricant, mais l’ouverture du boîtier du PC annulera la garantie. Quelle commande pourrait être utilisée pour lister les détails de la carte graphique tels qu’ils ont été détectés par le système d’exploitation ?
 

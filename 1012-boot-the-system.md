@@ -336,8 +336,73 @@ On peut nettoyer les journaux de dmesg si nécessaire avec la commande `dmesg -c
 
 La commande `dmesg` montre le contenu courant du journal du noyau avec les messages du tampon circulaire tandis que le fichier `/var/log/dmesg` contient ce que contenait le tampon circulaire lors du dernier processus de démarrage complet. Essayer `cat /var/log/dmesg`. 
 
+## Exercices
+
+### Exercices guidés 
 
 
+
+1. Sur une machine équipée d’un firmware BIOS, où se situe le binaire d’amorçage ?
+
+<details>
+  <summary>Réponse</summary>
+    Dans le MBR du premier périphérique de stockage, tel que défini dans l’utilitaire de configuration du BIOS.
+</details>
+
+2. Le firmware UEFI gère les fonctionnalités étendues fournies par des programmes externes, les applications EFI. Toutefois, ces applications disposent de leur propre emplacement spécifique. À quel endroit du système les applications EFI se trouvent-elles ?
+
+<details>
+  <summary>Réponse</summary>
+    Les applications EFI sont stockées dans la partition système EFI (ESP ou EFI System Partition), située dans n’importe quel bloc de stockage disponible doté d’un système de fichiers compatible (généralement un système de fichiers FAT32).
+</details>
+
+3. Les chargeurs de démarrage permettent de passer des paramètres personnalisés au noyau avant de le charger. Admettons que le système soit incapable de démarrer parce que l’emplacement du système de fichiers racine est mal renseigné. Comment le système de fichiers racine approprié, situé dans /dev/sda3, serait-il fourni comme paramètre au noyau ?
+
+<details>
+  <summary>Réponse</summary>
+    Le paramètre root doit être utilisé, comme dans root=/dev/sda3.
+</details>
+
+4. Le processus de démarrage d’une machine sous Linux se termine par le message suivant :
+```
+    ALERT! /dev/sda3 does not exist. Dropping to a shell!
+```
+    Quelle est la cause probable de ce problème ?
+
+<details>
+  <summary>Réponse</summary>
+    Le noyau n’a pas pu trouver le périphérique /dev/sda3, renseigné comme système de fichiers racine.
+</details>
+
+### Exercices d'approfondissement
+
+1. Le chargeur de démarrage présente une liste de systèmes d’exploitation au choix lorsque plusieurs systèmes d’exploitation sont installés sur la machine. Cependant, il arrive qu’un système d’exploitation nouvellement installé écrase le MBR du disque dur, ce qui supprime la première phase du chargeur de démarrage en rendant l’autre système d’exploitation inaccessible. Pourquoi cela ne serait-il pas le cas sur une machine équipée d’un firmware UEFI ?
+
+<details>
+  <summary>Réponse</summary>
+    Les machines UEFI n’utilisent pas le MBR du disque dur pour stocker la première phase du chargeur de démarrage.
+</details>
+
+2. Quelle est la conséquence habituelle de l’installation d’un noyau personnalisé sans fournir une image initramfs appropriée ?
+
+<details>
+  <summary>Réponse</summary>
+    Le système de fichiers racine peut être inaccessible si son type a été compilé comme un module de noyau externe.
+</details>
+
+3. Le journal d’initialisation compte des centaines de lignes, de sorte que le résultat de la commande dmesg est souvent transmis à une commande de pagination — comme la commande less — pour faciliter la lecture. Quelle option de dmesg va automatiquement paginer sa sortie, en éliminant la nécessité d’utiliser explicitement une commande de pagination ?
+
+<details>
+  <summary>Réponse</summary>
+    Les commandes dmesg -H ou dmesg --human activeront la pagination par défaut.
+</details>
+
+4. Un disque dur contenant tout le système de fichiers d’une machine hors ligne a été retiré et relié à une machine en état de marche en tant que disque secondaire. En supposant que son point de montage est /mnt/hd, comment journalctl serait-il invoqué pour inspecter le contenu des fichiers de journalisation situés dans /mnt/hd/var/log/journal/ ?
+
+<details>
+  <summary>Réponse</summary>
+    Avec les options journalctl -D /mnt/hd/var/log/journal ou journalctl --directory=/mnt/hd/var/log/journal
+</details>
 .
 
 .

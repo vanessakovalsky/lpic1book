@@ -913,6 +913,73 @@ Power off the system.
 
 Et nous avons terminé.
 
+## Exercices
+
+### Exercices guidés 
+
+
+1. Comment la commande telinit peut-elle être utilisée pour redémarrer le système ?
+
+<details>
+  <summary>Réponse</summary>
+    La commande telinit 6 va basculer vers le niveau d’exécution 6 et donc redémarrer le système.
+</details>
+
+2. Que deviendront les services liés au fichier /etc/rc1.d/K90network lorsque le système passe au niveau d’exécution 1 ?
+
+<details>
+  <summary>Réponse</summary>
+    Du fait de la lettre K au début du nom du fichier, les services correspondants seront arrêtés.
+</details>
+
+3. En utilisant la commande systemctl, comment un utilisateur pourrait-il vérifier si l’unité sshd.service est en cours d’exécution ?
+
+<details>
+  <summary>Réponse</summary>
+    Avec la commande systemctl status sshd.service ou systemctl is-active sshd.service.
+</details>
+
+4. Sur un système basé sur systemd, quelle commande doit être exécutée pour permettre le lancement de l’unité sshd.service lors de l’initialisation du système ?
+
+<details>
+  <summary>Réponse</summary>
+    La commande systemctl enable sshd.service, exécutée par root.
+</details>
+
+
+### Exercices d'approfondissement 
+
+
+
+1. Sur un système basé sur SysV, supposons que le niveau d’exécution par défaut défini dans /etc/inittab est 3, mais le système démarre toujours au niveau d’exécution 1. Quelle est la cause probable de cette situation ?
+
+<details>
+  <summary>Réponse</summary>
+    Les paramètres 1 ou S peuvent figurer dans la liste des paramètres du noyau.
+</details>
+
+2. Bien que le fichier /sbin/init soit présent dans les systèmes basés sur systemd, il n’est qu’un lien symbolique vers un autre fichier exécutable. Dans de tels systèmes, quel est le fichier pointé par /sbin/init ?
+
+<details>
+  <summary>Réponse</summary>
+    Le binaire systemd principal : /lib/systemd/systemd.
+</details>
+
+3. Comment peut-on vérifier la cible par défaut du système dans un système basé sur systemd ?
+
+<details>
+  <summary>Réponse</summary>
+    Le lien symbolique /etc/systemd/system/default.target pointera vers le fichier unité défini comme cible par défaut. La commande systemctl get-default peut également être utilisée.
+</details>
+
+4. Comment peut-on annuler un redémarrage du système programmé avec la commande shutdown ?
+
+<details>
+  <summary>Réponse</summary>
+    La commande shutdown -c doit être utilisée.
+</details>
+
+
 .
 
 .

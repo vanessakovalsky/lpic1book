@@ -21,7 +21,7 @@
 * [104.1. Create partitions and filesystems](1041-create-partitions-and-filesystems.md)
 * [104.2. Maintain the integrity of filesystems](1042-maintain-the-integrity-of-filesystems.md)
 * [104.3. Control mounting and unmounting of filesystems](1043-control-mounting-and-unmounting-of-filesystems.md)
-* [104.4. Manage disk quotas](1044-manage-disk-quotas.md)
+* [104.4. REMOVE FOR LPIC 101-500] 
 * [104.5. Manage file permissions and ownership](1045-manage-file-permissions-and-ownership.md)
 * [104.6. Create and change hard and symbolic links](1046-create-and-change-hard-and-symbolic-links.md)
 * [104.7. Find system files and place files in the correct location](1047-find-system-files-and-place-files-in-the-correct-location.md)

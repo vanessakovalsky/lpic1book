@@ -683,7 +683,47 @@ ce n'est qu'un example, ne pas le lancer car cela endommagerai votre système ac
 
 `grub2-install --boot-directory=/tmp/root/boot /dev/sda`
 
+## Exercices
 
+### Exercices guidés 
+
+1. Quel est l’emplacement par défaut du fichier de configuration de GRUB 2 ?
+
+<details>
+  <summary>Réponse</summary>
+    /boot/grub/grub.cfg
+</details>
+
+2. Quelles sont les étapes nécessaires pour modifier les réglages de GRUB 2 ?
+
+<details>
+  <summary>Réponse</summary>
+    Apportez vos modifications au fichier /etc/default/grub, puis actualisez la configuration avec update-grub.
+</details>
+
+3. Dans quel fichier doit-on ajouter les entrées personnalisées du menu GRUB 2 ?
+
+<details>
+  <summary>Réponse</summary>
+    /etc/grub.d/40_custom
+</details>
+
+4. Où sont stockées les entrées du menu de GRUB Legacy ?
+
+<details>
+  <summary>Réponse</summary>
+    /boot/grub/menu.lst
+</details>
+
+5. À partir d’un menu GRUB 2 ou GRUB Legacy, comment pouvez-vous accéder au shell GRUB ?
+
+<details>
+  <summary>Réponse</summary>
+    Appuyez sur c dans l’écran de menu.
+</details>
+
+
+### Exercices d'approndissement
 
 .
 

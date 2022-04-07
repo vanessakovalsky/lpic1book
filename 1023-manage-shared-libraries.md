@@ -400,6 +400,72 @@ N'oubliez pas que ces modifications ne sont pas permanentes et si vous voulez re
 
 C'est terminé!
 
+
+## Exercices
+
+### Exercices guidés
+
+
+
+1. Séparez les noms des bibliothèques partagées suivantes en leurs composantes :
+    
+<details>
+  <summary>Réponse</summary>
+    |Nom complet du fichier | Nom de la bibliothèque | suffixe so | Numéro de version |
+    | --------------- |---------------| --------------- | --------------- |
+    | linux-vdso.so.1 | linux-vdso | so | 1 |
+    | libprocps.so.6 | libprocps | so |  6 |
+    | libdl.so.2 | libdl | so | 2 | 
+    | libc.so.6 | libc | so | 6 |
+    | libsystemd.so.0 | libsystemd | so | 0 |
+    | ld-linux-x86-64.so.2 | ld-linux-x86-64 | so | 2 |
+</details>
+
+2. Vous avez développé un logiciel et vous souhaitez ajouter un nouveau répertoire de bibliothèques partagées à votre système (/opt/lib/mylib). Vous écrivez son chemin absolu dans un fichier appelé mylib.conf.
+    * Dans quel répertoire devez-vous ranger ce fichier ?
+    <details>
+    <summary>Réponse</summary>
+            /etc/ld.so.conf.d
+    </details>
+        
+    * Quelle commande devez-vous exécuter pour que les changements soient pleinement pris en compte ?
+    <details>
+    <summary>Réponse</summary>
+            ldconfig
+    </details>
+    
+3. Quelle commande utiliseriez-vous pour recenser les bibliothèques partagées requises par kill ?
+
+<details>
+  <summary>Réponse</summary>
+    ldd /bin/kill
+</details>
+
+### Exercices d’approfondissement
+
+1. objdump est un outil en ligne de commande qui affiche les informations relatives aux fichiers objets. Vérifiez s’il est installé sur votre système avec which objdump. Si ce n’est pas le cas, veuillez l’installer.
+
+    * Utilisez objdump avec l’option p (ou --private-headers) et grep pour afficher les dépendances de glibc :
+
+    <details>
+    <summary>Réponse</summary>
+        objdump -p /lib/x86_64-linux-gnu/libc.so.6 | grep NEEDED
+    </details>
+
+    * Utilisez objdump avec l’option p (ou --private-headers) et grep pour afficher le soname de glibc :
+
+    <details>
+    <summary>Réponse</summary>
+        objdump -p /lib/x86_64-linux-gnu/libc.so.6 | grep SONAME
+    </details>
+
+    * Utilisez objdump avec l’option p (ou --private-headers) et grep pour afficher les dépendances de Bash :
+
+    <details>
+    <summary>Réponse</summary>
+        objdump -p /bin/bash | grep NEEDED
+    </details>
+
 .
 
 .

@@ -208,6 +208,68 @@ Afin de voir le dossier /boot au moment du démarrage il doit toujours être sur
 
 Terminé.
 
+## Exercices 
+
+### Exercices guidés
+
+1. Sur les systèmes Linux, où sont stockés les fichiers du chargeur de démarrage GRUB ?
+
+<details>
+  <summary>Réponse</summary>
+    En-dessous de /boot/grub.
+</details>
+
+2. Où doit se terminer la partition de démarrage pour garantir qu’un PC sera toujours capable de charger le noyau ?
+
+<details>
+  <summary>Réponse</summary>
+    Avant le cylindre 1024.
+</details>
+
+3. À quel endroit la partition EFI est-elle généralement montée ?
+
+<details>
+  <summary>Réponse</summary>
+    En-dessous de /boot/efi.
+<details>
+
+4. Lors du montage manuel d’un système de fichiers, sous quel répertoire doit-il généralement être monté ?
+
+<details>
+  <summary>Réponse</summary>
+    En-dessous de /mnt. Toutefois, ce n’est pas obligatoire. Vous pouvez monter une partition sous n’importe quel répertoire.
+</details>
+
+### Exercices d'approfondissement
+
+1. Quelle est la plus petite unité à l’intérieur d’un groupe de volumes VG ?
+
+<details>
+  <summary>Réponse</summary>
+    Les groupes de volumes sont subdivisés en extensions.
+</details>
+
+2. Comment définit-on la taille d’un volume logique LV ?
+
+<details>
+  <summary>Réponse</summary>
+    Par la taille des extensions physiques multipliée par le nombre d’extensions sur le volume.
+</details>
+
+3. Sur un disque formaté selon le schéma de partitionnement MBR, quel est l’ID de la partition système EFI ?
+
+<details>
+  <summary>Réponse</summary>
+    L’ID est 0xEF.
+</details>
+
+4. En dehors des partitions d’échange, comment peut-on augmenter rapidement l’espace swap sur un système Linux ?
+
+<details>
+  <summary>Réponse</summary>
+    Les fichiers swap peuvent être utilisés.
+</details>
+
 .
 
 .

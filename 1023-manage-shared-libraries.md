@@ -411,6 +411,7 @@ C'est terminé!
     
 <details>
   <summary>Réponse</summary>
+  
 | Nom complet du fichier | Nom de la bibliothèque | suffixe so | Numéro de version |
 | --------------- |---------------| --------------- | --------------- |
 | linux-vdso.so.1 | linux-vdso | so | 1 |

@@ -2,7 +2,7 @@
 
 ### 101.2.Démarrage du système
 
-**Poids:**3
+**Poids:** 3
 
 **Description:** Les candidats doivent être capable de guider le système durant le processus de démarrage.
 

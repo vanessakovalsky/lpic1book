@@ -12,7 +12,7 @@
 * [102.5. Utiliser les gestionnaire de paquets RPM et YUM](1025-use-rpm-and-yum-package-management.md)
 * [103.1. Travailler en ligne de commande](1031-work-on-the-command-line.md)
 * [103.2. Traiter des flux de texte en utilisant les filtres](1032-process-text-streams-using-filters.md)
-* [103.3. Perform basic file management](1033-perform-basic-file-management.md)
+* [103.3. Gestion élémentaire des fichiers](1033-perform-basic-file-management.md)
 * [103.4. Use streams, pipes and redirects](1034-use-streams-pipes-and-redirects.md)
 * [103.5. Create, monitor and kill processes](1035-create-monitor-and-kill-processes.md)
 * [103.6. Modify process execution priorities](1036-modify-process-execution-priorities.md)

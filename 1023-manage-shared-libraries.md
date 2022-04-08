@@ -419,7 +419,7 @@ C'est terminé!
 | ld-linux-x86-64.so.2 |  |  |  |
 
 <details>
-  <summary>Réponse</summary>
+<summary>Réponse</summary>
 
 | Nom complet du fichier | Nom de la bibliothèque | suffixe so | Numéro de version |
 | --------------- |---------------| --------------- | --------------- |
@@ -433,19 +433,20 @@ C'est terminé!
 </details>
 
 2. Vous avez développé un logiciel et vous souhaitez ajouter un nouveau répertoire de bibliothèques partagées à votre système (/opt/lib/mylib). Vous écrivez son chemin absolu dans un fichier appelé mylib.conf.
-    * Dans quel répertoire devez-vous ranger ce fichier ?
 
-    <details>
-        <summary>Réponse</summary>
-         /etc/ld.so.conf.d
-    </details>
-        
-    * Quelle commande devez-vous exécuter pour que les changements soient pleinement pris en compte ?
-    
-    <details>
+* Dans quel répertoire devez-vous ranger ce fichier ?
+
+<details>
     <summary>Réponse</summary>
-            ldconfig
-    </details>
+    /etc/ld.so.conf.d
+</details>
+        
+* Quelle commande devez-vous exécuter pour que les changements soient pleinement pris en compte ?
+
+<details>
+    <summary>Réponse</summary>
+        ldconfig
+</details>
     
 3. Quelle commande utiliseriez-vous pour recenser les bibliothèques partagées requises par kill ?
 

@@ -1,16 +1,18 @@
-# 103.8. Perform basic file editing operations using vi
+# 103.8. Édition de fichier simple
 
-**Weight:** 3
+**Poids:** 3
 
-**Description:** Candidates should be able to edit text files using vi. This objective includes vi navigation, basic vi modes, inserting, editing, deleting, copying and finding text.
+**Description:** Les candidats doivent être en mesure d'éditer des fichiers texte avec vi. Cet objectif inclut le déplacement dans vi, les modes de base de vi, l'insertion, la modification, la suppression, la copie et la recherche de texte. Cela inclut également la connaissance d'autres éditeurs de texte courants ainsi que la configuration de l'éditeur de texte par défaut.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Navigate a document using vi
-* Use basic vi modes
-* Insert, edit, delete, copy and find text
+* Déplacement dans un document édité avec vi.
+* Compréhension et utilisation des modes de base de vi.
+* Insertion, modification, suppression, copie et recherche de texte dans vi.
+* Connaissance de base de Emacs, nano et vim.
+* Configuration de l'éditeur de texte par défaut.
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * vi
 * /, ?
@@ -19,21 +21,21 @@
 * c, d, p, y, dd, yy
 * ZZ, :w!, :q!, :e!
 
-The need to learn how to use text editors in Linux is indisputable. Every system administrator and engineer deal with configuration (plain text) files on a daily basis, and most times this is done purely using one or more tools from a command-line interface (such as **nano**, **vi**, or **emacs**).
+Le besoin d'apprendre comme utilise les éditeurs de texte dans Linux est indiscutable. Chaque administrateur système et ingénieur travaille avec des fichiers de configuration au quotidient, et la plupart du temps cela est fait en utilisant uniquement un ou plusieurs outil de l'interface en ligne de commande (comme **nano**, **vi**, ou **emacs**).
 
 ### vi
 
-The vi editor (visual editor) is almost certainly on every Linux and UNIX system. In fact, if a system has just one editor, it’s probably vi, so it’s worth knowing your way around in vi.
+L'éditeur vi (visual editor) est de manière quasi certaine présente sur chaque système Linux ou UNIX. De fait, si un système n'a qu'un seul éditeur, ce sera probablement vi, donc il n'est pas inutile d'apprendre à connaitre  vi.
 
-Using vi editor, we can edit an existing file or create a new file from scratch. we can also use this editor to just read a text file.
+En utilisant l'éditeur vi, nous pouvons modifier un fichier existant ou créer un nouveau fichier depuis zéro. Nous pouvons aussi utiliser cet éditeur seulement pour lire un fichier texte.
 
-> vi editor is great even trough ssh sessions!
+> L'éditeur vi est bien même dans une session ssh!
 
-#### vi or vim ?
+#### vi ou vim ?
 
- Most Linux distributions now ship with the vim (for **V**i **IM**proved) editor rather than classic vi. Vim is upward compatible with vi and has a graphical mode available (gvim) as well as the standard vi text mode interface. The `vi` command is usually an alias or symbolic link to the vim program.
+ La plupart des distributions Linux embarque maintenant l'éditeur vim (pour **V**i **IM**proved) plutôt que le classique vi. Vim est compatible avec vi et a un mode graphique disponible (gvim) ainsi qu'une interface standard en mode texte comme vi. La commande  `vi` est utilisé comme alias ou lien symbolique vers le programme vim.
 
- There are several versions of vim: tiny, small, normal, big, and huge. We can find out what version of vim we are running and what features are included by using the command(ubuntu 16.04 here ):
+ Il y a plusieurs versions de vim: tiny, small, normal, big, et huge. Nous pouvons trouver quel version de vim nous sommes entrain d'utiliser et quelles fonctionnalités sont inclues en utilisant la commande :
 
 ```
 root@ubuntu16-1:~# vi --version
@@ -54,14 +56,14 @@ Huge version without GUI.  Features included (+) or not (-):
 ...
 ```
 
-Inorder to read, create or modify a file with vi, give the file name to it:
+Afin de lire, créer ou modifier un fichier avec vi, donner lui le nom du fichier :
 
 ```
 vi filename
 ```
 
 {% hint style="info" %}
-**if you just type vi(m) and hit enter, the vi(m) version will be displayed:**
+**Si vous taper seulement vi(m) et appuyer sur entrée la version de vi(m) sera affichée :**
 
 ```
                               VIM - Vi IMproved                                
@@ -80,170 +82,170 @@ vi filename
 ```
 {% endhint %}
 
-Okey lets start learning vi(m):
+Commençons à apprendre vi(m):
 
-### vi modes
+### Modes de vi 
 
-Vim actually has three modes: **insert mode**, **command mode**, and **escape** ** (last-line) mode**. Let’s start with the default mode you’ll see when you start up Vim–command mode.
+Vim a actuellement trois modes : **mode insertion**, **mode commande**, et **mode escape (last-line)**. Commençons avec le mode par défaut lorsque vous démarrer vi le mode commande démarre.
 
-* **command mode** :  When you run vim filename to edit a file, Vim starts out in command mode. This means that all the alphanumeric keys are bound to commands, rather than inserting those characters.(save, quit, search/replace, navigate around, execute macros,...)
-* **insert mode** :  _To enter the insert mode, type i (for “insert”)_ and now the keys will behave as you’d expect. You can type normally until you want to make a correction, save the file, or perform another operation that’s reserved for command mode or escape (last-line) mode. _To get out of insert mode, hit the Escape key._
-* **escape (last-line) mode** :  Once you press Escape, you’re in command mode again. What if you’d like to save your file or search through your document? No problem, _press : and Vim will switch to escape (last-line) mode_. Vim is now waiting for you to enter a command like :w to write the file or :q to exit the editor.
+* **mode commande** :  Lorsque vous lancer vim filename pour modifier un fichier, Vim démarre en mode commande. Cela signifie que toutes les clés alphanumérics sont liés à des commandes, plutôt que d'insérer cs caractères.(enregistrer, quitter, rechercher/remplacer, naviguer, exécuter des macros,...)
+* **mode insertion** :  _Pour entrer en mode insertion, taper i (for “insert”)_ et maintenant les frappes sur le clavier se comporteront comme vous l'attendez. Vous pouvez taper normalement sauf si vous voulez faire une correction, enregistrer le ficheir, ou faire une autre opération qui est réservé au mode commande ou au mode escape (last-line). _Pour sortir du mode insertion, appuyer sur la touche Echap._
+* **mode escape (last-line)** : Une fois que vous avez appuyez sur Echap, vous entrer dans le mode commande de nouveau. Si vous voulez enregistrer votre fichier ou faire une recherche dans votre document? Pas de problème, _appuyez sur : et Vim passera en mode escape (last-line)_. Vim attend maintenant que vous entriez une commande comme :w pour enregistrer le fichier ou :q pour quitter l'éditeur.
 
 ![](.gitbook/assets/performbasicfileop-vimodes.jpg)
 
-If that all sounds complicated, it’s really not. It does take a few days to start training your brain to move between the modes and memorizing the most important keys for movement, commands, and so on.
+Si cela semble compliqué, ça ne l'est pas. Cela prend quelques jours d'entrainement pour que votre cerveau passe d'un mode à l'autre et mémorise les touches les plus importantes pour se déplacer, les commandes et le reste.
 
-####  Moving the cursor 
+####  Déplacer le curseur 
 
-The first thing you’ll want to learn is how to move around a file. When you’re in command mode, you’ll want to remember the following keys and what they do:
+La première chose que vous voudrez apprendre est comment se déplacer dans un fichier. Lorsque vous êtes en mode commande, souvenez vous des touches suivantes et de ce qu'elles font :
 
 | Key    | function                                                       |
 | ------ | -------------------------------------------------------------- |
-| h      | Move left one character on the current line                    |
-| j      | Move down to the next line                                     |
-| k      | Move up to the previous line                                   |
-| l      | Move right one character on the current line                   |
-| w      | Move to the next word on the current line                      |
-| e      | Move to the next end of word on the current line               |
-| b      | Move to the previous beginning of the word on the current line |
-| Crtl-f | Scroll forward one page                                        |
-| Ctrl-b |  Scroll backward one page                                      |
+| h      | Déplacer à gauche d'un caractère sur la ligne courantee        |
+| j      | Descendre à la prochaine ligne                                 |
+| k      | Monter à la ligne précédente                                   |
+| l      | Déplacer à droit d'un caractère sur la ligne courante          |
+| w      | Se déplacer au prochain mot sur la ligne courante              |
+| e      | Se déplacer jusqu'à la fin du prochain mot sur la ligne courante |
+| b      | Se déplacer au début du mot précédent sur la ligne courante    |
+| Crtl-f | Descendre d'une page                                           |
+| Ctrl-b | Remonter d'une page                                            |
 
->  If you type a number before any of these commands, then the command will be executed that many times. This number is called a _repetition count_ or simply _count_. For example, 5h will move left five characters. You can use repetition counts with many vi commands.
+>  Si vous taper un nombre avant une de ces commande, alors la commande sera exécuter plusieurs fois. Le nombre est appelé  _compteur de répétitions_ ou simplement _compteur_. Par exemple, 5h déplacer à gauche de 5 caractères. Vous pouvez utiliser le compteur de répétition avec de nombreuses commandes de vi.
 
-#### Jumping  <a href="moving-to-lines" id="moving-to-lines"></a>
+#### Sauter  <a href="moving-to-lines" id="moving-to-lines"></a>
 
 | key | function                 |
 | --- | ------------------------ |
-| H   | move to top of screen    |
-| M   | move to middle of screen |
-| L   | move to bottom of screen |
+| H   | Se déplacer en haut de l'écran    |
+| M   | Se déplacer au milieu de l'écran |
+| L   | Se déplacer en bas de l'écran |
 
 | key | function                                                              |
 | --- | --------------------------------------------------------------------- |
-| W   | jump forwards to the start of a word (words can contain punctuation)  |
-| E   | jump forwards to the end of a word (words can contain punctuation)    |
-| B   | jump backwards to the start of a word (words can contain punctuation) |
+| W   | Sauter jusqu'au début d'un mot (le mot peut contenir de la ponctuation)  |
+| E   | Sauter jusqu'à la fin d'un mot (le mot peut contenir de la ponctuation)    |
+| B   | Revenir au début d'un mot (le mot peut contenir de la ponctuation) |
 
 | key | function                                          |
 | --- | ------------------------------------------------- |
-| 0   | jump backwards to the start of line               |
-| ^   | jump to the first non-blank character of the line |
-| $   | jump to the end of the line                       |
-| g\_ | jump to the last non-blank character of the line  |
-| gg  | go to the first line of the document              |
-| G   | go to the last line of the document               |
+| 0   | Revenir au début de la ligne               |
+| ^   | Sauter jusqu'au premier caractère non blanc de la ligne |
+| $   | Sauter à la fin de la ligne                       |
+| g\_ | Sauter au dernier caractère non-blanc de la ligne  |
+| gg  | Aller à la première ligne du document  |
+| G   | Aller à la dernière ligne du document              |
 
-### Editing text <a href="editing-text" id="editing-text"></a>
+### Modifier du texte <a href="editing-text" id="editing-text"></a>
 
-Now that you can open a file in vi, move around it and get out, it’s time to learn how to edit the text in the file
+Maintenant que nous pouvons ouvrir un fichier dans vi, se déplacer à l'intérieur et sortir, il est temps d'apprendre à modifier le texte du fichier.
 
-| key( for inserting) | function                                                       |
+| key( pour l'insertion) | function                                                       |
 | ------------------- | -------------------------------------------------------------- |
-| i                   | insert text before cursor, until  hit                          |
-| I                   | insert text at beginning of current line, until  hit           |
-| a                   | append text after cursor, until  hit                           |
-| A                   | append text to end of current line, until  hit                 |
-| o                   | open and put text in a new line below current line, until  hit |
-| O                   | open and put text in a new line above current line, until  hit |
+| i                   | Insérer du texte avant le curseur                          |
+| I                   | Insérer du texte au début de la ligne           |
+| a                   | Ajouter du texte après le curseur                           |
+| A                   | Ajouter du texte à la fin de la ligne courante                 |
+| o                   | Ouvrir et mettre du texte dans une nouvelle ligne en dessous de la ligne courante |
+| O                   | Ouvrir et mettre du texte dans une nouvelle ligne au dessus de la ligne courante |
 
-| key(for changing) | function                                                                                    |
+| key(pour la modification) | function                                                                                    |
 | ----------------- | ------------------------------------------------------------------------------------------- |
-| r                 | replace single character under cursor (no  needed)                                          |
-| R                 | replace characters, starting with current cursor position, until  hit                       |
-| cw                | change the current word with new text, starting with the character under cursor, until  hit |
-| cNw               | change N words beginning with character under cursor, until  hit; e.g., c5w changes 5 words |
-| C                 | change (replace) the characters in the current line, until  hit                             |
-| cc                | change (replace) the entire current line, stopping when  is hit                             |
-| Ncc or cNc        | change (replace) the next N lines, starting with the current line, stopping when  is hit    |
+| r                 | Remplace un seul caractère sous le curseur                                          |
+| R                 | Remplacer des caractères, en commençant à la position courante du curseur                       |
+| cw                | Modifier le mot courant avec un nouveau texte, en commençant à partir du caractère sous le curseur |
+| cNw               | Modifier N mot en commençant avec le caractère sous le curseur; e.g., c5w modifie 5 mots |
+| C                 | Modifier (remplacer) les caractère de la ligne courante                             |
+| cc                | Modifier (remplacer) la ligne courante en entier                             |
+| Ncc or cNc        | Modifier (remplacer) les N prochaines lignes, en commençant avec la ligne courante    |
 
-| key (for deleting) | function                                                                        |
+| key (pour la suppression) | function                                                                        |
 | ------------------ | ------------------------------------------------------------------------------- |
-| x                  | delete single character under cursor                                            |
-| Nx                 | delete N characters, starting with character under cursor                       |
-| dw                 | delete the single word beginning with character under cursor                    |
-| dNw                | delete N words beginning with character under cursor; e.g., d5w deletes 5 words |
-| d^                 | delete  start of line till the cursor                                           |
-| d$ and D           | delete the remainder of the line, starting with current cursor position         |
-| dd                 | delete entire current line                                                      |
-| Ndd or dNd         | delete N lines, beginning with the current line; e.g., 5dd deletes 5 lines      |
+| x                  | Supprimer un seul caractère sous le curseur                                            |
+| Nx                 | Supprimer N caractères, en commençant avec le caractère sous le curseur                       |
+| dw                 | Supprimer le mot qui commence avec le caractère sous le curseur                    |
+| dNw                | Supprimer N mots en commençant avec le caractère sous le curseur; e.g., d5w supprime 5 mots |
+| d^                 | Supprimer du début de la ligne jusqu'au curseur                                           |
+| d$ and D           | Supprimer le reste de la ligne, en commençant avec la position courante du curseur |
+| dd                 | Supprimer la ligne courante en entier                                                      |
+| Ndd or dNd         | Supprimer N lignes, en commençant par la ligne courante; e.g., 5dd supprime 5 lignes      |
 
-| key(for cutting and pasting)  | function                                                                       |
+| key(pour couper et coller)  | function                                                                       |
 | ----------------------------- | ------------------------------------------------------------------------------ |
-| yy                            | copy (yank, cut) the current line into the buffer                              |
-| Nyy or yNy                    | copy (yank, cut) the next N lines, including the current line, into the buffer |
-| p                             | put (paste) the line(s) in the buffer into the text after the current line     |
-| P                             | put (paste) the line(s) in the buffer into the text before the current line    |
+| yy                            | Copier (couper) la ligne courante dans le tampon                              |
+| Nyy or yNy                    | Copier (couper) les N prochaines lignes, en incluant la ligne courantes, dans le buffer |
+| p                             | Copier les lignes depuis le tampon vers le texte après la ligne courante     |
+| P                             | Copier les lignes depuis le tampon dans le texte avant la ligne courante    |
 
-### searching
+### Recherche
 
 | key      | function                                                       |
 | -------- | -------------------------------------------------------------- |
-| /string  | search forward for occurrence of string in text                |
-| ? string | search backward for occurrence of string in text               |
-| n        | move to next occurrence of search string                       |
-| N        | move to next occurrence of search string in opposite direction |
+| /string  | Rechercher en avant pour une occurence d'une chaine dans le texte                |
+| ? string | Rechercher en arrière pour une occurence d'une chaine dans le texte               |
+| n        | Se déplacer à la prochaine occurence de la chaine recherchée                       |
+| N        | Se déplacer à la prochaine occurence de la chaine recherchée dans la direction opposée |
 
-### replacing
+### Remplacement
 
 | key             | function                                                    |
 | --------------- | ----------------------------------------------------------- |
-| :s/old/new/     | replace first old with new in just that  line               |
-| :s/old/new/g    | replace all old with new in just that  line                 |
-| :%s/old/new/g   | replace all old with new throughout file                    |
-| :%s/old/new/gc  | replace all old with new throughout file with confirmations |
-| :%s/old/new/gic | same as above but case insensitive                          |
-| :noh            | remove highlighting of search matches                       |
+| :s/old/new/     | Remplacer la premier ancienne par la nouvelle seulement dans la ligne courante               |
+| :s/old/new/g    | Remplacer toutes les anciennes avec les nouvelles seulement dans la ligne courante                 |
+| :%s/old/new/g   | Remplacer remplacer tous les anciens par les nouveaux dans le fichier                    |
+| :%s/old/new/gc  | Remplacer tous les anciens par les nouveaux dans le fichier avec des confirmations |
+| :%s/old/new/gic | Idem que le précédent mais insensible à la casse                          |
+| :noh            | Supprimer le surlignement des correspondances de recherche                       |
 
-### Exiting
+### Quitter
 
-If you’re in insert mode, hit Escape. Then enter : and you’ll see a line at the bottom of the screen with a cursor ready to take input.
+Si vous êtes en mode insertion, appuyer sur Echap. Puis entrer `:` et vous verrez une ligne en bas de l'écran avec un curseur qui attend une entrée.
 
 | key        | function                                                                     |
 | ---------- | ---------------------------------------------------------------------------- |
-| :w         |  That will write the file to the existing filename,but don't exit.           |
-| :w  _file_ | If you don’t have a filename or want to write out to a different _file name_ |
-| :q         | quit (fails if there are unsaved changes)                                    |
-| :q!        | Quit editing without saving.                                                 |
-| :wq        | write (save) and quit (throw and error if file is not writable)              |
-| :wq!       | try to write and quit (if it is not writable, quit without saving! )         |
-| ZZ and :x  | Exit and save the file if modified                                           |
-| q! or ZQ   | quit and throw away unsaved changes                                          |
+| :w         | Cela écrit le fichier avec le nom de fichier existant mais ne quite pas.           |
+| :w  _file_ | Si vous n'avez pas de nom de fichier ou vous voulez écrire avec un _nom de fichier_ différent |
+| :q         | Qutier (échoue si vous aves dez modifications non enregistrées)                                    |
+| :q!        | Quitter l'éditeur sans enregistrer.                                                 |
+| :wq        | Ecrire (enregistrer) et quitter (renvoit une erreur si le fichier ne peut pas être écrit)              |
+| :wq!       | Essaie d'écrire et quitter (s'il est en lecture seul, quitte sans enregistrer! )         |
+| ZZ and :x  | Sort et enregistre le fichier s'il est modifié                                           |
+| q! or ZQ   | Quitte et annule les modifications non enregistrées                                          |
 
-Press ESC to return back to the normal command mode!
+Appuyez sur ESC pour revenir au mode normal de commande!
 
-> When you want to write and exit from a file consider  you permissions, the bellow command write out the current file using sudo:
+> Lorsque vous voulez écire et quitter un fichier, considérer vos permissions, la commande suivante écrit le contenu du fichier en utilisant sudo :
 >
 > :w !sudo tee % 
 >
-> * :w – Write a file (actually buffer). 
-> * !sudo – Call shell with sudo command. 
-> * tee – The output of write (vim :w) command redirected using tee. 
-> * % – The % is nothing but current file name.
+> * :w – Ecrit un fichier (dans le tampon). 
+> * !sudo – Appel des commandes shell avec les droits d'admininistration. 
+> * tee – La commande de sortie de l'écriture (vim :w) est redirigé en utilisant tee. 
+> * % – Le % n'est rien d'autre que le nom du fichier.
 
-### reloading
+### Rechargement
 
 | key | function                                           |
 | --- | -------------------------------------------------- |
-| :e  |  (short for `:edit`) reload the file from the disk |
-| :e! | it will discard local changes and reload.          |
+| :e  | (raccourci pour `:edit`) recharge le fichier depuis le disque |
+| :e! | Annule les changements locaux et recharge.          |
 
 {% hint style="success" %}
-### VIM Tip : running external commands in a shell
+### Astuce VIM : lancer des commandes externes dans un shell
 
-It usuaslly happens that we need to run a command in shell to see the result of file which we are edditing. It could be happened in two ways:
+Il arrive que nous ayons besoin de lancer une commande dans un shell et de voir son résultat dans le fichier que nous éditons. On peut le faire de deux manières :
 
-1.We could suspend your session (ctrl-Z), and then run the command in your shell.That’s a lot of keystrokes, though !
+1. Nous pouvons suspendre notre session (ctrl-Z), et lancer la commande dans notre shell. Cela fait beaucoup de raccourci claviers!
 
-2.So, instead, you could use vim’s built-in “run a shell command”:
+2. A la place, nous pouvons utiliser l'outil fourni par vim “run a shell command”:
 
-> :!cmd Run a shell command, shows you the output and prompts you before returning to your current buffer.
+> :!cmd Lance une commande shell, montre la sortie et l'invite de commande avan de retourner le résultat au tampon.
 {% endhint %}
 
-### help
+### Aide
 
-Need help? you can use `:help` or` :help keyword`  and vim will open help for keyword.
+Vous avez besoin d'aide? Vous pouvez utiliser `:help` ou `:help keyword` et vim ouvrira l'aide pour les mots clés.
 
 .
 

@@ -1,27 +1,27 @@
-# 103.6. Modify process execution priorities
+# 103.6. Modification des priorités des processus
 
-**Weight:** 2
+**Poid:** 2
 
-**Description:** Candidates should should be able to manage process execution priorities.
+**Description:** Les candidats doivent être en mesure de gérer les priorités des processus. .
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Know the default priority of a job that is created
-* Run a program with higher or lower priority than the default
-* Change the priority of a running process
+* Connaissance de la priorité par défaut affectée à un nouveau processus.
+* Exécution de programme avec une priorité plus haute ou plus basse que celle par défaut.
+* Changement de la priorité d'un processus en cours d'exécution.
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * nice
 * ps
 * renice
 * top
 
-Linux, like most modern operating systems, can run multiple processes. It does this by sharing the CPU and other resources among the processes. If one process can use 100 percent of the CPU, then other processes may become unresponsive. We’ll introduce you to the way Linux assigns priorities for tasks.(We have already talked about ps and top commands in previous section)
+Linux, comme la plupart des systèmes d'exploitation modernes, peut lancer plusieurs processus. Il le fat en partageant le CPU et les autres ressources parmi les processus. Si un des processus utilise 100 pourcent du CPU, alors les autres pourrait ne plus répondre. Nous allons présenter la manière dont Linux assigne les priorités pour les tâches.(Nous avons déjà parlé des commandes ps et top dans la partie précédente)
 
 ### nice
 
- In Linux we can set guidelines for the CPU to follow when it is looking at all the tasks it has to do. These guidelines are called _**niceness**_ or _**nice value.**_**(**we_** **_use ubuntu 16 here)
+ Dans Linux nous pouvons définir des lignes directrices à suivre pour le CPU lorsqu'il est utilisé par toutes les tâches. Ces lignes directrices sont appelées _**niceness**_ ou _**nice value.**_
 
 ```
 top - 03:15:57 up 3 days, 20:17,  1 user,  load average: 0.03, 0.01, 0.00
@@ -41,20 +41,20 @@ KiB Swap:  1045500 total,   374404 free,   671096 used.   335984 avail Mem
      1 root      20   0  185244   3996   2500 S  0.0  0.4   0:08.10 systemd 
 ```
 
-**NI column ** Represents a Nice Value of task. The Linux niceness scale goes from -20 to 19. The lower the number the more priority that task gets. If the niceness value is high number like 19 the task will be set to the lowest priority and the CPU will process it whenever it gets a chance. The default nice value is **zero**.
+**Colonne NI** Représente la Nive value d'une tâche. L'échelle de priorité de Linux va de -20 à 19. Plus le nombre est bas, plus la prioriété est élevée pour une tâche. Si la valeur de priorité est un nombre haut comme 19 la tache sera défini comme ayant la priorité la plus basse et le CPU la traitera dès qu'il pourra. La valeur par défaut de priorité est **zero**.
 
 ![](.gitbook/assets/modifyprocess-nice.jpg)
 
-Different OS distributions can have different default values for new processes. The simplest method to determine the default value is to simply run the nice command with no arguments. By default nice will simply return the current niceness value
+Les différentes distibutions d'OS peuvent avoir des valeur par défaut différente pour les nouveaux processus. La méthode la plus simple pour déterminer la valeur par défaut est de lancer la commande nice sans argument. Par défaut nice renvoit simplement la valeur courant de priorité
 
 ```
 root@ubuntu16-1:~# nice
 0
 ```
 
-#### Determining the niceness value of a current process <a href="determining-the-niceness-value-of-a-current-process" id="determining-the-niceness-value-of-a-current-process"></a>
+#### Déterminer la valeur de priorité d'un processus en cours <a href="determining-the-niceness-value-of-a-current-process" id="determining-the-niceness-value-of-a-current-process"></a>
 
-The niceness value of current processes are also pretty simple to find as they are visible in the ps command’s full long format :
+La valeur de priorité d'un processus en cours est aussi assez simple à trouver puisqu'elle est visible dans la commande ps avec le format long :
 
 ```
 root@ubuntu16-1:~# sleep 11111 &
@@ -73,11 +73,11 @@ F S UID         PID   PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD
 0 R root      65133  65098  0  80   0 -  9341 -      04:49 pts/17   00:00:00 ps -fl
 ```
 
-> `-f` do full-format listing and  `-l `is for Long format.
+> `-f` affiche une liste au format complet et  `-l `est pour le format long.
 
-#### Changing the nice value of a new process <a href="changing-the-nice-value-of-a-new-process" id="changing-the-nice-value-of-a-new-process"></a>
+#### Modifier la valeur de priorité d'un nouveau processus <a href="changing-the-nice-value-of-a-new-process" id="changing-the-nice-value-of-a-new-process"></a>
 
-Changing the niceness value of a new process is fairly simple. The nice command itself will run the supplied command with the desired niceness value.(Please note we are logged in  as a user here)
+Modifier la valeur de priorité d'un nouveau processus est plutôt simple. La commande nice elle-même lance la commande souhaité avec le niveau souhaité de prioritéChanging.(Notez que nous sommes connecté comme utilisateur et pas comme administrateur ici)
 
 ```
 user1@ubuntu16-1:~$ sleep 11111 &
@@ -91,9 +91,9 @@ user1@ubuntu16-1:~$ nice -n -10 sleep 44444 &
 user1@ubuntu16-1:~$ nice: cannot set niceness: Permission denied
 ```
 
-note: root user is the only person who can start an application with the high priority  (lower than zero), but, any body can start an application with low priority (higher than zero).
+note: L'utilisateur root est la seule personne a pouvori démarrer une application avec une priorité plus haute (inférieur à zéro), mais n'importe qui peut démarrer une application avec une priorité plus basse (supérieur à zéro).
 
-if we try to run an application with high priority without root permissions, it would trough an error and starts application with priority zero.
+Si vous essayer de lancer une application avec une priorité plus haute sans les droits d'administration, cela créera une erreur et l'application démarrera avec la priorité zéro.
 
 ```
 user1@ubuntu16-1:~$ ps -fl
@@ -107,7 +107,7 @@ F S UID         PID   PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD
 0 R user1     65085  65015  0  80   0 -  9341 -      04:40 pts/17   00:00:00 ps -fl
 ```
 
-Now lets try the last command using root :
+Essayons la dernière commande en utilisant root :
 
 ```
 user1@ubuntu16-1:~$ su - root
@@ -125,34 +125,34 @@ F S UID         PID   PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD
 0 R root      65113  65098  0  80   0 -  9341 -      04:45 pts/17   00:00:00 ps -fl
 ```
 
-it good to know that nice command has there different syntax:
+Il est bon de savoir que la commande nice a différentes syntaxes:
 
 ```
 $ nice -n niceness-value [command args] 
-OR
+OU
 $ nice -niceness-value [command args] 	#it’s confusing for negative values
-OR
+OU
 $ nice --adjustment=niceness-value [command args]
 ```
 
-| nice command example  | Description      |
+| Exemple de commande nice  | Description      |
 | --------------------- | ---------------- |
-| nice --20 application | highest priority |
-| nice --15 application | very high        |
-| nice -10 application  | medium low       |
-| nice -19 application  | lowest           |
+| nice --20 application | Priorité la plus haute |
+| nice --15 application | Vraiment haut        |
+| nice -10 application  | Moyen bas       |
+| nice -19 application  | Le plus bas     |
 
-#### Changing the nice value of a running process <a href="changing-the-nice-value-of-a-running-process" id="changing-the-nice-value-of-a-running-process"></a>
+#### Modifer la valeur de priorité d'un processus en cours <a href="changing-the-nice-value-of-a-running-process" id="changing-the-nice-value-of-a-running-process"></a>
 
 ### renice
 
-To change the niceness of a running process to a negative value we will use the `renice `command again.
+Pour modifier la priorité d'un processus en cours vers une valeur négative nous utiliserons la commande `renice `.
 
 ```
 renice value PID
 ```
 
-It is important to note that changing a processes niceness value to a negative value requires root privileges. As the effects of giving a process a higher priority could have detrimental effects on a system.
+Il est important de noter que changer la valeur de priorité d'un processus vers une valeur négative nécessite des droits d'administrations. Donner une priorité plus haute à un processus peut avoir des effets destructeur sur un système.
 
 ```
 user1@ubuntu16-1:~$ sleep 88888 &
@@ -179,7 +179,7 @@ user1@ubuntu16-1:~$ renice 5 67534
 renice: failed to set priority for 67534 (process ID): Permission denied
 ```
 
-> user can only raise nice level.
+> L'utilisateur peut uniquement descendre le niveau de priorité.
 
 ```
 user1@ubuntu16-1:~$ su - root
@@ -198,14 +198,14 @@ F S UID         PID   PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD
 4 R root      67558  67542  0  80   0 -  9341 -      06:00 pts/17   00:00:00 ps -alf
 ```
 
-we can also use -p option before giving PID, but that is not necessary.
+Nous pouvons aussi utiliser l'option `-p` avant de donner le PID, mais ce n'est pas nécessaire.
 
-| renice command example |                  |
+| Exemple de commande renice  | Description   |
 | ---------------------- | ---------------- |
-| renice -20 -p PID      | highest priority |
-| renice -15 -p PID      | very high        |
-| renice 10 -p PID       | medium low       |
-| renice 19 -p PID       | lowest           |
+| renice -20 -p PID      | Priorité la plus haute |
+| renice -15 -p PID      | Priorité très haute        |
+| renice 10 -p PID       | Moyen bas       |
+| renice 19 -p PID       | La plus basse           |
 
 .
 

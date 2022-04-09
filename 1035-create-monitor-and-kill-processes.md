@@ -177,6 +177,106 @@ root@ubuntu16-1:~/test-space#
 
 {% hint style="info" %}
 
+### screen
+
+ La commande **screen** dans Linux permet de lancer et de voir plusieurs sessions shell depuis une unique session _ssh_. 
+
+Lorsqu'un processus est démarré avec ‘screen’, le processus peut être détaché de la session et peut être réattacher à la session plus tard. Lorsque la session est détaché, le processus qui a été originellement démarré depuis le scree est encore en cours et géré par le scree lui même. Le processus peut être réattaché à la session plus tard, et les terminaux sont encore là, tel qu'ils ont été laissé. (Vous aurez peut être besoin de l'installer)
+
+#### Démarrer screen pour la première fois
+
+Utiliser simplement la commande screen  :
+
+```
+root@ubuntu16-1:~# screen
+```
+
+```
+Screen version 4.03.01 (GNU) 28-Jun-15
+
+Copyright (c) 2010 Juergen Weigert, Sadrul Habib Chowdhury
+Copyright (c) 2008, 2009 Juergen Weigert, Michael Schroeder, Micah Cowan,
+Sadrul Habib Chowdhury
+Copyright (c) 1993-2002, 2003, 2005, 2006, 2007 Juergen Weigert, Michael
+Schroeder
+Copyright (c) 1987 Oliver Laumann
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 3, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program (see the file COPYING); if not, see http://www.gnu.org/licenses/,
+or contact Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+
+                  [Press Space for next page; Return to end.]
+```
+
+Utiliser` screen -s Session_Name` pour démarrer une session nommée session.now . Laisser une commande tournée dans screen:
+
+```
+root@ubuntu16-1:~# sleep 1111
+
+```
+
+> Afin de créer un nouveau écran à l'intérieur de l'ecran courant (écran nested) appuyez sur les touches  **Ctrl-a** + **c**
+
+#### Détacher le screen
+
+Un des avantages de screen est que vous pouvez le détacher. Puis, vous pouvez le restaurer sans rien perdre de ce que vous avez fait sur cet écran. Utiliser  **Ctrl-a + d **to detach**:**
+
+```
+root@ubuntu16-1:~# sleep 1111
+
+```
+
+```
+root@ubuntu16-1:~# screen
+[detached from 56798.pts-4.ubuntu16-1]
+root@ubuntu16-1:~# 
+```
+
+ **-d**  est aussi utilisé pour détacher une session screen de sorte à ce qu'elle puisse être réattacher plus tard.
+
+**Lister les screens**
+
+ **screen  -ls** est utilisé pour afficher les screens actuellement ouvert en incluant ceux qui tourne à l'arrière plan :
+
+```
+root@ubuntu16-1:~# screen -list
+There is a screen on:
+	56798.pts-4.ubuntu16-1	(10/14/2019 04:15:00 AM)	(Detached)
+1 Socket in /var/run/screen/S-root.
+```
+
+**Réattacher à un screen**
+
+ **-r** Est utilisé pour réattacher une session screen qui a précédemment été détaché :
+
+```
+root@ubuntu16-1:~# screen -r 56798
+```
+
+```
+root@ubuntu16-1:~# sleep 1111
+root@ubuntu16-1:~# 
+
+```
+
+> Nous utilisons les commandes `screen -dr <Screen-ID>`. Cela signifie détache le screen spécifié en premier puis réatache le. 
+
+#### Changer de screens
+
+Lorsque vous faites des screen imbriqué, vous pouvez passer de l'un à l'autre en utilisant la commande **Ctrl-a +n**. Cela vous emmenera au prochain screen. Lorsque vous avez besoin d'aller au screen précédent, utiliser les touches **Ctrl-a** +**p**.
+
+#### Terminer une session screen
+
+Utiliser  “**Ctrl-A**” et “**K**” pour tuer le screen.
+
 
 ### Suivre les processus actifs
 
@@ -289,7 +389,7 @@ Nous connaissons déjà la commande grep dans Linux, qui cherche un modle et aff
 
 ### pgrep
 
-the `pgrep` command searches for processes currently running on the system, **based on a complete** or** partial process name**, or other specified attributes.
+La commande `pgrep` recherche dans les processus qui tournent actuellement sur le système, **en se basant sur le nom complet ou partiel du processus**, ou d'autres attributs spécifiés.
 
 ```
 pgrep [options] pattern
@@ -305,9 +405,9 @@ root@ubuntu16-1:~# pgrep sleep
 60648
 ```
 
-> Always use ps -ef command to make sure about process_name. There is different between process_name and the running program(like bash). compare pgrep -a and pgrep -af.
+> Utiliser toujours la commande `ps -ef` pour vérifier le nom du processus. Il y a une différente entre le process_name et le programme qui l'exécute (comme bash). Comparez `pgrep -a` et `pgrep -af`.
 
-pgrep options:
+Les options de pgrep:
 
 ```
 -d, --delimiter <string>  specify output delimiter
@@ -339,17 +439,17 @@ pgrep options:
  -V, --version  output version information and exit
 ```
 
-> **Real Time process monitoring ?**
+> **Surveillance des processus en temps réel ?**
 >
-> Be creative and use combination of  other commands like 'watch'. We can use 'watch' in conjunction with ps  command to perform Real-time Process Monitoring :
+> En étant créatif et en utilisant des combinaisons avec d'autres commandes comme 'watch'. Nous pouvons utiliser 'watch' en conjonction de la commande ps pour faire du suivi de processus en temps réel  :
 >
 > `watch -n 1 'ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head'`
 
-But there is another tool for that, top.
+Mais il y a un autre outil pour ça, top.
 
 ###  top
 
- **top** command is used to show the Linux processes. It provides a dynamic real-time view of the running system. Usually, this command shows the summary information of the system and the list of processes or threads which are currently managed by the Linux Kernel.
+ La commande **top** est utilisé pour voir les processus de Linux. Elle fournit une vue dynamique en temps réel du système en cours d'exécution. Généralement, cette commande montre les informations résumé du système et la liste des processus ou threads qui sont gérés par le noyau Linux.
 
 ```
 root@ubuntu16-1:~# top
@@ -373,71 +473,71 @@ KiB Swap:  1045500 total,   448216 free,   597284 used.   256968 avail Mem
     10 root      rt   0       0      0      0 S  0.0  0.0   0:00.00 migration/0
 ```
 
-Top output keep refreshing until you press ‘q‘.
+Top continue à se mettre à jour jusqu'à ce que vous appuyez sur la touche ‘q‘.
 
-Where,
+Pù,
 
-* **PID:** Shows task’s unique process id
-* **USER:** User name of owner of task.
-* **PR:** Stands for priority of the task.
-* **NI:** Represents a Nice Value of task. A Negative nice value implies higher priority, and positive Nice value means lower priority.
-* **VIRT:** Total virtual memory used by the task.
-* **RES:**It is the Resident size, the non-swapped physical memory a task has used.
-* **SHR:** Represents the amount of shared memory used by a task.
-* **%CPU:** Represents the CPU usage.
-* **%MEM:** Shows the Memory usage of task.
-* **TIME+:** CPU Time, the same as ‘TIME’, but reflecting more granularity through hundredths of a second.
-* **COMMAND:**Shows the command used to launch the process.
+* **PID:** Montre l'id unique du processus
+* **USER:** Nom de l'utilisateur propriétaire de la tâche.
+* **PR:** Montre la priorité de la tâche.
+* **NI:** Représente une Nice Value pour la tâche. Une nice value négative implique parfois une priorité plus haute et une nice value positive signifie une priorité plus basse.
+* **VIRT:** Mémoire virtuelle totale utilisé par la tâche.
+* **RES:** C'est la Resident size, la mémoire physique non-swapped que la tâche a utilisé.
+* **SHR:** Représente la quanité de mémoire partagé utilisé par une tâche.
+* **%CPU:** Représente l'utilisation du CPU.
+* **%MEM:** Montre l'utilisation de la mémoire de la tâche.
+* **TIME+:** Le temps de CPU, le même que ‘TIME’, mais avec plus de précisions avec les centièmes de secondes.
+* **COMMAND:** Montre la commande utilisé pour lancer le processus.
 
 | top command option    | description                                |
 | --------------------- | ------------------------------------------ |
-| top -n 10             | Exit Top Command After Specific repetition |
-| top -u user1          |  Display Specific User Process             |
-| Top -d seconds.tenths | It tells delay time between screen updates |
-| top -h                |  Shows top command syntax                  |
+| top -n 10             | Sortie de la commande Top après une répétition n |
+| top -u user1          | Affiche les processus d'un utilisateur spécifique |
+| Top -d seconds.tenths | Donne un délai entre deux mise à jour de l'écran |
+| top -h                | Montre la syntaxe de la commande top             |
 
 | Running top command hot keys | Description                                                  |
 | ---------------------------- | ------------------------------------------------------------ |
-|  pressing ‘d‘                | change screen refresh interval (default 3.0 sec)             |
-| Pressing ‘z‘                 | display running process in color                             |
-| Pressing ‘c‘                 | display absolute path of running program                     |
-| pressing ‘k‘                 | kill a process after finding PID of process(without exiting) |
-| Pressing 'M'                 | sort based on memory usage                                   |
-| Shift+P                      |  Sort by CPU Utilisation                                     |
-|  Press ‘h‘                   | Getting top command help                                     |
+|  pressing ‘d‘                | Modifie l'intervale de rafraichissement de l'écran (default 3.0 sec)             |
+| Pressing ‘z‘                 | Affiche les processus en cours en couleur                    |
+| Pressing ‘c‘                 | Affiche les chemins complet des programmes en cours          |
+| pressing ‘k‘                 | Tue un processus après avoir trouver le PID de ce processus (sans quitter) |
+| Pressing 'M'                 | Tri basé sur l'utilisation de la mémoire                     |
+| Shift+P                      | Tri par utilisation du CPU                                   |
+|  Press ‘h‘                   | Obetnir l'aide de la commande top                            |
 
-### Manage processes
+### Gérer les processus
 
-To manage processes in a linux machine  we can send signals signals to the process.Many Signals are defined in the linux kernels. (try `man 7 signal`)
+Pour gérer les processus dans une machine linux nous pouvons envoyer des signaux aux processus. De nombreux signaux sont définis dans les noyaux Linux. (Essayez `man 7 signal`)
 
 | Signal Name | Signal Number | Description                                                                                         |
 | ----------- | ------------- | --------------------------------------------------------------------------------------------------- |
-| SIGHUP      | 1             | Hang up detected on controlling terminal or death of controlling process                            |
-| SIGINT      | 2             | Issued if the user sends an interrupt signal (Ctrl + C)                                             |
-| SIGQUIT     | 3             | Issued if the user sends a quit signal (Ctrl + D)                                                   |
-| SIGKILL     | 9             | If a process gets this signal it must quit immediately and will not perform any clean-up operations |
-| SIGTERM     | 15            | Software termination signal (sent by kill by default)                                               |
-| SIGCOUNT    | 18            | Continue the process stopped with STOP                                                              |
-| STOP        | 19            | Stop process                                                                                        |
+| SIGHUP      | 1             | Suspension détécté sur le terminal qui contrôle ou mort du processus qui le controle                |
+| SIGINT      | 2             | Déclenché si l'utilisateur envoit un signal d'interruption (Ctrl + C)                               |
+| SIGQUIT     | 3             | Déclenché si l'utilisateur envoit un signal d'arrêt (Ctrl + D)                                      |
+| SIGKILL     | 9             | Si un processus reçoit ce signal il doit s'arrêter immédiatement et ne fera aucune opération de nettoyage |
+| SIGTERM     | 15            | Signal de fin du logiciel (envoyé par défaut par kill)                                               |
+| SIGCOUNT    | 18            | Continuer le processus arrêté avec STOP                                                              |
+| STOP        | 19            | Arrêter un processsus                                                                                |
 
-to send signals to processes there are some commands:
+Pour envoyer des signaux au processus voici quelques commandes :
 
 ### kill
 
- `kill` command in Linux (located in /bin/kill), is a built-in command which is used to terminate processes manually . _kill_ command sends a signal to a process which terminates the process.
+ La commande `kill` sous Linux (qui se trouve dans /bin/kill), est une commande fourni qui est utilisé pour terminer un processus manuellement. La commande _kill_ envoie un signal à un processus qui termine le processus.
 
 ```
 kill {-signal | -s signal} pid 
 ```
 
-please notice that:
+Veuillez noter que:
 
-* A user can kill all his process.
-* A user can not kill another user’s process.
-* A user can not kill processes System is using.
-* A root user can kill System-level-process and the process of any user.
+* Un utilisateur peut tuer tous ses processus.
+* Un utilisateur ne peut pas tuer les processus d'un autre utilisateur.
+* Un utilisateur ne peut pas tuer les processus que le sytème utilise.
+* Un utilisateur administrateur (root) peut tuer les processus de niveau système et les processus de n'importe quel utilisateur.
 
-note: If the user doesn’t specify any signal which is to be sent along with kill command then **default TERM signal** is sent that terminates the process.
+Note: Si l'utilisateur ne spécifie aucun signal à envoyé avec la commande kill,  **par défaut, le signal TERM** est envoyé pour terminer le processus.
 
 ```
 root@ubuntu16-1:~# sleep 1000 &
@@ -464,28 +564,28 @@ root@ubuntu16-1:~# ps -ef | grep sleep
 root      61100  55644  0 02:58 pts/17   00:00:00 grep --color=auto sleep
 ```
 
-  use `kill -l` to see all signals you can send using kill.
+  Utiliser `kill -l` pour voir tous les finaux que vous pouvez envoyer en utilisant kill.
 
 {% hint style="danger" %}
-There are two commands used to kill a process:
+Il y a deux commandes utilisé pour tuer un processus :
 
-* kill – Kill a process by ID
-* killall,pkill – Kill a process by name
+* kill – Tue un processus par son ID
+* killall,pkill – Tue un processus par son nom
 
-killing a proccess by name could be realy dangerous, Before sending signal,  verify which process is matching the criteria using “pgrep -l”.
+Tuer un processus par nom peut être réellement dangereux. Avant d'envoyer le signal, vérifier quel proecessus correspond au critère en utilisant “pgrep -l”.
 {% endhint %}
 
 ### killall
 
- `killall` is a tool for terminating running processes on your system **based on name**. _In contrast, `kill` terminates processes based on Process ID number (PID)_. Like `kill` , `killall` can also send specific system signals to processes.
+ `killall` est un outil pour terminer les processus en cours d'exécution sur votre système **basé sur leur nom**. _Par contraste, `kill` termine les processus en se basant sur leur Process ID number (PID)_. Comme `kill` , `killall` peut aussi envoyé des signaux spécifique du système au processus.
 
 ```
 kill {-signal | -s signal} process_name 
 ```
 
-note1:the whole process_name should be defined ( ex : sleep not sle or slee).
+note1: Le nom complet du processus doit être défini ( ex : sleep et pas sle ou slee).
 
-note2: If no signal name is specified, SIGTERM is sent.
+note2:  Si aucun signal n'est spécifié, SIGTERM est envoyé.
 
 ```
 root@ubuntu16-1:~# sleep 1000 &
@@ -503,24 +603,24 @@ root@ubuntu16-1:~# ps -ef | grep sleep | grep -v grep
 
 | killall command example    | Description                                                            |
 | -------------------------- | ---------------------------------------------------------------------- |
-| killall -l                 | all signals the killall command can send                               |
-| killall -q process_name    | prevent killall from complaining if specified process doesn't exist    |
-| killall -u \[user-name]    | kill all processes owned by a user                                     |
-| killall -o 5h              | kill all processes that have now been running for more than _5_ hour   |
-| killall -y 4h              | kill all precesses  that less than 4 hours old                         |
-| killall -w \[process-name] |  causes `killall` to wait until the process terminates before exiting. |
+| killall -l                 | tous les signaux que la commande killall peut envoyé                   |
+| killall -q process_name    | empeche killall de se plaindre si le processus spécifié n'existe pas   |
+| killall -u \[user-name]    | Tue tous les processus d'un utilisateur                                |
+| killall -o 5h              | Tue tous les processus qui sont en cours d'exécution depuis plus de  _5_ heures   |
+| killall -y 4h              | Tue tous les processus qui sont agés de moins de 4 heures              |
+| killall -w \[process-name] | Demande à `killall` d'attendre jusqu'à ce que le processus termine avant de sortir. |
 
 ### pkill
 
-The PKill command allows you to kill a program simply **by specifying the name.**
+La commande PKill vous permet de tuer un programme simplement **en spécifiant son nom.**
 
 ```
 pkill [options] pattern
 ```
 
-note: We don't have to define whole process_name. So it could be really dangerous!
+note: Nous n'avons pas besoin de définir le nom complet du processus. Cela peut donc être très dangereux!
 
-example:
+exemple:
 
 ```
 root@ubuntu16-1:~# pgrep firefox
@@ -528,21 +628,21 @@ root@ubuntu16-1:~# pgrep firefox
 root@ubuntu16-1:~# pkill firefox
 ```
 
-| pkill command example     | Description                                      |
+| Exemple de commande pkill | Description                                      |
 | ------------------------- | ------------------------------------------------ |
-| pkill -c \[process_name]  | return a count of the number of processes killed |
-| pkill -U \[real_user_ID]  | kill all the processes for a particular user     |
-| pkill -G \[real_group_ID] | kill all the programs in a particular group      |
+| pkill -c \[process_name]  | Renvoit le nombre de processus tués              |
+| pkill -U \[real_user_ID]  | Tue tous les processus pour un utilisateur spécifique |
+| pkill -G \[real_group_ID] | Tue tous les programe d'un groupe particulier    |
 
 ### free
 
- **`free`** command  displays the total amount of **free space** available along with the amount of **memory used** and **swap** memory in the system, and also the** buffers** used by the kernel.
+ La commande **`free`** affiche la quantité total d'**espace libre** disponible avec la quantité de **mémoire utilisé** et la mémoire **swap** dans le système, et aussi les **tampons(buffers)** utilisés par le noyau.
 
 ```
 free [options]
 ```
 
-As free displays the details of the memory related to the system , its syntax doesn’t need any arguments to be passed but it has some options!
+Comme free affiche les détails de la mémoire lié au système, sa syntaxe n'a pas besoin d'argument mais il a quelques options!
 
 ```
 root@ubuntu16-1:~# free
@@ -551,17 +651,17 @@ Mem:         985080      432716      135464       16724      416900      339484
 Swap:       1045500      671864      373636
 ```
 
-free command with no options produces the columnar output as shown above where column:
+La commande free sans option produit la sortie en colonne comme montré ci-dessus où les colonnes sont :
 
-1. **total **: displays the total installed memory _(MemTotal and SwapTotal i.e present in /proc/meminfo)._
-2. **used :** displays the used memory.
-3. **free :** displays the unused memory.
-4. **shared :** displays the memory used by tmpfs_(Shmen i.epresent in /proc/meminfo and displays zero in case not available)._
-5. **buffers :** displays the memory used by kernel buffers.
-6. **cached :** displays the memory used by the page cache and slabs_(Cached and Slab available in /proc/meminfo)._
-7. **buffers/cache :** displays the sum of buffers and cache.
+1. **total**: Affiche la mémoire totale installé _(MemTotal et SwapTotal i.e présente dans /proc/meminfo)._
+2. **used :** Affiche la mémoire utilisé.
+3. **free :**  Affiche la mémoire inutilisée.
+4. **shared :** Affiche la mémoire utilisé par tmpfs_(Shmen i.e présente dans /proc/meminfo et affiche zero dans le cas ou elle n'est pas disponible)._
+5. **buffers :** Affiche la mémoire utilisé par les tampons du noyau.
+6. **cached :** Affiche la mémoire utilisé par le cache de page et slabs_(Cached et Slab disponible dans /proc/meminfo)._
+7. **buffers/cache :** Affiche la comme des tampons et du cache.
 
- By default the display is in kilobytes, but you can override this using `-b` for bytes, `-k` for kilobytes, `-m` for megabytes, or `-g` for gigabytes.
+ Par défaut, l'affichage est en kilobytes, mais vous pouvez le surcharger en utilisant `-b` pour bytes, `-k` pour kilobytes, `-m` pour megabytes, ou `-g` pour gigabytes.
 
 ```
 root@ubuntu16-1:~# free -h
@@ -570,7 +670,7 @@ Mem:           961M        423M        128M         16M        410M        330M
 Swap:          1.0G        655M        365M
 ```
 
- `-t`   displays an additional line containing the total of the total, used and free columns:
+ `-t` affiche une ligne aditionnele qui contient le total du total, les colonnes utilisé et libres:
 
 ```
 root@ubuntu16-1:~# free -t -h
@@ -580,7 +680,7 @@ Swap:          1.0G        655M        365M
 Total:         1.9G        1.1G        492M
 ```
 
-Other free command options:
+Autre options pour la commande free:
 
 ```
 -h, --human         show human-readable output
@@ -597,7 +697,7 @@ Other free command options:
 
 ### uptime
 
- The `uptime` command shows you a one-line display that includes the current time, how long the system has been running, how many users are currently logged on, and the **system load averages** for the past 1, 5, and 15 minutes.
+ La commande `uptime` montre un affichage en une ligne qui inclut la date et l'heure courante, depuis quand le système est lancé, combien d'utilisateurs sont actuellement connecté, et command shows you a one-line display that includes the current time, how long the system has been running, how many users are currently logged on, et la **moyenne de charge système** pour les 1, 5, et 15 minutes précédente.
 
 ```
 uptime [-options]
@@ -608,7 +708,7 @@ root@ubuntu16-1:~# uptime
  03:37:00 up 3 days, 19:07,  1 user,  load average: 0.00, 0.00, 0.00
 ```
 
-Lets try` uptime -h` to see all of `uptime` availbale options:
+Essayons` uptime -h` pour voir toutes les options disponible de `uptime`:
 
 ```
 Usage:
@@ -623,7 +723,7 @@ Options:
 For more details see uptime(1).
 ```
 
-examples:
+Exemples:
 
 ```
 root@ubuntu16-1:~# uptime -p
@@ -639,42 +739,6 @@ uptime from procps-ng 3.3.10
 .
 
 .
-
-{% hint style="info" %}
-Processes deep dive ( Beyond the scope of LPIC1)
-
- **Types of Processes**
-
-1. **Parent and Child process :** The 2nd and 3rd column of the ps –f command shows process id and parent’s process id number. For each user process there’s a parent process in the system, with most of the commands having shell as their parent.
-2. **Zombie and Orphan process :** After completing its execution a child process is terminated or killed and SIGCHLD updates the parent process about the termination and thus can continue the task assigned to it. But at times when the parent process is killed before the termination of the child process, the child processes becomes orphan processes, with the parent of all processes “init” process, becomes their new ppid.\
-    A process which is killed but still shows its entry in the process status or the process table is called a zombie process, they are dead and are not used.
-3. **Daemon process :** They are system-related background processes that often run with the permissions of root and services requests from other processes, they most of the time run in the background and wait for processes it can work along with for ex print daemon.\
-    When ps –ef is executed, the process with ? in the tty field are daemon processes
-
-**States of a Process in Linux**
-
-* **Running** – here it’s either running (it is the current process in the system) or it’s ready to run (it’s waiting to be assigned to one of the CPUs). use ps -r command.
-* **Waiting** – in this state, a process is waiting for an event to occur or for a system resource. Additionally, the kernel also differentiates between two types of waiting processes; interruptible waiting processes – can be interrupted by signals and uninterruptible waiting processes – are waiting directly on hardware conditions and cannot be interrupted by any event/signal.
-* **Stopped** – in this state, a process has been stopped, usually by receiving a signal. For instance, a process that is being debugged.
-* **Zombie** – here, a process is dead, it has been halted but it’s still has an entry in the process table.
-
-**Processes state codes in ps aux or ps -ef  command:**
-
-* `R` running or runnable (on run queue)
-* `D` uninterruptible sleep (usually IO)
-* `S` interruptible sleep (waiting for an event to complete)
-* `Z` defunct/zombie, terminated but not reaped by its parent
-* `T` stopped, either by a job control signal or because it is being traced
-
-Some extra modifiers:
-
-* `<` high-priority (not nice to other users)
-* `N` low-priority (nice to other users)
-* `L` has pages locked into memory (for real-time and custom IO)
-* `s` is a session leader
-* `l` is multi-threaded (using CLONE_THREAD, like NPTL pthreads do)
-* `+` is in the foreground process group
-{% endhint %}
 
 .
 

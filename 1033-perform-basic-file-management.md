@@ -15,7 +15,7 @@
 * Utiliser find pour localiser et agir sur les fichiers en se basant sur leur type, leur taille ou leur date
 * Utilisation de tar, cpio et dd
 
-**Concepts et Utilitairess:**
+**Concepts et Utilitaires:**
 
 * cp
 * find

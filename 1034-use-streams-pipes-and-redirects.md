@@ -1,46 +1,46 @@
-# 103.4. Use streams, pipes and redirects
+# 103.4. Utilisation des flux, des tubes et des redirections
 
 **Weight:** 4
 
-**Description:** Candidates should be able to redirect streams and connect them in order to efficiently process textual data. Tasks include redirecting standard input, standard output and standard error, piping the output of one command to the input of another command, using the output of one command as arguments to another command and sending output to both stdout and a file.
+**Description:** Les candidats doivent être en mesure de rediriger des flux et de les associer pour traiter efficacement des données textuelles. Ces tâches incluent les redirections de l'entrée standard, de la sortie standard et de l'erreur standard, la redirection de la sortie d'une commande vers l'entrée d'une autre, l'utilisation de la sortie d'une commande comme paramètres pour une autre commande et l'envoi de la sortie à la fois sur la sortie standard et dans un fichier. .
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Redirecting standard input, standard output and standard error
-* Pipe the output of one command to the input of another command
-* Use the output of one command as arguments to another command
-* Send output to both stdout and a file
+* Redirection de l'entrée standard, de la sortie standard et de l'erreur standard.
+* Connexion de la sortie d'une commande à l'entrée d'une autre commande.
+* Utilisation de la sortie d'une commande comme paramètres d'une autre commande.
+* Envoi simultané du résultat d'une commande vers la sortie standard et vers un fichier. 
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * tee
 * xargs
 
-We have talked about basics of piping and redirecting in previous sections and in this tutorial we take a closer look at Linux techniques for redirecting standard IO streams.
+Nous avons parler ds bases de l'enchainement et de la rédirection dans leçon précédente et celle-ci nous plongera plus en avant dans les techniques de Linux pour rediriger les flux IO standard.
 
-### Input, output, and streams <a href="input-output-and-streams" id="input-output-and-streams"></a>
+### Entrée, sortie et flux <a href="input-output-and-streams" id="input-output-and-streams"></a>
 
-In computing, a stream is something that can transfer data. Data streams, like water streams, have two ends. They have a source and an outflow. 
+En informatique, un flux est quelque chose qui peut transférer des données. Les flux de données, comme les courant marins ont deux fins. Ils ont une source et une destination. 
 
-A Linux shell, such as Bash, receives input and sends output as sequences or streams of characters. Stream of characters comes from or goes to a file, a keyboard, a window on a display, or some other IO device. 
+Dans un shell Linux, comme bash, on reçoit des entrée et on envoit des sortie comme séquequence ou flux de caractères. Les flux de caractères viennent ou vont dans un fichier, un clavier, une fenêtre d'affichage ou d'autres périphériques d'entrée/sortie (I/O) . 
 
-stdin, stdout, and stederr are three standard streams that are established when a Linux command is executed. 
+stdin, stdout, et stderr sont les trois flux standard, il sont établi lorsqu'une commande Linux est exécutée. 
 
 ![](.gitbook/assets/usestreams-streams.jpg)
 
-Linux shells use these three standard I/O **streams , **each of which is associated with **file descriptor**:**:**
+Les shell Linux utilise ces trois **flux** I/O standard, chacun d'eux est associé avec un **descripteur de fichier**:
 
-* **stdout** is the standard output stream, which displays output from commands(**file descriptor** **1**)
-* **stderr** is the standard error stream, which displays error output from commands(**file descriptor** **2**)
-* **stdin** is the standard input stream, which provides input to commands(**file** **descriptor** **0**)
+* **stdout** est le flux standard de sortie, qui affiche la sortie des commandes(**descripteur de fichier** **1**)
+* **stderr** est le flux standard des erreur, qui affiche les sortie d'erreurs depuis les commandes (**descripteur de fichier** **2**)
+* **stdin** est le flux standard d'entrée, qui fournit les commandes saisies(**descripteur de fichier** **0**)
 
- So  we can see that there are two output streams, `stdout` and `stderr`, and one input stream, `stdin`
+ Nous pouvons donc dire qu'il y a deux flux de sorties, `stdout` et `stderr`, et un flux d'entrée, `stdin`
 
-**What are file descriptors?**
+**Qu'est ce qu'un descripteur de fichier?**
 
-Streams Are Handled Like Files. We can read text from a file, and we can write text into a file. Both of these actions involve a stream of data. So the concept of handling a stream of data as a file isn’t that much of a stretch.
+Les flux sont gérés comme des fichiers. Nous pouvons lire le texte depuis un fichier, et nous pouvons écrire du texte dans un fichier. Ces deux actions implique un flux de données. Donc le concept de gestion d'un flux de données en tant que fichier n'est pas si surprenant.
 
-Each file associated with a process is allocated a unique number to identify it.
+Chaque fichier associé avec un processus est associé à un nombre unique pour l'identifié.
 
 ```
 STDIN - /proc/<processID>/fd/0
@@ -48,13 +48,13 @@ STDOUT - /proc/<processID>/fd/1
 STDERR - /proc/<processID>/fd/2
 ```
 
- This is known as the** file descriptor**. Whenever an action is required to be performed on a file, the file descriptor is used to identify the file.  These values are always used for `stdin`, `stdout,` and `stderr`:
+ Cela est connu comme le **descripteur de fichier**. Lorsqu'une action doit être faite sur un fichier, le descripeur de fichier est utilisé pour identifié le fichier. Ces valeurs sont toujours utilisés pour `stdin`, `stdout,` et `stderr`:
 
 * 0: stdin 
 * 1: stdout 
 * 2: stderr
 
-To make life more convenient the system creates some shortcuts for us:
+Pour nous rendre la vie plus facile, le système a crée des raccourcis pour nous :
 
 ```
  root@ubuntu16-1:~/test-space/myfiles# ls -al /dev/std*
@@ -63,26 +63,26 @@ lrwxrwxrwx 1 root root 15 Dec  1  2018 /dev/stdin -> /proc/self/fd/0
 lrwxrwxrwx 1 root root 15 Dec  1  2018 /dev/stdout -> /proc/self/fd/1
 ```
 
-### Redirecting standard IO <a href="redirecting-standard-io" id="redirecting-standard-io"></a>
+### Rediriger les IO standards <a href="redirecting-standard-io" id="redirecting-standard-io"></a>
 
- Although the model for standard input and output is a serial stream of characters to and from a terminal, we might want to prepare input data in a file, or save output or error information in a file. That’s where **.**comes in.
+ Bien que le modèle pour les entrées et sorties standard est une série de flux de caractères depuis et vers un terminal, nous pouvons vouloir préparer les données d'entrée dans un fichier, ou enregistrer la sortie ou les erreurs dans un fichier. C'est là où **.** entre en jeu.
 
-#### Redirecting output <a href="redirecting-output" id="redirecting-output"></a>
+#### Rediriger la sortie <a href="redirecting-output" id="redirecting-output"></a>
 
-There are two ways to redirect output to a file:
+Il y a deux manière de rediriger la sortie dans un fichier :
 
-_**n**_**> ** redirects output from file descriptor n to a file. You must have write authority to the file. If the file does not exist, it is created. If it does exist, the existing contents are usually lost without any warning.
+_**n**_ **>** redirige la sortie depuis le descripteur de fichier n vers un fichier. Nous devons avoir les droits d'écrire dans le fichier. Si le fichier n'existe pas, il est crée. S'il existe, son contenu existant est perdu sans avertissement.
 
-_**n**_**>> ** also redirects output from file descriptor n to a file. Again, we must have write authority to the file. If the file does not exist, it is created. If it does exist, the output is appended to the existing file.
+_**n**_ **>>** redirige aussi la sortie depuis le descripteur de dichier n vers un fichier. Là aussi, nous devons avoir les droits d'écrire dans le fichier. Si le fichier n'existe pas, il est créé. S'il existe, la sortie est ajouté au fichier existant.
 
->  The _n_ in n> or n>> refers to the _file descriptor_. If it omitted, then standard output (file descriptor 1) is assumed.
+>  Le _n_ dans n> ou n>> fait référence au _descripteur de fichier_. S'il est omis, alors la sortie standard (descripteur de fichier 1) est supposé.
 
-The` >` and `>>` redirection symbols works with **stdout** by default. We can use one of the numeric file descriptors to indicate which standard output stream you wish to redirect.
+Les symboles de redirections ` >` et `>>` fonctionne par défaut avec  **stdout**. Nous pouvons utiliser un des descripteurs de fichiers numéroque pour indiquer quel flux de sortie standard nous souhaitons rediriger.
 
 * **>** - standard output
 * **2>** - standard error
 
-">" redirects stdout
+">" redirige stdout
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls -l
@@ -101,7 +101,7 @@ drwxr-xr-x 2 root root    4096 Oct  5 05:25 dir2
 -rw-r----- 1 root root 1156369 Sep 30 05:41 mylog.txt
 ```
 
-"2>" redirects stderr
+"2>" redirige stderr
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls -l BlahBlah
@@ -119,9 +119,9 @@ root@ubuntu16-1:~/test-space/myfiles# cat error
 ls: cannot access 'BlahBlah': No such file or directory
 ```
 
-**Append**
+**Ajout**
 
- Commands with a double bracket _do not_ overwrite the destination’s existing contents, they append.
+ La commande avec le double symbole _n'écrase pas_ le contenu existant de la destination, il ajoute le nouveau contenu.
 
 * **>>** - standard output
 * **2>>** - standard error
@@ -142,9 +142,9 @@ Sat Oct 12 02:53:23 PDT 2019
 ```
 
 {% hint style="info" %}
- **To clobber or to noclobber?**
+ **Ecraser ou ne pas écraser ?**
 
-We said that output redirection using n> usually overwrites existing files. You can control this with the `noclobber` option of the `set` builtin.  use set -C for enabling noclobber:
+Nous l'avons dis la redirection de sortie qui utilise n> écrase le fichier existant. Vous pouvez le controller avec l'option `noclobber` du pré-construit `set`. Utiliser `set -C` pour activer noclobber(pas d'écrasement):
 
 ```
 user1@ubuntu16-1:~$ set -o | grep noclobber
@@ -160,20 +160,20 @@ user1@ubuntu16-1:~$ ls > list1
 bash: list1: cannot overwrite existing file
 ```
 
-If it has been set, we can override it using n>|
+S'il a été défini, nous pouvons le surcharger en utilisant n>|
 
 ```
 user1@ubuntu16-1:~$ ls >| list1
 ```
 
-use `set +C` for turning globbing off.
+Utiliser `set +C` pour désactiver l'option.
 {% endhint %}
 
-**redirect both standard output and standard error**
+**Rediriger à la fois la sortie standard et les erreurs standard**
 
-Sometimes, we might want to redirect both standard output and standard error into a file. This is often done for automated processes or background jobs so that we can review the output later.
+Parfois, nous voulons rediriger à la fois la sortie standard et les erreurs standard dans un fichier. C'es souvent fait pour les process automatisés ou les taches en arrière plans pour que nous puissions consulter la sortie plus tard.
 
-* Use** &>** or** &>>** to redirect both standard output and standard error to the same place**.**
+* Utiliser **&>** ou **&>>** pour rediriger à la fois la sortie standard et les erreurs standards au même endroit.
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls blah &>result
@@ -185,9 +185,9 @@ ls: cannot access 'blah': No such file or directory
 ls: cannot access 'blah2': No such file or directory
 ```
 
-We can do it in another way,  redirect file descriptor _n_ and then redirect file descriptor _m_ to the same place using the construct m>\&n or m>>\&n.
+Nous pouvons le faire d'une autre manière, rediriger le descripteur de fichier _n_ et rediriger le descripteur de fichier  _m_ au même endroit en utilisant la construction m>\&n ou m>>\&n.
 
-* **&1** and **&2** and** &0**  reffer to current place of** stdout** , **stderror** and **stdin**.
+* **&1** et **&2** et **&0** font référence à l'espace courant de **stdout** , **stderror** et **stdin**.
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls blah3 > result 2>&1
@@ -196,19 +196,19 @@ ls: cannot access 'blah3': No such file or directory
 ```
 
 {% hint style="info" %}
- The order in which outputs are redirected is important. For example,\
+ L'ordre dans lequel les sorties sont redirigés est important. Par exemple,\
 `command 2>&1 >output.txt`\
- is not the same as\
+ n'est pas la même chose que\
 `command >output.txt 2>&1`
 
-In the first case, stderr is redirected to the current location of stdout and then stdout is redirected to output.txt, but this second redirection affects only stdout, not stderr. In the second case, stderr is redirected to the current location of stdout and that is output.txt.
+Dans le premier cas, stderr est redirigé dans la localisation courante de stdout et puis stdout est redirigé vers output.txt, mais cette seconde redirection affecte seulement stdout, pas stderr. Dans le second cas, stderr est redirigé dans la localisation courante de stdout et ça dans output.txt.
 {% endhint %}
 
-** redirecting to /dev/null**
+**Rédiriger dans /dev/null**
 
-At other times, we** **might want to ignore either standard output or standard error entirely. To do this, redirect the appropriate stream to the empty file, /dev/null.
+A d'autres momens, nous pourrions vouloirs ignorer soit la sortie standard soit les erreurs standards. Pour ce faire, rediriger le flux approprié dans un fichier vide, /dev/null.
 
-/dev/null is a special file called the null device. it is also called the bit-bucket or the black-hole because it immediately discards anything written to it and only returns an end-of-file EOF when read.
+/dev/null est un fichier spécia qui appelle le périphérique null. Il est aussi appelé bit-bucket ou le trou noir (black-hole) car il annule immédiatement tout ce qui est écrit et retournce seulement une fin de fichier (end-of-file EOF) lorsqu'il est lu.
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls -l
@@ -223,9 +223,9 @@ drwxr-xr-x 2 root root    4096 Oct  5 05:25 dir2
 root@ubuntu16-1:~/test-space/myfiles# ls -l Blah 2>/dev/null
 ```
 
-### redirecting input
+### Rediriger l'entrée
 
-"<" redirects stdin 
+"<" redirige stdin 
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# cat list 
@@ -239,11 +239,11 @@ root@ubuntu16-1:~/test-space/myfiles# wc < list
   6  47 267
 ```
 
-or simply wc 0< list do the same thing.
+ou simplement wc 0< list fait la même chose.
 
 ### here documents
 
-A here document (or heredoc) is a way of getting text input into a script or command without having to feed it in from a separate file.
+Un here document (ou heredoc) est une manière d'obtenir le texte à entré dans un script ou une commande sans avoir à le mettre dans un fichier séparé.
 
 ```
 Command << HeredocDelimiter
@@ -253,9 +253,9 @@ Command << HeredocDelimiter
 HeredocDelimiter
 ```
 
-**<<**  redirects standard input and the command will take input until "HeredocDelimiter" string .
+**<<**  redirige l'entrée standard dans la commande et prend une chaine jusqu'au "HeredocDelimiter" .
 
- **Note:** There should not be any space between the << symbol and the limit string. If there are any characters between the limit string and the << symbol then the here document is unlikely to work.
+ **Note:** Il ne doit pas y avoir d'espace entre le symbole << et la limite de la chaine. S'il y a un caractère entre la chaine et le symbole << alors le document ne fonctionnera pas.
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# cat << EOF > /tmp/myfile.txt
@@ -269,19 +269,19 @@ Theis line will be written to the file.
 this is last line.
 ```
 
-> Reminder: "-" A hyphen (used alone) generally signifies that input will be taken from `stdin` as opposed to a named file. try: cat - << EOF > interesting.txt
+> Rappel: "-" Un tiret (utilisé seul) signifie généralement que l'entrée proviendra de `stdin` plutôt que d'un fichier nommé. Essayez : cat - << EOF > interesting.txt
 
 ### here string
 
- **<<<** Redirect a single line of text to the stdin of cmd. This is called a here-string.
+ **<<<** Redirige une seule ligne de texte dans le stdin d'une commande. C'est appelé un here-string.
 
 ```
 cmd <<< "string"
 ```
 
-### **Pipes**
+### **Tubes**
 
-We use the`  |  `(pipe) operator between two commands to direct the stdout of the first to the stdin of the second. **`command | command`**
+Nous utilisons l'opérateur`  |  `(pipe ou tube en français) entre deux commands pour rediriger le stdout de la première dans le stdin de la seconde. **`command | command`**
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls -l
@@ -306,12 +306,12 @@ root@ubuntu16-1:~/test-space/myfiles# ls -l | cut -f1 -d' ' | wc -l
 8
 ```
 
-Some commands like grep can accept input as parameters, but some commands accepts arguments
+Certaines commandes comme grep peut accepter une entrée comme paramètres, mais certaines commandes acceptes des argument
 
-> Parameter vs Argument: 
+> Paramètre vs Argument: 
 >
-> * **Parameter** is variable in the declaration of function.
-> *   **Argument** is the actual value of this variable that gets passed to function.
+> * **Paramètre** est une variable dans la déclaration d'une fonction.
+> * **Argument** est la valeur actuel de la variable qui est passé à la fonction.
 >
 >     > ```
 >     >                  Parameters
@@ -324,36 +324,36 @@ Some commands like grep can accept input as parameters, but some commands accept
 >     >      Arguments
 >     > ```
 
-### Using output as arguments <a href="using-output-as-arguments" id="using-output-as-arguments"></a>
+### Utiliser la sortie comme arguments <a href="using-output-as-arguments" id="using-output-as-arguments"></a>
 
-In the privious of pipelines, we learned how to take the output of one command and use it as input to another command. Instead , what if  we want to use the output of a command or the contents of a file as arguments to a command rather than as input. Pipelines don’t work for that.
+Dans la partie précédente sur les pipelines, nous avons appris comment prendre la sortie d'une commande et l'utiliser en tant qu'entrée dans une autre commande. A la place, que se passe t'il si nous voulons utiliser la sortie d'une commande ou le contenu d'un fichier comme argument d'une commande plutôt que comme entrée ?. Les Pipelines ne fonctionnent pas pour ça.
 
- Three common methods are:
+ Les trois méthodes communes sont :
 
-1. The `xargs` command
-2. The `find` command with the `-exec` option (previous section)
-3. Command substitution ( will be discussed later)
+1. La commande `xargs`
+2. La commande `find` avec l'option `-exec` (section précédente)
+3. La substitution de commande ( nous le verrons plus tard)
 
 ### xargs
 
-**xargs** is a Unix command which can be used to build and execute commands from standard input.
+**xargs** est une commande Unix qui peut être utiliser pour construire et exécuter des commande depuis l'entrée standard.
 
 ```
 xargs [options] [command]
 ```
 
-> If no command is specified, xargs executes echo by default.
+> Si aucune commande n'est spécifié, xargs exécute echo par défaut.
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls | xargs 
 dir1 dir2 interesting.txt list myconf.txt mydate mylog.txt
 ```
 
- There are several ways in which **xargs** is useful in daily usage of the command line.
+ Il y a plusieurs manières pour lesquel **xargs** est utile au quotidien avec les lignes de commande.
 
 ![](.gitbook/assets/usestreams-xarg.jpg)
 
-We can replace occurrences of arguments via` -I` switch:
+Nous pouvons remplacer des occurence de l'argument via l'option` -I` :
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# find . -type f | xargs -I FILE  echo this is my file FILE yes
@@ -367,7 +367,7 @@ this is my file ./myconf.txt yes
 this is my file ./mydate yes
 ```
 
-`it is also possible to run multiple commands with xargs `
+`Il est aussi possible de lancer plusieurs commandes avec xargs `
 
 cat a.txt | xargs -I % sh -c {command1; command2; ... }
 
@@ -386,7 +386,7 @@ root@ubuntu16-1:~/test-space# ls
 foo  one  three  two
 ```
 
-With `-L` option, the input will break by line and not by blanks. Other options:
+Avec l'option `-L`, l'entrée sera cassé par ligne et non pas espace. D'autres options:
 
 ```
 xargs options :
@@ -412,17 +412,17 @@ xargs options :
 
 ### tee
 
- Sometimes we might want to see output on the screen while saving a copy for later. While we **could** do this by redirecting the command output to a file in one window and then using `tail -f `to follow the output in another screen, using the `tee` command is easier.
+ Parfois, nous voulons voir la sortie sur l'écran et en enregistrer une copie pour plus tard. Nous pouvons le faire en redirigeant la sortie dans un fichier dans une fenêtre et en utilisant `tail -f `pour suivre dans une autre fenêtre, utiliser la commande `tee` est plus simple.
 
 ```
 tee [OPTION]... [FILE]...
 ```
 
- **tee **reads the standard input and writes it to both the standard output and one or more files.
+ **tee** lit l'entrée standard et l'écrit dans la sortie standard et dans un ou plusieurs fichiers.
 
 ![](.gitbook/assets/upstreams-tee.jpg)
 
-tee always work after the '|' and it does both the tasks simultaneously.example:
+tee fonctionne toujours après le '|' et il faut les deux tâches en simultanné. Par exemple :
 
 ```
 root@ubuntu16-1:~/test-space/myfiles# ls  | tee list.txt
@@ -445,7 +445,7 @@ mydate
 mylog.txt
 ```
 
-with  **`-a` ** option It basically do not overwrite the file but append to the given file.
+Avec l'option  **`-a`** il n'écrase pas le contenu du fichier mais l'ajoute au fichier donné.
 
 
 

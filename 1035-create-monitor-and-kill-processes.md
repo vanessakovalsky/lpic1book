@@ -1,18 +1,18 @@
-# 103.5. Create, monitor and kill processes
+# 103.5. Création, contrôle et interruption des processus
 
-**Weight:** 4
+**Poids:** 4
 
-**Description:** Candidates should be able to perform basic process management.
+**Description:** Les candidats doivent être en mesure d'effectuer une gestion élémentaire des processu
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Run jobs in the foreground and background
-* Signal a program to continue running after logout
-* Monitor active processes
-* Select and sort processes for display
-* Send signals to processes
+* Exécution de tâches au premier plan et en arrière plan.
+* Indiquer à un programme qu'il doit continuer à s'exécuter après la déconnexion.
+* Contrôle des processus actifs.
+* Sélection et tri des processus à afficher.
+* Envoi de signaux aux processus. 
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * &
 * bg
@@ -27,11 +27,13 @@
 * pgrep
 * pkill
 * killall
+* watch
 * screen
+* tmux
 
-In this section we are talking about jobs and processes. What you should know is that, what exactly is a job?
+Dans cette section nous parlerons des tâches et des processus. D'ailleurs qu'est ce que c'est une tâche (job) ?
 
-If you run a command from the shell, that is job. 
+Si vous lancer des commande depuis le shelle, c'est une tâche. 
 
 ```
 root@ubuntu16-1:~# ls
@@ -39,21 +41,21 @@ client.conf  files-backup            openvpn.key  unzip_6.0-20ubuntu1_amd64.deb
 dead.letter  jcal_0.4.1-2_amd64.deb  test-space   zip_3.0-11_amd64.deb
 ```
 
-A job might be executed and exit immediately and runs for a short time only but some jobs run for a long time.
+Une tâche doit être exécuté et quitter juste après la fin et lancre pour un temps court seulement mais certaines tâches sont lancé pour une longue période.
 
 ```
 root@ubuntu16-1:~# sleep 3600
 
 ```
 
-that goes to sleep for 3600 seconds, that is an hour! So you can wait for an hour (considering that you can not use your terminal) or you can run a job in background.
+Cela va dormir pour 3600 secondes, c'est une heure! Donc vous pouvez attendre pour une heure (en considérant que vous ne pouvez plus utiliser votre terminal) ou vous pouvez lancer une tâche en arrière plan (background).
 
-### Foreground and Background jobs (&)
+### Tache de premier plan et d'arrière-plan (&)
 
- A **job is a process that the shell manages**. Each job is assigned a sequential job ID. Because a job is a process, each job has an associated PID. There are two types of job statuses:
+ Une **tache est un processus que le shell gère**. Chaque tâche est assigné à un ID de tâche séquentiel. Puisqu'une tâche est un processus, chaque tâche est associé à un PID. Il y a deux types de statut de tâche:
 
-1\. **Foreground**: When we enter a command in a terminal window, the command occupies that terminal window until it completes. This is a foreground job.\
- 2\. **Background**: When we enter an ampersand (**&**) symbol at the end of a command line, the command runs without occupying the terminal window. The shell prompt is displayed immediately after you press Return. This is an example of a background job.
+1\. **Premier plan(Foreground)**: Lorsque vous entrez une commande dans une fenêtre de terminal, la commande occupe la fenêtre du terminal jusqu'à ce qu'elle soit complète. C'est une tâche en premier plan.\
+ 2\. **Arrière-plan(Background)**: Lorsque vous entrez le symbole esperluette (**&**) a la fin d'une ligne de commande, la commande tourne sans occuper votre fenêtre de terminal. L'invite de commande du shell (shell prompt) est affiché immédiatement après que vous ayez appuer sur Entrée. Voici un exemple de tâche en arrière-plan.
 
 ```
 user1@ubuntu16-1:~$ sleep 5 &
@@ -63,21 +65,21 @@ user1@ubuntu16-1:~$
 user1@ubuntu16-1:~$
 ```
 
-> By default you get notified about terminated jobs when you hit enter ,Try set -b to get notified immediately.
+> Par défaut, vous serez notifié lorsque la tâche se termine la prochaine fois que vous appuierez sur la touche Entrée. Essayer `set -b` pour être notifié immédiatement.
 
-**Job Control Commands**
+**Commande de contrôle des tâches**
 
-Job control commands enable **us **to place jobs in the foreground or background, and to start or stop jobs. The table describes the job control commands.
+La commande de contrôle des tâche nous permet de mettre les tâches en premier plan ou à l'arrière plan, et de démarrer ou d'arrêter les tâches. Ce tableau décrit les commandes de contrôles des tâchesThe table describes the job control commands.
 
 | Command   | Description                                                                    |
 | --------- | ------------------------------------------------------------------------------ |
-| jobs      | Lists all jobs                                                                 |
-| bg %n     | Places the current or specified job in the background, where n is the job ID   |
-| fg %n     | Brings the current or specified job into the foreground, where n is the job ID |
-| Control-Z | Stops the foreground job and places it in the background as a stopped job      |
-| Control-C | Ctrl+C kills the process                                                       |
+| jobs      | Liste toutes les tâches                                                        |
+| bg %n     | Positionnel la tâche courante ou spécifié en arrière plan, où n est l'ID de la tâche   |
+| fg %n     | Ramène la tâche courante ou spécifié au premier plan, où n est l'ID de la tâche |
+| Control-Z | Arrête la tâche en premier plan et la met à l'arrière plan comme une tâche arrêté      |
+| Control-C | Ctrl+C tue le processus                                                       |
 
-> if no job id is mentioned bg and fg consider the most recent job
+> Si aucun id de tâche n'est précisé pour bg et fg, il prendra la tâche la plus récente
 
 ### jobs
 
@@ -109,7 +111,7 @@ root@ubuntu16-1:~# jobs
 [3]+  Running                 sleep 3000 &
 ```
 
-we cloud use `fg %3` command and it would have the same result. 
+Nous pouvons utiliser la commande `fg %3` et cela aura le même résultat. 
 
 ### fg
 
@@ -127,36 +129,23 @@ root@ubuntu16-1:~# jobs
 root@ubuntu16-1:~# 
 ```
 
-We brought a job to foreground and use Ctrl + C to kill that job. 
+Nous mettons une tâche au premier plan et utilisons Ctrl + C pour tuer cette tâche. 
 
-> we can disable and enable shell job control feature  with`set +m and set -m` commands.
+> Nous pouvons désactiver et activer les fonctionnalité de controle des tâches de shell avec la commande `set +m and set -m`.
 
-jobs normally stick to the shell running it, so they are killed when we close the terminal or log out. Some times we need to make sure that the running job is not attached to the running shell.This is where nohup and disown come to play.
+Les tâches sont liés au shell qui les a lancé, donc elles sont tués lorsque le termina est fermé ou déconnecté. Parfois nous avons besoin de nous assurer que la tâche qui tourne n'est pas attaché au terminal courant. C'est la que nohup entre en jeu.
 
-{% hint style="info" %}
-**huponexit**
-
-jobs are killed **only if** the `huponexit` option is set! 
-
-run`shopt huponexit` to see if this is true.
-
-* If `huponexit` is false, _which **is the default** on at least some linuxes these days_, then backgrounded jobs will **not** be killed on normal logout!
-* If `huponexit` is true, then we can use `nohup` or `disown` to dissociate the process from the shell so it does not get killed when you exit. Or, run things with `screen`.
-
-use `shopt -s huponexit` and `shopt -u huponexit` in order to set and unset it.
-{% endhint %}
-
-### Signal a program to continue running after logout
+### Dire à un programme de continuer après la déconnexion
 
 ### nohup
 
-`Nohup` stands for** no hangup**, and that means even if the parent shell is diconnected the job just will continue,  The output of the **nohup** command will write in **nohup.out** the file if any redirecting filename is not mentioned in **nohup** command.
+`Nohup` signifie **no hangup**, et cela veut dire que même si le shell parent est déconnecté la tâche continuera. La sortie de la commande **nohup** sera écrite dans le fichier **nohup.out** si aucun nom de fichier pour une redirection dans la commande **nohup**.
 
 ```
 nohup command [command-argument ...]
 ```
 
-Using nohup with commands:
+Utiliser nohup avec des commandes:
 
 ```
 root@ubuntu16-1:~/test-space# nohup ping  8.8.8.8 &
@@ -171,7 +160,7 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 64 bytes from 8.8.8.8: icmp_seq=2 ttl=128 time=74.4 ms
 ```
 
-Now even if we close the terminal and open it again ping is still running.
+Maintenant même si nous fermons le terminal et l'ouvrons de nouveau, ping continue de tourner.
 
 ```
 root@ubuntu16-1:~/test-space# jobs
@@ -180,170 +169,44 @@ root      55210  0.0  0.0   6536   756 ?        S    02:32   0:00 ping 8.8.8.8
 root@ubuntu16-1:~/test-space# 
 ```
 
-> Please notice that we can not use `fg`, `bg` commands on that particular job anymore.
+> Noter que nous ne pouvons plus utiliser les commandes `fg`, `bg` sur cette tâche particulière désormais.
 
- When we run nohup command without ‘**&’** then it returns to shell command prompt immediately after running that particular command in the background.
+ Lorsque nous lançons la commande nohup sans ‘**&’** alors il renvoit l'invite de commande du shell immédiatement après avoir lancer cette commande particulière à l'arrière plan.
 
-> We useually use nohup with output redirection `nohup bash script.sh > myresult.txt 2>&1`
+> Nous utilisons généralement nohup avec la redirection de sortie `nohup bash script.sh > myresult.txt 2>&1`
 
 {% hint style="info" %}
-**disown**
-
-We can also use disown command, it is used after the a process has been launched and put in the background, it’s work is to remove a shell job from the shell’s active list jobs, therefore we can not use fg, bg commands on that particular job anymore but that process keeps running even after closing current shell.
-
-```
-root@ubuntu16-1:~# jobs
-root@ubuntu16-1:~# sleep 111 &
-[1] 6394
-root@ubuntu16-1:~# jobs -l
-[1]+   Running                 sleep 111 &
-root@ubuntu16-1:~# disown %1
-root@ubuntu16-1:~# jobs 
-root@ubuntu16-1:~# pgrep sleep
-6394
-```
-
- disown -h %1 lets us to have  normal job control mechanisms to continue controlling the process until closing the terminal.
-{% endhint %}
-
-| Option | Description                               |
-| ------ | ----------------------------------------- |
-| **-a** | Delete all jobs if jobID is not supplied. |
-| **-r** | Delete only running jobs.                 |
-
-There is a problem with nohup and disown commands. There is no way to bring back that job to forground and work interactivly with that. So we need a different solution, screen.
-
-### screen
-
- **screen** command in Linux provides the ability to launch and use multiple shell sessions from a single _ssh_ session. 
-
-When a process is started with ‘screen’, the process can be detached from session and then can reattach the session at a later time. When the session is detached, the process that was originally started from the screen is still running and managed by the screen itself. The process can then re-attach the session at a later time, and the terminals are still there, the way it was left. (you might need to install it)
-
-#### Start screen for the first time
-
-simple use screen command ** :**
-
-```
-root@ubuntu16-1:~# screen
-```
-
-```
-Screen version 4.03.01 (GNU) 28-Jun-15
-
-Copyright (c) 2010 Juergen Weigert, Sadrul Habib Chowdhury
-Copyright (c) 2008, 2009 Juergen Weigert, Michael Schroeder, Micah Cowan,
-Sadrul Habib Chowdhury
-Copyright (c) 1993-2002, 2003, 2005, 2006, 2007 Juergen Weigert, Michael
-Schroeder
-Copyright (c) 1987 Oliver Laumann
-
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation; either version 3, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program (see the file COPYING); if not, see http://www.gnu.org/licenses/,
-or contact Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-
-                  [Press Space for next page; Return to end.]
-```
-
-use` screen -s Session_Name` to start a named session.now lets run a command inside screen:
-
-```
-root@ubuntu16-1:~# sleep 1111
-
-```
-
-> Inorder to create a new screen inside the current screen (nested screen) use  just press **Ctrl-a** +**c**
-
-#### Detach the screen
-
-One of the advantages of screen that is you can detach it. Then, you can restore it without losing anything you have done on the screen. use  **Ctrl-a + d **to detach**:**
-
-```
-root@ubuntu16-1:~# sleep 1111
-
-```
-
-```
-root@ubuntu16-1:~# screen
-[detached from 56798.pts-4.ubuntu16-1]
-root@ubuntu16-1:~# 
-```
-
- **-d** is** also **used to detach a screen session so that it can be reattached in future.
-
-**List screens**
-
- **screen  -ls** is used to display the currently opened screens including those running in the background:
-
-```
-root@ubuntu16-1:~# screen -list
-There is a screen on:
-	56798.pts-4.ubuntu16-1	(10/14/2019 04:15:00 AM)	(Detached)
-1 Socket in /var/run/screen/S-root.
-```
-
-**Reattach to a screen**
-
- **-r ** It is used to reattach a screen session which was detached in past:
-
-```
-root@ubuntu16-1:~# screen -r 56798
-```
-
-```
-root@ubuntu16-1:~# sleep 1111
-root@ubuntu16-1:~# 
-
-```
-
-> We usually use `screen -dr <Screen-ID>` command.This means detach the specified screen first and then reattach it. 
-
-#### Switching between screens
-
-When we do nested screen, you can switch between screen using command **Ctrl-a +n**. It will be move to the next screen. When  need to go to the previous screen, just press **Ctrl-a** +**p**.
-
-#### Terminate screen session
-
-Use  “**Ctrl-A**” and “**K**” to kill the screen.
 
 
+### Suivre les processus actifs
 
-### Monitor active processes
+#### Qu'est ce qu'un processus?
 
-#### What is process?
+Un programme est une série d'instruction qui dit à l'ordinateur ce qu'il doit faire. Lorsque nous lançons un programme, ces instructions sont copié en mémoire et de l'espace est alloué pour les variables et d'autres éléments nécessaire pour son exécution. Cette instance qui fonctionne d'un programme est appelé processus, et c'est un processus que nous pouvons gérer
 
-A program is a series of instructions that tell the computer what to do. When we run a program, those instructions are copied into memory and space is allocated for variables and other stuff required to manage its execution. This running instance of a program is called a process and it's processes which we manage
+Chaque processus reçoit un **PID**. PID signifie  **process identifier** et c'est un nombre unique qui identifie chaque processus en fonction sur le système d'exploitation.
 
-Each process got a **PID**. PID stands for  **process identifier** and it is is a unique number that identifies each of the running processes in an operating system
+Les processus peuvent être catégorisés en :
 
-processes can further be categorized into:
+* **Processus Parent** – ce sont les processus qui créent d'autres processus pendant leur durée d'exécution.
+* **Processus Enfant** – ces processus sont crées par d'autres processus durant leur durée d'exécution.
 
-* **Parent processes** – these are processes that create other processes during run-time.
-* **Child processes** – these processes are created by other processes during run-time.
+De plus **PPID** signifie **Parent Process ID**. Noter que:
 
-therefore **PPID** stands for **Parent Process ID**. notes:
+* note1: Un PID peut être utilisé de nouveau pour un nouveau processus si toutes les combinaisons possibles sont utilisées.
+* note2: A aucun moment, deux processus existe en même temps avec le même PID sur le système car c'est le PID que Unix utilise pour tracer chaque processus.
 
-* note1:Used up pid’s can be used in again for a newer process since all the possible combinations are used.
-* note2:At any point of time, no two processes with the same pid exist in the system because it is the pid that Unix uses to track each process.
-
-> If we use the `jobs` command with the `-l` option, it will also show process ID.  
+> Si nous utilisons la commande `jobs` avec l'option `-l`, elle montrera aussi les ID de processus.  
 
 ### ps
 
-ps (Process status) can be used to see/list all the running processes and their PIDs along with some other information depends on different options.
+ps (Process status) peut être utilisé pour voir / lister tous les processus en cour et leurs PID abec d'autre informations qui dépendent des différentes options.
 
 ```
 ps [options]
 ```
 
- ps reads the process information from the virtual files in **/proc** file-system.  In it's simplest form, when used without any option, `ps` will print four columns of information for minimum two processes running in the current shell, the shell itself, and the processes that run in the shell when the command was invoked.
+ ps lit les informations de processus depuis les fichiers virtuels dans le système de fichier **/proc**.  Dans sa forme la plus smimple, lorsque nous l'utilisons sans option, `ps` affiche quatre colonne d'information avec au minimum deux processus qui tourne dans le terminal courant, le shell lui-même et le processus qui tourne dans le shell lorsque la commande est invoqué.
 
 ```
 root@ubuntu16-1:~# ps
@@ -352,19 +215,19 @@ root@ubuntu16-1:~# ps
  59076 pts/18   00:00:00 ps
 ```
 
- Where,\
- **PID –** the unique process ID\
- **TTY –** terminal type that the user is logged into\
- **TIME –** amount of CPU in minutes and seconds that the process has been running\
- **CMD –** name of the command that launched the process.
+ Où,\
+ **PID –** l'ID unique du processus\
+ **TTY –** le type du terminal dans lequel l'utilisateur est connecté\
+ **TIME –** quantité de CPU en minutes et seconds que le processus a utilisé\
+ **CMD –** nom de la commande qui a lancé le processus.
 
->  **Note –** Sometimes when we execute **ps** command, it shows TIME as 00:00:00. It is nothing but the total accumulated CPU utilization time for any process and 00:00:00 indicates no CPU time has been given by the kernel till now. In above example we found that, for bash no CPU time has been given. This is because bash is just a parent process for different processes which needs bash for their execution and bash itself is not utilizing any CPU time till now.
+>  **Note –** Parfois, lorsque nous exécutons la commande **ps**, elle montre TIME as 00:00:00. Ce n'est rien d'autre que le total de emps d'utilisation du CPU pour chaque processus et 00:00:00 indique qu'aucun temps de CPU n'a été donné par le noyau jusqu'à maintenant. Dans l'exemple précédent, nous avons trouvé que, pour bash aucun temps de CPU n'a été donné. C'est parce que bash est juste le processus parent pour les différents processus qui ont besoin de bash pour leur exécution et bash lui-même n'a pas utilise de temps de CPU jusqu'à maintenant.
 
-Usually when we use the command ps we add parameters like `-a`, `-u` and` -x`. While 
+Généralement lorsque nous utilisons la commande `ps` nous ajoutons des paramètres comme `-a`, `-u` et` -x`. Où 
 
-* `a` = show processes for all users
-* `u` = display the process’s user/owner
-* `x` = also show processes not attached to a terminal
+* `a` = montre les processus pour tous les utilisateurs
+* `u` = montrer l'utilisateur qui a lancé le processus / son propriétaire
+* `x` = montre aussi les processus qui ne sont pas attaché à un terminal
 
 ```
 root@ubuntu16-1:~# ps -aux | head -10
@@ -380,49 +243,49 @@ root         10  0.0  0.0      0     0 ?        S    Oct11   0:00 [migration/0]
 root         11  0.0  0.0      0     0 ?        S    Oct11   0:01 [watchdog/0]
 ```
 
-where column are :
+Où les colonnes sont :
 
-*   **USER –** Specifies the user who executed the program.
+*   **USER –** Spécifie l'utilisateur qui a exécuté le programme.
 
-     **PID:** Process ID, shows the process identification number.
+     **PID:** ID du processus, montrer le numéro d'identification du processus.
 
-    **CPU%**: The processor % used by the process.
+    **CPU%**: Le % de processeurs utilisé par ce processus.
 
-    **MEME%**: The memory % used by the process.
+    **MEME%**: Le % de mémoire utilisé par ce processus.
 
-    **VSZ:** The virtual size in kbytes.
+    **VSZ:** La taille virtuelle en kbytes.
 
-    **RSS:** In contrast with the  virtual size, this shows the real memory used by the process.
+    **RSS:** En opposition à la taille virtuelle, celle-ci montre la mémoire réelle utilisé par le processus.
 
-    **TTY:** Identifies the terminal from which the process was executed.
+    **TTY:** Identifie le terminal depuis lequel le processus a été exécuté.
 
-    **STATE:** Shows information on the process’ state just as it’s priority, by running “man ps” you can see codes meaning.
+    **STATE:** Montre les informations sur l'état du processus comme sa priorité, en lançant “man ps” vous verrez la signification des codes.
 
-    **START:** Show when the process has started.
+    **START:** Montre quand le processus à démarrer.
 
-    **TIME:** Shows the processor’s time occupied by the program.
+    **TIME:** Montre le temps d'occupation du processeur du programme.
 
-    **C0MMAND:** Shows the command used to launch the process.
+    **C0MMAND:** Montre la commande utilisé pour lancer le processus.
 
-> We can also use ps -ef instead of ps aux . There are no **differences** in the output because the meanings are the same. The **difference between ps** -**ef and ps aux** is due to historical divergences **between** POSIX and BSD systems. At the beginning, POSIX accepted the -**ef** while the BSD accepted only the **aux** form. Both list all processes of all users. In that aspect `-e` and `ax` are completely equivalent.
+> Nous pouvons aussi utiliser `ps -ef` au lieux de `ps aux` . Il n'y a **aucune différence** dans la sortie car le sens est le même. La **différence entre ps -ef and ps aux** est dû à des différents historiques **entre** les systèmes POSIX et BSD. Au début, POSIX accepté l'option -**ef** alors que BSD acceptait seulement la forme **aux**. Tous les deux listes tous les processus de tous les utilisateurs. De fait `-e` et `ax` sont complètement équivalent.
 
-| Options for ps command | Description                                   |
+| Options pour la commande ps | Description                                   |
 | ---------------------- | --------------------------------------------- |
-| ps -T                  | View Processes  associated with a terminal    |
-| ps -x                  | View all processes owned by you               |
-| ps -o  column_name     | view process according to user-defined format |
+| ps -T                  | Voir les processus associé à un terminal    |
+| ps -x                  | Voir tous les processus dont vous êtes le propriétaire |
+| ps -o  column_name     | Voir les processus en fonction du format définit par l'utilisateur |
 
-It is also possible to use --sort option to sort output based on different fields (+ for ascending & - for descending). `ps -eo  pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -10` . With`-o` or `–format` options, ps allows us to build user-defined output formats.
+Il est aussi possible d'utiliser l'option --sort pour trier la sortie en s'appuyant sur différents champs (+ pour ascendant & - pour descendant). `ps -eo  pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -10` . Avec l'option `-o` ou `–format`, ps permet de construre un format de sorti personnalisé.
 
-|  **Process selection commands**   | Description                             |
+|  **Commande de séléction des processus**   | Description                             |
 | --------------------------------- | --------------------------------------- |
-| ps -C command_name                | Select the process by the command name. |
-| ps p process_id                   | View process by process ID.             |
-| ps -u user_name/ID                | Select by user name or ID               |
-| ps -g group_name , ps -G group_id | Select by group name or ID              |
-| ps -t pst/0                       | Display Processes by TTY                |
+| ps -C command_name                | Selectionner le processus par le nom de la commande. |
+| ps p process_id                   | Voir le processus par son ID de processus.|
+| ps -u user_name/ID                | Selectionner par nom d'utilisateur ou  ID  |
+| ps -g group_name , ps -G group_id | Selectionner par nom de groupe ou ID              |
+| ps -t pst/0                       | Afficher les processus par  TTY                |
 
-We already know about the grep command in Linux, which searches for a pattern, and then prints the matching text in the output. What if the requirement is to apply this kind of processing to fetch select information about processes currently running in the system?
+Nous connaissons déjà la commande grep dans Linux, qui cherche un modle et affiche le texte correspondant dans la sortie. Et si le besoin est d'appliquer ce type de traitement opur récupérer les informations sélectionner sur un processus qui tourne actuellement sur le système ?
 
 ### pgrep
 
@@ -822,12 +685,6 @@ Some extra modifiers:
 [https://linuxhint.com/nohup_command_linux/](https://linuxhint.com/nohup_command_linux/)
 
 [https://www.tecmint.com/run-linux-command-process-in-background-detach-process/](https://www.tecmint.com/run-linux-command-process-in-background-detach-process/)
-
-[https://www.geeksforgeeks.org/screen-command-in-linux-with-examples/](https://www.geeksforgeeks.org/screen-command-in-linux-with-examples/)
-
-[https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/](https://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/)
-
-[https://linoxide.com/linux-command/15-examples-screen-command-linux-terminal/](https://linoxide.com/linux-command/15-examples-screen-command-linux-terminal/)
 
 [https://ryanstutorials.net/linuxtutorial/processes.php](https://ryanstutorials.net/linuxtutorial/processes.php)
 

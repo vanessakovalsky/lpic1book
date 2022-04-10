@@ -30,3 +30,5 @@
     * [104.5. Gestion des permissions et de la propriété sur les fichiers](1045-manage-file-permissions-and-ownership.md)
     * [104.6. Création et modification des liens physiques et symboliques sur les fichiers](1046-create-and-change-hard-and-symbolic-links.md)
     * [104.7. Recherche de fichiers et placement des fichiers aux endroits adéquats](1047-find-system-files-and-place-files-in-the-correct-location.md)
+* Examens blancs
+    * [LPIC-1-101-500-Premier examen blanc](LPIC1-101-500-Practice-test-1.md)

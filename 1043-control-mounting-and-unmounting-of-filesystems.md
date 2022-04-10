@@ -1,33 +1,37 @@
-# 104.3. Control mounting and unmounting of filesystems
+# 104.3. Montage et démontage des systèmes de fichiers
 
-**Weight: **3
+**Poids:** 3
 
-**Description: **Candidates should be able to configure the mounting of a filesystem.
+**Description:** Les candidats doivent être en mesure de configurer le montage d'un système de fichiers. .
 
-**Key Knowledge Areas:**
+**Connaissances clés :**
 
-* Manually mount and unmount filesystems
-* Configure filesystem mounting on bootup
-* Configure user mountable removable filesystems
+* Montage et démontage manuel des systèmes de fichiers.
+* Configuration du montage des systèmes de fichiers au démarrage du système.
+* Configuration des options de montage des systèmes de fichiers.
+* Utilisation des étiquettes et UUID pour l'identification et le montage des systèmes de fichier
+* Connaissance de base des unités de montage systemd mount units (systemd mount units).
 
-**Terms and Utilities:**
+**Concepts et Utilitaires :**
 
 * /etc/fstab
 * /media/
 * mount
 * umount
+* blkid
+* lsblk
 
-In previous lessons we have learn how to partition hard drives  and how to format file system on to those partitions. In this section we will learn how to mount and unmount  files systems so we can access them, store and retrieves  files from the actual hard drive.
+Dans les leçons précédente nous avons appris comment partionner des disques durs et comment formater les systèmes de fichiers sur ces partitions. Dans cette stion nous allons apprendre comment monter et démonter des systèmes de fichier, afin de pouvoir y accéder, stocker et retrouver des fichiers depuis le disque dur.
 
-### Linux filesystems <a href="linux-filesystems" id="linux-filesystems"></a>
+### Le système de fichier de Linux <a href="linux-filesystems" id="linux-filesystems"></a>
 
-The Linux filesystem is one big tree rooted at /, and yet we have filesystems on different devices and partitions. How do we resolve this apparent incompatibility?
+Le système de fichiers de Linux est un grand arbre ayant pour racine /, et nous avons des systèmes de fichiers sur des périphériques différents et des partitions.  Comment résoudre cette incompatibilité apparente ?
 
- The root (/) filesystem is mounted as part of the initialization process. Each of the other filesystems that you create is not usable by Linux system until it is _mounted_ at a _mount point_.
+ Le système de fichier racince (/) est monté comme partie du processus d'initialisation. Chaque autre système de fichier que vous créer n'est pas utilisable sur le système Linux tant qu'il n'est pas _mounté_ sur un _point de montage_.
 
-## mounting and unmounting
+## Montage et démontage
 
- **mount** command is used to mount the filesystem found on a device to big tree structure(**Linux** filesystem) rooted at ‘**/**‘.  Conversely, another command **umount** can be used to detach these devices from the Tree.
+ La commande **mount** est utilisé pour monter le système de fichier trouvé sur un périphérique dans la structure du grand arbre(le système de fichier de **Linux**) ayant pour racine ‘**/**‘. Il exsite une autre commande **umount** qui peut être utilisé pour détacher ces périphérique de l'arbre.
 
 ### mount
 
@@ -35,11 +39,11 @@ The Linux filesystem is one big tree rooted at /, and yet we have filesystems on
 mount -t type device location
 ```
 
-> Actually the place we specify as location is mount point. mount point should be exist other wise the device could not be mounted.
+> Généralement l'endroit que nous spécificions est le point de montage. Le point de montage doit existé sinon le périphérique ne peut pas être monté.
 
-With -t option we can specify file system type, how ever it can be omitted as mount command is smart enough to determine file system type!(ubuntu 16.4):
+Avec l'option `-t` nous pouvons spécifier le type de système de fichier, cependant il peut être omis car la commande mount est assez intelligente pour déterminer le type de système de fichier!:
 
-Lets create a directory called "mydisk" as a mount point and mount /dev/sdb1 on that:
+Créons un dossier appelé "mydisk" comme point de montage et montons /dev/sdb1 dessus:
 
 ```
 root@ubuntu16-1:/mnt# pwd
@@ -60,10 +64,10 @@ root@ubuntu16-1:/mnt/mydisk# cat file1.txt
 ```
 
 {% hint style="info" %}
-When you mount a filesystem over an existing directory, the files on the filesystem you are mounting become the files and subdirectories of the mount point. If the mount point directory already contained files or subdirectories, they are not lost, but are no longer visible until the mounted filesystem is unmounted, at which point they become visible again. It is a good idea to avoid this problem by using only empty directories as mount points.
+Lorsque vous monter un système de fichier dans un dossier existant, les fichiers sur le système de fichier que vous monter deviennent les fichiers et sous dossier du point de montage. Si le dossier dupoint de montage contient déjà des fichiers ou des sous-dossier, il ne sont pas perdu, mais ils ne sont plus visible jusqu'à ce que le système de fichiers monté soit démonté, et alors il redeviendront visibles. C'est une bonne idée pour éviter ces problèmes d'utiliser uniquement des dossiers vides comme point de montage.
 {% endhint %}
 
-mount command without any arguments  displays all the mounts on the system:
+La commande mount sans argument affiche tous les montages sur le système :
 
 ```
 root@ubuntu16-1:~# mount
@@ -104,9 +108,9 @@ gvfsd-fuse on /run/user/1001/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime
 /dev/sdb1 on /mnt/mydisk type ext4 (rw,relatime,data=ordered)
 ```
 
-#### mount options
+#### Options de mount 
 
- The `mount` command has several options that override the default behavior. For example, we can mount a filesystem read-only by specifying `-o ro`. If the filesystem is already mounted, add `remount:`
+ La commande `mount` a plusieurs options qui surcharge son comportement par défaut. Par exemple, nous pouvons monter un système de fichier en lecture seule en spécifiant `-o ro`. Si le système de fichiers est déjà monté, ajouter `remount:`
 
 ```
 root@ubuntu16-1:/mnt# mount -o remount,ro /dev/sdb1 /mnt/mydisk/
@@ -119,38 +123,38 @@ touch: cannot touch 'file2': Read-only file system
 
 > `notes:`
 
-> * Use commas to separate multiple options, such as `remount` and `ro`.
-> * When remounting an already mounted filesystem, it suffices to specify either the mount point or the device name. It is not necessary to specify both.
-> * You cannot mount a read-only filesystem as read-write. Media that cannot be modified, such as CD-ROM discs, will automatically be mounted read-only.
-> * To remount a writable device read-write, specify`-o remount,rw`
+> * Utiliser des virgules pour séparer les multiples options, comme `remount` et `ro`.
+> * Lorsque vous remonté un système de fichier déjà montée, il suffit de spécifier soit le point de montage soit le nom du périphérique. Il n'est pas nécessaire de spécifier les deux.
+> * Vous ne pouvez pas monter un système de fichier en lecture seul comme système sur lequel on peut lire et écrire. Les médias qui ne peuvent être modifié, comme les CD-ROM, seront automatiquement monté en lecture seule.
+> * Pour remonter un périphérique sur lequel on peut ecrire, spécifier `-o remount,rw`
 
 | mount command examples                 | description                                                                |
 | -------------------------------------- | -------------------------------------------------------------------------- |
-| mount -l                               | Add the ext2, ext3 and XFS labels in the mount output.                     |
-| mount -r /dev/sdb1 /mydisk             | Mount the file system read-only. Same as -o ro                             |
-| mount -r /dev/sdb1 /mydisk             | Mount the file system read/write. This is the default. It is same as -o rw |
-| mount -L mydata /mydisk/               | Mount the partition that has the specified label                           |
-| mount -U uuid /mydisk                  | Mount the partition that has the specified uuid                            |
-| mount -t iso9660 -o ro /dev/cdrom /mnt | Mount a CD-ROM(just in case system didn't that)                            |
-| mount -o loop /mydisk.iso /mnt         | Mount an iso image                                                         |
+| mount -l                               | Ajoute les labels ext2, ext3 et XFS sur la sortie du montage.                     |
+| mount -r /dev/sdb1 /mydisk             | Monte le système de fichier en lecture seule. Comme -o ro                             |
+| mount -r /dev/sdb1 /mydisk             | Monte le système de fichier en lecture/écriture. C'est le cas par défaut. Comme avec -o rw |
+| mount -L mydata /mydisk/               | Monte la partition qui a le label spécifié                           |
+| mount -U uuid /mydisk                  | Monte la partition qui a l'uuid spécifié                            |
+| mount -t iso9660 -o ro /dev/cdrom /mnt | Monte un CD-ROM(juste dans le cas où le système ne l'est pas fait)                            |
+| mount -o loop /mydisk.iso /mnt         | Monte une image iso                                                         |
 
- ` mount -B /mydisk /mysecondplace` :After mounting to a directory the mount point can be changed. We will provide the current mounted point and new mount point in a row with `-B` parameter. This actually does not removes old mount only adds the new directory as the mount.
+ ` mount -B /mydisk /mysecondplace` : Après être monter dans dossier le point de montage peut être modifié. Nous fournisson le point de montage courant et le nouveau point de montage dans une ligne avec le paramètre `-B`. Cela ne supprime pas l'ancien montage, mais ajoute seulement le nouveau dossier comme montage.
 
-> All mounts that we create are not permanent and get vanished as system restarted. In order to make a them permanent we need to edit /etc/fstab file. 
+> Tous les montage que nous avons créé ne sont pas permanent et seront supprimé lors du redémarrage du système. Afin de les rendre permanent nous devons modifier le fichier /etc/fstab. 
 
 ### umount
 
-Once a file system is mounted, we can use the umount command (without an “n”) to unmount the file system. We can unmount the file system by using umount with the device or the mount point.
+Une fois que le système de fichiers est monté, nous pouvons utiliser la commande umount (sans “n”) pour démonter le système de fichiers. Nous pouvons démonter le système de fichier en utilisant umount avec le périphérique ou le point de montage.
 
 ```
 umount device
-OR
+OU
 umount mount-point
 ```
 
->  Note that a file system cannot be unmounted when it is busy - for example, when there are open files on it, or when some process has its working directory there, or when a swap file on it is in use.
+>  Noter qu'un système de fichier ne peut pas être démonté lorsqu'il est occupé - par exemple, lorsqu'il y a des fichiers ouverts sur celui-ci, ou lorsque certains processus travaillent dans ces dossier, ou bien lorsqu'un fichier swap sur lui est utilisé.
 
- lets unmount /dev/sdb1 as an example:
+ Par exemple, démontons /dev/sdb1 :
 
 ```
 umount /dev/sdb1
@@ -158,9 +162,9 @@ umount /dev/sdb1
 
 ### /etc/fstab
 
-In previous sections about Boot Managers we  learned  in both GRUB and LILO  root= parameter  tell the boot loader what filesystem should be mounted as root. For GRUB2, this is the`setroot` statement. Once the root filesystem is mounted, the initialization process runs `mount` with the `-a` option to automatically mount a set of filesystems. The set is specified in the file /etc/fstab.
+Dans les sections précédentes à propos des chargeurs de démarrage nous acons appris que, dans les deux cas, GRUB et LILO  root= parameter dit au chargeur de démarrage quelle système de fichier doit être monté comme racine. Pour GRUB2, c'est le paramètre `setroot`. Une fois que le système de fichiers racine est monté, le processus d'initialisation lance `mount` avec l'option `-a` pour monter automatiquement un ensemble de systèmes de fichiers. Cet esemble est déifnit dans le fichier /etc/fstab.
 
-Fstab is  operating system’s file system table:
+Fstab est le tableau du système d'exploitation des systèmes de fichiers:
 
 ```
 root@ubuntu16-1:~# cat /etc/fstab 
@@ -179,37 +183,37 @@ UUID=b4801c8b-ca75-4548-8697-182d1b6d895c none            swap    sw            
 /dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 0       0
 ```
 
-*  **file system :**This may be a device name such as /dev/sda1, or a label (LABEL=) or UUID (UUID=). 
+*  **file system :** Cema peut être un nom de périphérique commme /dev/sda1, ou un label (LABEL=) ou UUID (UUID=). 
 
-> > We can either mount using device name, labels or uuid. Which one is better ?Every body can set any labels the he/she wants, Device name might be changed for example if you attach two usb devices, so the best way is using uuid for mounting(use `blkid `command).
+> > Nous pouvons aussi monter des périphéique en utilisant leur nom, labels, ou uuid. Lequel est le meilleur ? N'importe qui peut définir les labels qu'il souhaite. Les nom de périphérique peuent être changer par exemple si vous attacher deux clés USB, donc la meilleur manière est d'utiliser l'uuid pour le montage(utiliser la commande `blkid `).
 
-*  **mount point : **mount point, but** **For swap space, this should be the value ‘none’ or ‘swap’.
-*  **type : **Specifies the type of filesystem. it can be (**ext2,3,4, reiserfs,swap, vfat and ntfs,ISO9660,auto**)
-* **option** : Specifies the mount options. Specify defaults if you want default mount options.
+*  **mount point :** point de montage. Pour l'espace swap, cette valeur doit être ‘none’ ou ‘swap’.
+*  **type :** Précise le type de système de fichier. Cela peut être **ext2,3,4, reiserfs,swap, vfat and ntfs,ISO9660,auto**,etc.
+* **option** : Précise les options de montage. Précise `defaults` si vous voulez les options par défaut de montage.
 
 {% hint style="info" %}
-* sync/async - All I/O to the file system should be done (a)synchronously.
-* auto - The filesystem can be mounted automatically (at bootup, or when mount is passed the -a option). This is really unnecessary as this is the default action of mount -a anyway.
-* noauto - The filesystem will NOT be automatically mounted at startup, or when mount passed -a. You must explicitly mount the filesystem.
-* dev/nodev - Interpret/Do not interpret character or block special devices on the file system.
-* exec / noexec - Permit/Prevent the execution of binaries from the filesystem.
-* suid/nosuid - Permit/Block the operation of suid, and sgid bits.
-* ro - Mount read-only.
-* rw - Mount read-write.
-* user - Permit any user to mount the filesystem. This automatically implies noexec, nosuid,nodev unless overridden.
-* nouser - Only permit root to mount the filesystem. This is also a default setting.
-* defaults - Use default settings. Equivalent to rw, suid, dev, exec, auto, nouser, async.
-* \_netdev - this is a network device, mount it after bringing up the network. Only valid with fstype nfs.
+* sync/async - Tous les I/O du système de fichiers doivent être faite de manière (a)synchrone.
+* auto - Le système de fichier peut être monté automatiquement (au démarrage, ou lorsque l'option `-a` est passé à mount). Ce n'est pas nécessaire car c'est l'action par défaut de `mount -a`.
+* noauto - Le système de fichier ne sera pas monter automatiquement lors du démarrage ou lorsque l'on passe l'option `-a` à la commande mount. Vous devrez explicitement monté le système de fichier.
+* dev/nodev - Interprète / N'interrète pas les caractères ou blocs spéciaux du périphériques sur le système de fichier.
+* exec / noexec - Permet/ Empêche l'exécution de binaires depuis le système de fichier.
+* suid/nosuid - Permet/ Empêche l'opération de suid, et sgid bits.
+* ro - Monter en lecture seule.
+* rw - Monter en lecture/écriture read-write.
+* user - Permet n'importe quel utilisateur à monter le système de fichiers. Cela implique automatiquement noexec, nosuid,nodev sauf si elles sont surchargés.
+* nouser - Permet seulement à root de monter le système de fichier. C'est aussi un paramètre par défaut.
+* defaults - Utiliser les paramères par défaut. Equivalent à rw, suid, dev, exec, auto, nouser, async.
+* \_netdev - C'est un périphérique réseau, le monter après que le réseau soit connecté. Valide seulement sur les systèmes de fichier de type nfs.
 {% endhint %}
 
-> note1: User-mounted filesystems default to noexec unless exec is specified afteruser.
+> note1: Les systèmes de fichiers montés par l'utilisateu ont par défaut l'option noexec sauf si c'est spécifié après user.
 >
-> note2: noatime will disable recording of access times. Not using access times may improve performance.
+> note2: noatime désative l'enregistrement de l'heure d'accès. Cela peut améliorer les performances.
 
-* **dump: **Specifies whether the dump command should consider this ext2 or ext3 filesystem for backups. A value of 0 tells dump to ignore this filesystem.
-* **pass: **Non-zero values of pass specify the order of checking filesystems at boot time,( based on check interval and mount count, try `tune2fs -l` ).
+* **dump:** Précise si la commande dump doit être considérer pour les sauvegarde des système de fichier ext2 ou ext3. Une valeur de 0 dit à dump d'ignorer le système de fichier.
+* **pass:** Les valeurs différentes de 0 précise l'ordre de vérification des systèmes de fichier lors du démarrage (en se basant sur l'interval de vérification et le compteur de montage, essayez `tune2fs -l` ).
 
-Lets add /dev/sdb1 to the /etc/fstab file using UUID  and have it even after reboot:
+Ajouttons /dev/sdb1 au fichier /etc/fstab en utilisant son UUID et nous aurons accès même après un redémarrage :
 
 ```
 root@ubuntu16-1:~# blkid
@@ -239,7 +243,7 @@ UUID=03c28ca3-daa3-49c2-9bc4-b083c3b0957b /mnt/mydisk  auto default   0 0
 
 ```
 
-if any thing goes wrong in /etc/fstab , it can cause system failure and system can't boots up! So try `mount -a` in order to try mounting all fstab items before rebooting the system and check for errors.
+Si quelque chose ne vas pas dans /etc/fstab , cela peut entraîner un échec du système et le système peut arrêter de démarrer! Donc essayer `mount -a` afin d'essayer les montage des items de fstab avant de redémarrer le système et vérifier les erreurs.
 
 ```
 root@ubuntu16-1:~# mount -a
@@ -250,14 +254,14 @@ mount: wrong fs type, bad option, bad superblock on /dev/sdb1,
        dmesg | tail or so.
 ```
 
-Ops! that is defaults not default, so try to edit this line again in fstab:
+Oups! c'est `defaults` et non `default`. Essayez d'éditer de nouveau cette ligne dans fstab:
 
 ```
 ### added by root! 
 UUID=03c28ca3-daa3-49c2-9bc4-b083c3b0957b /mnt/mydisk  auto defaults   0 0
 ```
 
-and we are done:
+Et nous avons terminé :
 
 ```
 root@ubuntu16-1:~# mount -a
@@ -266,7 +270,7 @@ root@ubuntu16-1:/mnt/mydisk# ls
 file1.txt  file2.txt  lost+found
 ```
 
-users can only mount and unmount things they are allowed to in /etc/fstab!
+Les utilisateurs peuvent seulement monter et démonter les choses qu'ils sont autorisés dans /etc/fstab!
 
 .
 

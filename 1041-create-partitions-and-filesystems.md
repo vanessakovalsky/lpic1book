@@ -1,22 +1,22 @@
-# 104.1. Create partitions and filesystems
+# 104.1. Création des partitions et des systèmes de fichiers
 
-## **104.1 Create partitions and filesystems**
+## **104.1 Création des partitions et des systèmes de fichiers**
 
-**Weight: **2
+**Poids:** 2
 
-**Description:** Candidates should be able to configure disk partitions and then create filesystems on media such as hard disks. This includes the handling of swap partitions.
+**Description:** Les candidats doivent être en mesure de configurer le partitionnement des disques puis de créer des systèmes de fichiers sur des supports comme les disques durs. Ceci inclut la prise en charge des partitions d'échange (swap). 
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Manage MBR partition tables
-* Use various mkfs commands to create various filesystems such as:
-* ext2/ext3/ext4
-* XFS
-* VFAT
-* Awareness of ReiserFS and Btrfs
-* Basic knowledge of gdisk and parted with GPT
+* Gestion des tables de partition MBR et GPT
+* Utilisation des différentes commandes mkfs pour le paramétrage des partitions et la création des différents systèmes de fichiers comme :
+  * ext2/ext3/ext4
+  * XFS
+  * VFAT
+  * exFAT
+* Connaissance de base de Btrfs, y compris les systèmes de fichiers sur plusieurs périphériques, la compression et les sous-volumes.
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * fdisk
 * gdisk
@@ -28,69 +28,69 @@
 
 ### BIOS
 
- The Basic Input/Output System (BIOS), (also known as System BIOS, ROM BIOS ) is a  standard for defining a firmware interface. The BIOS software is built into the PC, and is the first software run by a PC when powered on.
+ Le Basic Input/Output System (BIOS), (aussi connu comme System BIOS, ROM BIOS ) est un standrd pour définir l'interface du matériel. Le logiciel VIOS est construit sur le PC, et est le premier logiciel lancé lorsqu'un PC est allumé.
 
-The fundamental purposes of the BIOS are to initialize and test the system hardware components, and to load a bootloader or an operating system from a mass memory device. 
+L'objectif fondamental du BIOS est d'initiliser et de tester les composants matériel du système, et de charger un chargeur de démarage ou un système d'exploitation depuis un périphérique de mémoire de masse. 
 
 ### UEFI
 
-The Unified Extensible Firmware Interface (UEFI) is a specification that defines a software interface between an operating system and platform firmware. UEFI is meant to replace the Basic Input/Output System (BIOS) firmware interface. In practice, most UEFI images provide legacy support for BIOS services. UEFI can support remote diagnostics and repair of computers, even without another operating system!
+Le Unified Extensible Firmware Interface (UEFI) est une specification qui définit une interface logiciel entre un système d'exploitatio et la plateforme matériel.  UEFI est fait pour remplacer l'interface matérielle Basic Input/Output System (BIOS). En pratique, la plupart des images UEFI fournit un support pour les services hérités du BIOS. UEFI peut supporté le diagnostique à distance et la réparation des ordinateurs, même sans autre système d'exploitation!
 
 {% hint style="info" %}
-> The original EFI (Extensible Firmware Interface) specification was developed by Intel. UEFI is still not widespread and major hardware companies have switched over almost exclusively to UEFI use. Many older and less expensive motherboards also still use the BIOS system.
+> La spécification originale EFI (Extensible Firmware Interface) a été developpé par Intel. UEFI n'est pas encore largement diffusé et la plupart des fabricant matériel ont migré et utilise presque exclusivement UEFI. Les carte mère plus vieilles et les moins chères utilise encore le système BIOSM.
 {% endhint %}
 
 ### MBR
 
-A master boot record (MBR) is a special type of boot sector at the very beginning of partitioned computer mass storage devices like fixed disks or removable drives. 
+Un master boot record (MBR) est un type spécial de secteur de démarrage au tout début des périphériques de stockage de masse comme les disques dur ou les disques externes. 
 
-The MBR holds the information on how the logical partitions, containing file systems, are organized on that medium. Besides that, the MBR also contains executable code to function as a loader for the installed operating system—usually by passing control over to the loader's second stage. This MBR code is usually referred to as a boot loader.
+Le MBR contient des information sur comment les partitions logiques, contenant les fichiers du système, sont organisé sur ce média. De plus le MBR contient également du code exécutable comme un chargeur pour le système d'exploitation installé qui permet au système de passé à sa seconde étape de chargement. Ce code MBR est souvent appelé chargeur de démarrage.
 
 ![](.gitbook/assets/bootloader-mbr.jpg)
 
-**Master Boot records has some short comings:**
+**Master Boot records a de nombreuses limitation:**
 
-* MBR puts all information in first sector of hard disk so if any problem ocures for that sectore, system won't be able to boot up. 
-* MBR contains only four entries (slots) for four Primary partitions, one of which can be an Extended partition. This partition will contain unallocated space within it where we can create unlimited number of Logical partitions.
+* MBR met toutes les informations dans le premier secteur du disque dur, de sorte à ce qu'un problème apparaiise sur ce système, le système ne pourra pas démarré. 
+* MBR contient seulement quatre entrée (slots) pour quatre partitions Primaires, l'une d'elle peut être une partition étendue. Cette partition contien de l'espace non alloué dans lequel nous pouvons créé un nombre illimité de partition Logique.
 
 ![](.gitbook/assets/createpartition-mbrpart.jpg)
 
-* The organization of the partition table in the MBR limits the maximum addressable storage space of a disk to 2 TB. 
+* L'organisation de la table de partition sur le MBR limit l'espace de stockage maximum adressable à un disque de 2 TB. 
 
-Therefore, the MBR-based partitioning scheme is in the process of being superseded by the GUID Partition Table (GPT) scheme in new computers. A GPT can coexist with an MBR in order to provide some limited form of a backwards compatibility for older systems. 
+De fait, le schema de partitionnement basé sur MBR est un processus qui est surcharché par le schéma GUID Partition Table (GPT) sur les nouveaux ordinateurs. Un GPT  peut coexister avec un MBR de sorte à fournir une forme de compatibilité ascendante pour les plus vieux systèmes. 
 
 ### GPT
 
-GUID Partition Table (GPT) is a standard for the layout of the partition table on a physical hard disk, using globally unique identifiers (GUID).
+GUID Partition Table (GPT) est un standard pour la conception des tables de partitions sur un disque dur physique, utilisant des identificants globals unique (GUID).
 
- Although it forms a part of the Unified Extensible Firmware Interface (UEFI) standard, it is also used on some BIOS systems because of the limitations of master boot record (MBR) partition tables.
+ Bien qu'il fasse partie du standard de l'interface matérielle de Unified Extensible Firmware Interface (UEFI), il est aussi utilisé sur certains système BIOS à cause des limitations de la table de partition de MBR.
 
 ### MBR vs GBT
 
 | MBR(Master Boot Record)                                                   | GPT(GUID Partition Table)                                             |
 | ------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Since 1983                                                                | New 2005-...                                                          |
-| lives on first sector                                                     | Stored in multiple locations on Drive                                 |
-| <p>Limited to 4 partitions per disk </p><p>Limited to 2 TB partitions</p> | <p>Supports 128 partitions per disk</p><p>Supports 18EX partition</p> |
+| Depuis 1983                                                                | New 2005-...                                                          |
+| Vit dans le premier secteur                                               | Stocké à plusieurs endroits du périphérique                           |
+| <p>Limité à 4 partitions par disque</p><p>Limité à des partitions de 2 TB </p> | <p>Supporte 128 partitions par disque</p><p>Supporte des partitions de 18EX </p> |
 
-> Both GPT disk and MBR disk can be basic or dynamic.
+> A la fois les disques GPT et les disques MBR peuvent être basique ou dynamique.
 
 ### BIOS vs UEFI
 
 | BIOS(Basic Input/Output System)                  | UEFI(Unified Extensible Frimware Interface)       |
 | ------------------------------------------------ | ------------------------------------------------- |
-| Only Supports MBR( So GPT itself acts like MBR!) | Native GPT support                                |
-| Sees GPT as a drive with a single MBR partition  | Usually need to run in legacy mode ti support MBR |
+| Supporte seulement MBR( Donc GPT agit comme s'il était MBR!) | Support natif de GPT                  |
+| Voie GPT comme un périphérique avec une partition unique MBR  | A besoin d'être lancé en mode legacy pour supporter MBR |
 
 {% hint style="success" %}
-Usually, MBR and BIOS** (MBR + BIOS)**, and GPT and UEFI **(GPT + UEFI) **go hand in hand. This is required for some systems (Windows), while optional for others (Linux).
+Généralement, MBR et BIOS **(MBR + BIOS)**, et GPT et UEFI **(GPT + UEFI)** vont de pair. C'est requis pour certains système (Windows), alors que c'est optionnel pour d'autres (Linux).
 {% endhint %}
 
-### Block devices
+### Bloc de périphérique
 
-A block device is an abstraction layer for any storage device that can be formatted in fixed-size blocks and blocks should be able to be access randomly.
+Un bloc de périphérique est une couche d'abstration pour n'importe quel périphérique de stockage qui peut être formaté en blocs de taille fixe et les blocs doivent pouvoir être accéder aléatoirement.
 
- Examples of block devices include the first IDE or SATA hard drive on our system (/dev/sda or /dev/hda) or the second SCSI, IDE, or USB drive (/dev/sdb). Use the `ls -l` command to display /dev entries.
+ Exemple de bloc de périphérique inclue le premier disque dur IDE ou SATA de notre système (/dev/sda ou /dev/hda) ou le second SCSI, IDE, ou périphérique USB (/dev/sdb). Utiliser la commande `ls -l` pour afficher les entrées de /dev.
 
 ```
 root@ubuntu16-1:~# ls -l  /dev/null /dev/sd[a-z] /dev/sr0 /dev/tty0
@@ -100,21 +100,21 @@ brw-rw----+ 1 root cdrom 11, 0 Dec  2  2018 /dev/sr0
 crw--w----  1 root tty    4, 0 Dec  2  2018 /dev/tty0
 ```
 
- The first character on each output line is **b** for a **block** device, such as floppy, CD drive, IDE hard drive, or SCSI hard drive; and **c** for a **character** device, such as a or terminal (tty) or the null device.
+ Le premier caracère pour chaque ligne de la sortie est  **b** pour un périphérique de **block**, comme une disquette, un lecteur CD, un disque dur IDE ou  un disque dur SCSI; et **c** pour un périphérique **character**, comme un terminal (tty) ou le périphérique null.
 
-#### Disk Partitioning
+#### Partitionnemen de disque
 
-Now that we are introduced you to hard drive layouts (MBR & GPT) , lets learn how to create MBR partitions using fdisk and GPT partitions using gdisk.
+Maintenant que nous avons présenté les modèles de disques durs (MBR & GPT) ,apprenons comment crée des partitions MBR en utilisant fdisk et des partitions GPT en utilisant gdisk.
 
 ### fdisk
 
-**fdisk** also known as format disk is a dialog-driven command in Linux used for creating and manipulating disk partition table. It is used for the view, create, delete, change, resize, copy and move partitions on a hard drive using the dialog-driven interface.\
- fdisk allows us to create a maximum of four primary partitions and the number of logical partition depends on the size of the hard disk you are using. It allows the user:
+**fdisk** aussi connu comme format disk est une commande interractive dans Linux utilisé pour créer et manipuler une table de partition. Il est utilisé pour voir, créé, supprimer, modifier, redimensionner, copier et déplacer les partitions sur un disque dur en utilisant l'interface interractive.\
+ fdisk nous permet de créer un maximum de quatre partitions primaires et le nombre de partitions logiques dépends de la taille du disque dur que vous utiliser. Il permet à l'utilisateur :
 
-* To Create space for new partitions.
-* Organizing space for new drives.
-* Re-organizing old drives.
-* Copying or Moving data to new disks(partitions)
+* De créer de l'espace pour de nouvelles partitions.
+* Organiser l'espace pour les nouveaux périphériques.
+* Ré-organiser les anciens périphériques.
+* Copier ou déplacer les données vers un nouveau disque(partitions)
 
 ```
 fdsik [options] device
@@ -122,7 +122,7 @@ or
 fdisk -l [device...]
 ```
 
-The first thing to do before doing any thing with the disks and partition is to view basic details about all available partition in the system using` -l` option(ubuntu 16.04):
+La première chose à faire avant autre chose avec les disque et partition est de voir les déails basiques à propos de toutes les partitions disponibles sur le système en utilisation l'option ` -l`:
 
 ```
 root@ubuntu16-1:~# fdisk -l
@@ -145,14 +145,14 @@ Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
 ```
 
-as you can see we have two disk drives (sda,sdb) sda has some partitions on it but sdb is row.
+Comme vous pouvez le voir, nous avons deux périphériques de disques (sda,sdb). Sda a quelque parititon mais sdb est vide.
 
-*  **Boot** : The Boot column shows that the first partition, /dev/sda1, has an asterisk **(\*)** indicating that this partition contains the files required by the boot loader to boot the system.
-*  **Start and End** : The start and end columns list the starting and ending sectors of each partition.
-*  **Blocks** : The blocks column lists the number of blocks allocated to the partition.
-*  **Id and System** : These columns identify the partition type.
+*  **Boot** : La colonne Boot est la première partition, /dev/sda1, l'asterisque **(\*)** indique que cette partition contient les fichiers requis par le chargeur de démarrage pour démarrer le système.
+*  **Start and End** : Les colonnes start et end liste les secteur de démarrage et de fin de chaque partition.
+*  **Blocks** : La colonne blocks liste le nombre de blocs alloués à la partition.
+*  **Id and System** : Ces colonnes identifie le type de partition.
 
-Viewing  Partition(s) on a Specific Disk (sda) :
+Voir les partitions sur un disque spécifique (sda) :
 
 ```
 root@ubuntu16-1:~# fdisk -l /dev/sda
@@ -169,7 +169,7 @@ Device     Boot     Start       End   Sectors  Size Id Type
 /dev/sda5       102764544 104855551   2091008 1021M 82 Linux swap / Solaris
 ```
 
-Lets start interactive mode and see all available commands (sdb):
+Démarraons le mode interractif et voyons les commandes disponible (sdb):
 
 ```
 root@ubuntu16-1:~# fdisk /dev/sdb
@@ -223,7 +223,7 @@ Help:
 Command (m for help): 
 ```
 
- okey creating partion:
+ Création une partition:
 
 ```
 Command (m for help): n
@@ -240,7 +240,7 @@ Created a new partition 1 of type 'Linux' and of size 20 GiB.
 Command (m for help): 
 ```
 
-next we need to specify partition type based on the future use we have considered for:
+Puis nous allons spécifié le type de partition en se basant sur l'utilisation future que nous avons prévu :
 
 ```
 Command (m for help): l
@@ -272,13 +272,13 @@ Command (m for help): l
 1e  Hidden W95 FAT1 80  Old Minix       be  Solaris boot    ff  BBT   
 ```
 
-**Partition Types**
+**Types de Partition**
 
-The partition types can be displayed and changed by using the fdisk utility. A partial list (most commonly used) of partition types are:\
- **83: Linux**\
-** 82: Linux swap**\
-** 5: Extended**\
-** 8e: Linux LVM**
+Les types de partition peuvent être affichés et modifiés en utilisant l'utilitaire fdisk. Une liste partielle (les plus utilisés) des types de partitions est:\
+* **83: Linux**
+* **82: Linux swap**
+* **5: Extended**
+* **8e: Linux LVM**
 
 ```
 Command (m for help): t
@@ -288,7 +288,7 @@ Partition type (type L to list all types): 83
 Changed type of partition 'Linux' to 'Linux'.
 ```
 
-and use -p option inorder to print partition table:
+Et nous utilisons l'option `-p` afin d'afficher la table de partition :
 
 ```
 Command (m for help): p
@@ -305,7 +305,7 @@ Device     Boot Start      End  Sectors Size Id Type
 Command (m for help): 
 ```
 
-fdisk does not write any changes on hard disk until we ask it using `w` switch, if you are not sure use `q` to quit and hard disk stays untouched! 
+fdisk n'écrit pas les modifications sur le disque dur tant que vous ne lui demander par en utilisant l'option `w`, si vous n'êtes pas sur utiliser `q` pour quitter et le disque dur ne sera pas modifié! 
 
 ```
 Command (m for help): v
@@ -316,13 +316,13 @@ Calling ioctl() to re-read partition table.
 Syncing disks.
 ```
 
-use -d for delete a partition bu be care full!
+Utiliser `-d` pour supprimer une partition, soyez prudent!
 
-> To see the help message and listing of all options, use fdisk -h command.
+> Pour voir le message d'aide et lister toutes les options, utiliser la commande `fdisk -h`.
 
 ### gdisk
 
-We can Manage  GPT Partitions with gdisk. like fdisk, gdisk is a text-mode menu-driven program for creation and manipulation of partition tables. It will automatically convert an old-style Master Boot Record (MBR) partition table  to the newer Globally Unique Identifier (GUID) Partition Table (GPT) format, or will load a GUID partition table.
+Nous pouvon gérer les partitions GPT avec gdisk. Comme fdisk, gdisk est un programme en mode texte avec des menus pour créer et manipuler la table de partition. Il convertira automatique une table de partition ancienne de type Master Boot Record (MBR) cer le format plus récent de table de partition Globally Unique Identifier (GUID) Partition Table (GPT), ou il chargera une table de partition GPT.
 
 ```
 root@ubuntu16-1:~# gdisk /dev/sdb
@@ -371,71 +371,70 @@ root@ubuntu16-1:~#
 
 ### parted
 
- The `parted` command is a partition editor that will work with both MBR and GPT formatted disks.
+ La commande `parted` est un éditeur de partition qui fonctionnera pour formatter les disques MBR et GPT..
 
-### File System
+### Système de fichier
 
-Linux File System or any file system generally is a layer which is under the operating system that handles the positioning of your data on the storage, without it; the system cannot knows which file starts from where and ends where.
+Le système de fichier Linux ou tout système de fichier est une couche qui est sous le système d'exploitation et qui gère le positionnement de vos données sur le stockage, sans lui, le système ne peut pas savoir où les fichiers commence et se termine.
 
-### **File system types**
+### **Type de système de fichiers**
 
- Linux supports several different file systems. Each has strengths and weaknesses and its own set of performance characteristics. 
+ Linux supporte différent système de fichier. Chacun a des forces et des fabiblesse et son propre ensemble de caractèristiques de performance. 
 
-**Ext, Ext2, Ext3, Ext4, JFS, XFS, btrfs and swap**
+**Ext, Ext2, Ext3, Ext4, JFS, XFS, btrfs et swap**
 
-One important attribute of a filesystem is journaling
+Un des attribut important du système de fichier est la journalisation
 
-**What is journaling?**
+**Qu'est ce que la journalisation ?**
 
-Journaling is designed to prevent data corruption from crashes and sudden power loss. Let’s say your system is partway through writing a file to the disk and it suddenly loses power. Without a journal, your computer would have no idea if the file was completely written to disk. The file would remain there on disk, corrupt.
+La journalisation désigne la manière d'empêcher la corruption des données lors d'un crash ou d'une perte de courant. Disons que votre système est entrain d'écrire un ficheir sur le disque et qu'il y a une coupure de courant. Sans un journal, votre ordinateur ne saura pas si le fichier a été écrit complètement sur le disque. Le fichier restera sur le disque, corrompu.
 
 ![](.gitbook/assets/createpartition-journaling.jpg)
 
-With a journal, your computer would note that it was going to write a certain file to disk in the journal, write that file to disk, and then remove that job from the journal. If the power went out partway through writing the file, Linux would check the file system’s journal when it boots up and resume any partially completed jobs. This prevents data loss and file corruption.
+Avec un journal, votre ordinateur notera qu'il était entrain d'écrire un fichier sur le disque dans le journal, écrira ce fichier et enlèvera cette tâche du journal. Si le courant est coupé pendant l'écriture d'un fichier, Linux vérifiera le journal du système de fichier lorsqu'il redémarre et reprend toutes les tâches partiellement complètées. Cela évite la perte de données et la corruption de fichier.
 
-Journaling does slow disk write performance down a tiny bit, but it’s well-worth it on a desktop or laptop.
+La journalisation ralentit un peu les performances d'écriture sur le disque, mais c'est un pis-aller sur un ordinateur de bureau.
 
 {% hint style="success" %}
-Which File System is perfect for you?
+Quel est le système de fichier parfait pour vous?
 
- Generally, a journaling filesystem is preferred over a non-journaling one when you have a choice. You may also want to consider whether your chosen filesystem supports _Security Enhanced Linux_ (or SELinux). 
+ Généralement, un système de fichier avec journalisation est préféré au lieu d'un système sans journalisation lorsque vous avez le choix. Vous pouvez aussi condiférer lequel choisir en fonction du support de  _Security Enhanced Linux_ (ou SELinux) par le système de fichier. 
 {% endhint %}
 
-Following is a brief summary of the types you need to know about for the LPI exam**:**
+Voici un résumé rapide des types que vous devez connaitre pour l'examen LPI **:**
 
 | Format                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <p><strong>ext2</strong></p><p>(1993)</p> | <p>The ext2 filesystem (also known as the <em>second extended filesystem</em>) was developed to address shortcomings in the Minix filesystem used in early versions of Linux. It has been used extensively on Linux for many years. There is no journaling in ext2, and it has largely been replaced by ext3 and more recently ext4.</p><p></p><ol><li>Maximum file size is <strong>16GB – 2TB</strong>.</li></ol><p>*It’s being used for normally Flash based storage media like <strong>USB Flash drive</strong>, <strong>SD Card</strong> etc.</p>             |
-| <p><strong>ext3</strong></p><p>(2001)</p> | <p>The ext3 filesystem adds journaling capability to a standard ext2 filesystem and is therefore an evolutionary growth of a very stable filesystem. It offers reasonable performance under most conditions and is still being improved. Because it adds journaling on top of the proven ext2 filesystem, it is possible to convert an existing ext2 filesystem to ext3 and even convert back again if required.</p><ol><li>Max file size <strong>16GB – 2TB</strong>.</li><li>was integrated in <strong>Kernel 2.4.15</strong> with journaling feature</li></ol> |
-| <p><strong>ext4</strong></p><p>(2008)</p> | <p>The ext4 filesystem started as extensions to ext3 to address the demands of ever larger file systems by increasing storage limits and improving performance.    Some of the changes from ext3 are:</p><ol><li>Max file size <strong>16GB to 16TB</strong>.</li><li>was included in the<strong> 2.6.28 kernel</strong>.</li><li>Ext4 file system have option to <strong>Turn Off</strong> journaling feature.</li><li>Other features like <strong>Fast FSCK</strong> etc.</li></ol>                                                                             |
-| **ReiserFS**                              | ReiserFS is a B-tree-based filesystem that has very good overall performance, particularly for large numbers of small files.  has journaling. no longer in active development, does not support SELinux and has largely been superseded by Reiser4 whose future is unclear.                                                                                                                                                                                                                                                                                       |
-| **XFS**                                   | XFS is a filesystem with journaling. It comes with robust features and is optimized for scalability. XFS aggressively caches in-transit data in RAM, great if you have an uninterruptible power supply.                                                                                                                                                                                                                                                                                                                                                           |
-| **btrfs**                                 | btrfs (B-Tree file system) was initially developed by Oracle(GPL).It is a new copy-on-write filesystem for Linux aimed at implementing advanced features(snapshots,compression,...) while focusing on fault tolerance, repair, and easy administration.Designed to handle large files efficiently and handle filesystems spread across multiple devices.                                                                                                                                                                                                          |
-| **vfat**                                  | <p>(also known as <em>FAT32</em>) no journaling, lacks many features required for a full Linux filesystem implementation. useful for exchanging data between Windows and Linux systems . Do <strong>not</strong> use this filesystem , except for sharing data . </p><p>*If you unzip or untar a Linux archive on a vfat disk, you will lose permissions, such as execute permission, and you will lose any symbolic links that may have been stored in the archive.</p>                                                                                          |
-| **swap**                                  | Swap space must be formatted for use as swap space, but it is not generally considered a filesystem.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| <p><strong>ext2</strong></p><p>(1993)</p> | <p>Le système de fichier ext2 (aussi connu comme le <em>second système de fichier étendu second</em>) a été developpé pour traiter des problèmes sur le système de fichier Minix utilisé dans les versions précédente de Linux. Il a été beaucou utilisé sur Linux pendant de nombreuses années. Il n'y a pas de journalisation dans ext2, et il a été largement remplacé par ext3 et plus récémment par ext4.</p><p></p><ol><li>La taille maximum des fichiers est de <strong>16GB – 2TB</strong>.</li></ol><p>* Il était utilisé pour les médias de stockage Flash comme les <strong>clés USB</strong>, <strong>SD Card</strong> etc.</p>             |
+| <p><strong>ext3</strong></p><p>(2001)</p> | <p>Le système de fichier ext3 ajoute la possibilité de journalisation au systèm de fichiers standard ext2 et est une évolution vers un système de fichier vraiment fiable. Il offre des performances raisonnable dans la plupart des conditions et est encore amélioré. Comme il a jouté la journalisation sur le système de fichier éprouvé ext2, il est possible de convertir un système de fichiers ext2 existant vers ext3 et même de revenir en arrière si nécessaire.</p><ol><li>Taille maximum des fichiers <strong>16GB – 2TB</strong>.</li><li>a été intégré au <strong>Noyau 2.4.15</strong> avec la fonctionnalité de journalisation</li></ol> |
+| <p><strong>ext4</strong></p><p>(2008)</p> | <p>Le système de fichier ext4 a démarré comme une extension de ext3 pour gérer les demandes pour des ficheiers plus large en augmentant la limit de stockage et en améliorant les performances. Certains de ces changement depuis ext3 sont ::</p><ol><li>Taille maximum des fichiers <strong>16GB to 16TB</strong>.</li><li>a été inclu dans le <strong>noyau  2.6.28</strong>.</li><li>Le système de fichier Ext4 a des options pour désactiver la fonctionnalité de journalisation.</li><li>D'autres fonctionnaliés comme <strong>Fast FSCK</strong> etc.</li></ol>                                                                             |
+| **XFS**                                   | XFS est un système de fichier avec journalisation. Il vient avec des fonctionnalités solides et est optimisé pour la scalabilité. XFS met en cache de manière aggressive les données en transit dans la RAM, ce qui est très bien si vous avez du courant sans interruption |
+| **btrfs**                                 | btrfs (B-Tree file system) a été initialement développé par Oracle(GPL). C'est un nouveau système de fichier copy-on-write pour Linux qui a pour but d'ajouté des fonctionnalités avancés (snapshots, compression ...) an se concentrant sur la tolérance à la panne, la réparation et l'administration simplifié. Conçu pour gérer des fichiers vooumineux de manière efficace et gérer des systèmes de fichiers divisés sur plusieurs périphériques |
+| **vfat**                                  | <p>(aussi connu comme <em>FAT32</em>) pas de journalisation, manque de nombreuses fonctionnalités requises pour un système de fichiers complet pour Linux. Utilise poru échanger des données entre les systèmes Windows et Linux . Ne <strong>pas</strong> utiliser ce système de fichier, sauf pour partager des données. </p><p>*Si vous extrayer les fichiers d'une archive zip ou tar sur un disque vfat, vous perdrez les permissions comme la permission d'exécuter, et vous perdrez tout lien symbolique qui ont été stockés dans l'archive.</p>                                                                                          |
+| **swap**                                  | Espace Swap doit être formaté pour utiliser en tant qu'espace Swpa, mais il n'est généralement pas considéré comme système de fichier |
 
-We must create a file system before you can use any data storage device connected to a Linux computer.
+Nous devons créer un système de fichier avant d'utiliser tout périphérique de stockage connécté à un ordinateur Linux.
 
-### partitioning
+### Partitionnement
 
-Linux uses the `mkfs` command to create filesystems and `mkswap`command to make swap space.
 
 {% hint style="danger" %}
-Before you start modifying partitions, there are some important things to remember. You risk losing your existing data if you do not follow these guidelines: 
+Avant de commencer à modifier les partitioins, il y a des points important à se rappeler. Vous risquer de perdre vos données existantes si vous ne suivez pas ce instructions : 
 
-1. Back up important data before you start 
-2. Do not change partitions that are in use 
-3. Know your tool
-4.  Stop if you do make a mistake
+1. Sauvegarder ailleurs vos données importantes avant de commencer 
+2. Ne modifier pas les partitions qui sont utilisées 
+3. Connaissez vos outils
+4. Arrêtez vous si vous faites une erreur
 {% endhint %}
 
- Linux uses the `mkfs` command to create filesystems and `mkswap`command to make swap space
+Linux utilise la commande `mkfs` pour créer des systèmes de fichier et la commande `mkswap` pour créer des espaces swap.
+
 
 ### mkfs
 
-The mkfs (make filesystem) command is used to create a filesystem.
+La commande mkfs (make filesystem) est utilisée pour créer un système de fichier.
 
-The `mkfs` command is actually a front end to several filesystem-specific commands such as `mkfs.ext3` for ext3, `mkfs.ext4` for ext4 and `mkfs.btrfs` for btrfs.
+La commande `mkfs` est actuelleemnt un frontal pour plusieurs commandes spécifiques au systèmes de fichier comme `mkfs.ext3` pour ext3, `mkfs.ext4` pour ext4 et `mkfs.btrfs` pour btrfs.
 
 ```
 root@ubuntu16-1:~# mkfs
@@ -450,15 +449,15 @@ root@ubuntu16-1:~# ls /sbin/mk*
 
 ```
 
-various forms of some commands. mke2fs, mkfs.ext2, and mkfs.ext3 are all the same file, while mkfs.msdos and mkfs.vfat are usually symbolic links to mkdosfs.
+Différentes variantes de la commande : mke2fs, mkfs.ext2, et mkfs.ext3 ont toute leur propre fichier, alors que mkfs.msdos et mkfs.vfat sont généralement des liens symboliques vers  mkdosfs.
 
-In order to build the filesystem using mkfs command, the required arguments are   filesystem-type and device-filename:
+Afin de consstruire le système de fichier en utilisant la commande mkfs, les arguments requis sont filesystem-type et device-filename:
 
 ```
 mkfs [options] [-t type fs-options] device [size]
 ```
 
-We can either use mkfs._fstype_ commands `mkfs.ext3 /dev/sdb1 ` or we can use mkfs via `-t `option to  specify the format `mkfs -t ext3 /dev/sdb1` and both would have the same results.
+Nous pouvons aussi utiliser la commande mkfs._fstype_  `mkfs.ext3 /dev/sdb1 ` ou nous pouvons utiliser mkfs via  l'option `-t ` pour spécifier le format `mkfs -t ext3 /dev/sdb1` et le deux auront le même résultat.
 
 ```
 root@ubuntu16-1:~# mkfs -t ext3 /dev/sdb1
@@ -477,10 +476,10 @@ Writing superblocks and filesystem accounting information: done  c
 root@ubuntu16-1:~# 
 ```
 
-If we want  to assign a label to the partition during format progress we should use -L labelname with that :  `mkfs -t ext3 -L MyData /dev/sdb1`
+Si nous voulons assigner une étiquette à la partition pendant le formatage, nous devons utiliser -L labelname avec :  `mkfs -t ext3 -L MyData /dev/sdb1`
 
 {% hint style="info" %}
-For mounting Formatted partition we can either use Partition label or  **UUID**.  **UUID** _is a unique identifier used in partitions to uniquely identify partitions_. to get the UUID of recent created  partition try : `blkid /dev/sdb1`
+Pour monter des partitions formaté nous pouvons utiliser l'étiquette de la partition ou son **UUID**.  **UUID** _qui est un identifiant unique utilisé dans les paritions pour identifier les partitions de manière unique_. Pour obtenir l'UUID des partitions créé essayez : `blkid /dev/sdb1`
 {% endhint %}
 
 | Partition | Format Type | Sample Command                    | Notes                                                             |
@@ -493,17 +492,17 @@ For mounting Formatted partition we can either use Partition label or  **UUID**.
 
 ### mkswap
 
- `mkswap`command  makes swap space on a device or in a file. 
+ La commande `mkswap` créer un espace swap sur un périphérique ou dans un fichier. 
 
 ```
 mkswap [options] device [size]
 ```
 
-The device argument will usually be a disk partition (something like /dev/sdb1) but can also be a file. 
+L'argument device est généralement une partition disque (something like /dev/sdb1) mais peut aussi être un fichier. 
 
-The Linux kernel does not look at partition IDs, but many installation scripts will assume that partitions of hex type 82 (LINUX_SWAP) are meant to be swap partitions.
+Le noyau Linux ne chercher pas d'ID de partition, mais de nombreux scripts d'installation supposeront que les partition de type hex 82 (LINUX_SWAP) sont des partitions swap.
 
-So in order to make a swap space first create a partition using fdisk via partition type 82 and then use mkswap:
+Donc pour créer un espace swap, créer d'abord une partition en utilisant fdisk avec une partition de type 82  puis utiliser mkswap:
 
 ```
 root@ubuntu16-1:/# mkswap /dev/sdb1
@@ -512,9 +511,9 @@ Setting up swapspace version 1, size = 20 GiB (21473783808 bytes)
 no label, UUID=0dcd7e90-4b45-4d5f-808c-320f1e5ba8a3
 ```
 
-Using the created partition as a swap space requires further step which will be discussed in later lessons.
+Utiliser les partitions créées en tant qu'espace swap nécessite d'autres étapes que nous verrons plus tard.
 
-that's all!
+C'est terminé!
 
 .
 

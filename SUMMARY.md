@@ -1,4 +1,4 @@
-# Table of contents
+# Table des matières
 
 * [Introduction](README.md)
 * [Pré-requis techniques](prereqis-techniques.md)
@@ -27,6 +27,6 @@
     * [104.2. Maintenance de l'intégrité des systèmes de fichiers](1042-maintain-the-integrity-of-filesystems.md)
     * [104.3. Montage et démontage des systèmes de fichiers](1043-control-mounting-and-unmounting-of-filesystems.md)
     * 104.4. REMOVE FOR LPIC 101-500 
-    * [104.5. Manage file permissions and ownership](1045-manage-file-permissions-and-ownership.md)
-    * [104.6. Create and change hard and symbolic links](1046-create-and-change-hard-and-symbolic-links.md)
-    * [104.7. Find system files and place files in the correct location](1047-find-system-files-and-place-files-in-the-correct-location.md)
+    * [104.5. Gestion des permissions et de la propriété sur les fichiers](1045-manage-file-permissions-and-ownership.md)
+    * [104.6. Création et modification des liens physiques et symboliques sur les fichiers](1046-create-and-change-hard-and-symbolic-links.md)
+    * [104.7. Recherche de fichiers et placement des fichiers aux endroits adéquats](1047-find-system-files-and-place-files-in-the-correct-location.md)

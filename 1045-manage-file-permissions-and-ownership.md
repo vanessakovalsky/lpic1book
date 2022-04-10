@@ -1,17 +1,17 @@
-# 104.5. Manage file permissions and ownership
+# 104.5. Gestion des permissions et de la propriété sur les fichiers
 
-**Weight: **3
+**Poids :** 3
 
-**Description:** Candidates should be able to control file access through the proper use of permissions and ownerships.
+**Description:** Les candidats doivent être en mesure de contrôler l'accès aux fichiers en utilisant les droits d'accès et les propriétés appropriés.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
-* Manage access permissions on regular and special files as well as directories
-* Use access modes such as suid, sgid and the sticky bit to maintain security
-* Know how to change the file creation mask
-* Use the group field to grant file access to group members
+* Gestion des permissions d'accès sur les fichiers standards et les fichiers spéciaux, ainsi que sur les répertoires.
+* Utilisation des modes d'accès comme suid, sgid et sticky bit pour maintenir la sécurité.
+* Savoir changer le masque de création des fichiers par défaut.
+* Utilisation du champ groupe pour attribuer les permissions aux membres d'un groupe. 
 
-**Terms and Utilities:**
+**Concepts et Utilitaires :**
 
 * chmod
 * umask
@@ -20,15 +20,15 @@
 
 ####  <a href="users-groups-and-file-ownership" id="users-groups-and-file-ownership"></a>
 
-#### Users, groups and file ownership <a href="users-groups-and-file-ownership" id="users-groups-and-file-ownership"></a>
+#### Utilisateurs, groupes et propriétaire de fichier <a href="users-groups-and-file-ownership" id="users-groups-and-file-ownership"></a>
 
-By now, you know that Linux is a multiuser system and that each user belongs to one primary group and possibly additional groups. It is also possible to log in as one user and become another user using the `su`  commands. Ownership of files in Linux and access authority are closely related to user ids and groups.
+Jusqu'ici, nous savons que Linux est un système multi-utilisateurs et que chaque utilisateur appartien à un groupe primaire et éventuellement à d'autres groupes. Il est aussi possible de se connecter avec un utilisateur et de devenir un autre utilisateur en utilisant la commande `su`. La propriété des fichiers dans Linux et l'autorisation d'accès sont liés aux id des utilisateurs et aux groupes.
 
-### User and groups <a href="user-and-groups" id="user-and-groups"></a>
+### Utilisateur et groupes <a href="user-and-groups" id="user-and-groups"></a>
 
-To start, let’s review some basic user and group information via some commands
+Pour commencer, revoyons quelques informations basique sur l'utilisateur et le groupe via certaines commandes :
 
-* whoami : It displays the username of the current user (ubuntu16.04)
+* whoami : Affiche le nom de l'utilisateur actuellement connecté
 
 ```
 user1@ubuntu16-1:~/sandbox$ whoami
@@ -39,7 +39,7 @@ root@ubuntu16-1:~# whoami
 root
 ```
 
-* groups: We can find out what groups you are in by using the `groups` command.
+* groups: Nous pouvons trouver dans quels groupes nous sommes en utilisant la commande `groups`.
 
 ```
 root@ubuntu16-1:~# groups
@@ -50,7 +50,7 @@ user1@ubuntu16-1:~/sandbox$ groups
 user1
 ```
 
-* id :  We can find out both user and group information using the `id` command.
+* id :  Nous pouvons trouver à la fois les information sur l'utilisateur et son groupe avec la commande `id`.
 
 ```
 user1@ubuntu16-1:~/sandbox$ id
@@ -61,10 +61,10 @@ root@ubuntu16-1:~# id
 uid=0(root) gid=0(root) groups=0(root)
 ```
 
-> It can show numeric ID’s (UID or group ID) of the current user or any other user in the server.
+> Il peut montrer l'ID numérique (UID ou group ID) de l'utilisateur courant ou d'un autre utilisateur sur le serveur.
 
 {% hint style="info" %}
-users and groups information are stored in /etc/passwd and /etc/group along other information.
+Les informations sur les utilisateurs et les groupes sont stockées dans /etc/passwd et /etc/group parmi d'autres informations.
 
 ```
 root@ubuntu16-1:~# cat /etc/passwd | grep user1
@@ -74,11 +74,11 @@ user1:x:1001:
 ```
 {% endhint %}
 
-#### File ownership and permissions
+#### Propriété des fichiers et permissions
 
-Every file on a Linux system has one owner and one group associated with it.
+Chaque fichier sur un système Linux a un propriétaire et un groupe qui lui sont associé.
 
- Use the ls -l`ls-l` command to display the owner and group.
+ Utiliser la commande `ls-l` pour afficher le propriétaire et le groupe.
 
 ```
 user1@ubuntu16-1:~/sandbox$ ls -l
@@ -87,36 +87,36 @@ drwxrwxr-x 2 user1 user1 4096 Jan 27 21:49 dir1
 -rw-rw-r-- 1 user1 user1    0 Jan 27 21:49 file1
 ```
 
-> As you can see, the file1 belongs to user1 and a group called user1.
+> Comme vous pouvez voir, le file1 appartient à  user1 et a un groupe appelé user1.
 
-The first character of a long listing describes the type of object. "-" for a regular file, "d" for a directory, "l" for a symbolic link(we will see them).
+Le premier caractère d'une longue liste décrit le type d'objet. "-" pour un fichier régulier, "d" pour un dossier, "l" pour un lien symbolique (nous les verrons plus tard).
 
 ![](.gitbook/assets/permis-filepermis.jpg)
 
-Permissions are specified separately for the file’s owner, members of the file’s group, and everyone else. 
+Les permissions sont spécifié séparemment pour le propriétaire du fichier, les membres du groupe du fichier et n'importe qui d'autres. 
 
-The Linux permission model has three types of permission for each filesystem object.
+Le modèle de permission de Linux a trois types de permissions pour chaque objet du système de fichier.
 
-The permissions are read (r), write (w), and execute (x). Write permission includes the ability to alter or delete an object.   A `-` indicates that the corresponding permission is not granted. example:
+Les permissions sont lire(r), écrire(w), et exécuter (x). La permission d'écrire inclut la possibilité de modifier ou de supprimer un objet. Un `-` indique que la permission correspondante n'est pas accordée. Exemple:
 
 ```
 root@ubuntu16-1:~# ls -l /sbin/fsck
 -rwxr-xr-x 1 root root 44184 May 16  2018 /sbin/fsck
 ```
 
-As you can see fsck can be read, written and executed by its owner (root) and all  root group members, but others can just read and execute that(probably with limited results )
+Commme bou le voyez fsck peut être lu, écrit et exécuté par son propriétaire (root) et tous les membres du groupe root, mais les autres peuvent seulement lire et exécuter celui-ci
 
-#### Directories ownership and permissions <a href="directories" id="directories"></a>
+#### Propriété et permission des dossiers <a href="directories" id="directories"></a>
 
 ![](.gitbook/assets/permis-dirpermis.jpg)
 
-Directories use the same permissions flags as regular files, but they are interpreted differently.
+Les dossiers utilises les mêmes flags de permission que les fichiers régulier, mais ils sont interprétés différement.
 
-* Read permission for a directory allows a user with that permission to list the contents of the directory.
-* Write permission means a user with that permission can create or delete files in the directory.
-* Execute permission allows the user to enter the directory and access any subdirectories.
+* La permission de lire pour un dossier permet à un utilisateur avec cette permission de lister le contenu de ce dossier.
+* La permission d'écire signifie qu'un utilisateur avec cette permission peut créer ou supprimer des fichiers dans ce dossier.
+* La permission d'exécuter permet à l'utilisateur d'entrer dans le dossier et d'accéder aux sous-dossiers.
 
-Without execute permission on a directory, the filesystem objects inside the directory are not accessible. Without read permission on a directory, the filesystem objects inside the directory are not viewable in a directory listing, but these objects can still be accessed as long as you know the full path to the object on disk. example:
+Sans la permission d'éxécuter sur un dossier, les objets du système de fichier dans un dossier ne sont pas accessible. Sans la permission de lire sur un dossier, le système de fichier à l'intérieur ne peut pas être vu dans une liste de dossier, mais ces objets peuvent encore être accédés tant que vous connaisez le chemin complet de l'objet sur le disque. Exemple:
 
 ```
 root@ubuntu16-1:~# ls -l /home/
@@ -125,18 +125,18 @@ drwxr-xr-x 22 payam payam 4096 Oct 27  2018 payam
 drwxr-xr-x 19 user1 user1 4096 Jan 27 21:49 user1
 ```
 
-The first charcter indicates that this a directory. The owner (user1) has read,write, execute access but other members of user1 group and others have just read and execute access on this directory, (as we mentioned, execute lets them to see files inside it )
+Le premier caractère indique que c'est un dossier. Le propriétaire (user1) a les droits de lire, écrire, éxécuter mais les autres membres du groupes user1 et les autres ont seulement le droit de lire et d'éxecuter sur ce dossier, (comme mentionné, exécuter nous laisse voir les fichiers à l'intérieur )
 
-#### Changing permissions
+#### Modifier les permissions
 
 ### chmod
 
-The command you use to change the  permissions on files is called chmod , which stands for “change mode". There  are to ways to tell this command what you want to do:
+La commande que vous devez utiliser pour modifier les permissions sur les fichiers est appelée chmod , ce qui signifie “change mode". Il y a deux façon de dire à cette commande ce qu'elle doit faire:
 
-* using short codes
-* using ocatl codes
+* en utilisant les codes raccourcis
+* en utilisant les codes en octal
 
-**1- using short codes:**  That is easier way. 
+**1- En utilisant les codes raccourcis:**  C'est la manière la plus simple. 
 
 ![](.gitbook/assets/permis-chmodshortcodes.jpg)
 
@@ -144,24 +144,24 @@ The command you use to change the  permissions on files is called chmod , which 
 chmod [reference][operator][mode] file... 
 ```
 
-reference can be
+Les références peuvent être:
 
-*  u as user  (file's owner)
-* g as group (users who are members of the file's grou)
-* o as others (users who are not the file's owner / members of the file's group)
-* a as all (All three of the above, same as ugo)
+* u pour l'utilisateur  (propriétaire du fichier)
+* g pour groupe (les utilisateurs qui sont membre du groupe nommé)
+* o pour autres (others) (les utilisateurs qui ne sont pas propriétaires du fichier ou membre du groupe du fichier)
+* a pour tous(all) (Tous ceux mentionné ci-dessus, équivalent à ugo)
 
-Operator can be
+Les opérateurs peuvent être
 
-* \+  Adds the specified modes to the specified classes
-*  \- Removes the specified modes from the specified classes
-* \= The modes specified are to be made the exact modes for the specified classes
+* \+  Ajoute le mode spécifié à la classe spécifié
+*  \- Supprime le mode spécifié à la classe spécifié
+* \= Le mode spécifié doit être le même pour les classes spécifiés
 
-obviously modes might be
+Et les modes doivent être
 
-* r  :Permission to read the file
-* w :Permission to write (or delete) the file.
-* x : Permission to execute the file, or, in the case of a directory, search it.
+* r  : Permission de lire le fichier
+* w : Permission d'écrire le fichier (ou de le supprimer).
+* x : Permission d'exécuter le fichier, ou, dans le cas d'un dossier, de rechercher à l'intérieur.
 
 ```
 user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
@@ -178,7 +178,7 @@ user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
 -rwxrw---- 1 user1 user1    0 Jan 27 21:49 file1
 ```
 
->  If we want to set different permissions for user, group, or other, we can separate different expressions by commas —for example, `ug=rwx,o=rx`
+>  Si nous voulons utiliser différents ensembles de permissions pour l'utilisateur, le groupe et les autres, nous pouvons utiliser des expressions différentes séparées par des virgules — par exemple, `ug=rwx,o=rx`
 
 ```
 user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
@@ -190,7 +190,7 @@ user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
 -rw-rwxr-- 1 user1 user1    0 Jan 27 21:49 file1
 ```
 
-> using a as ugo with = operator to set exact mode easier
+> Utiliser a comme ugo avec l'opérateur = pour définir un mode exact est plus facile
 
 ```
 user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
@@ -200,11 +200,11 @@ user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
 -rw-rw-rw- 1 user1 user1    0 Jan 27 21:49 file1
 ```
 
-**2- using ocatl codes : **So far we have used symbols (ugoa and rxw) to specify permissions. we can also set permissions using octal numbers instead of symbols.
+**2- En utilisant les code octal :** Jusqu'ici nous avons utilisé les symboles (ugoa et rxw) pour définir les permissions. Nous pouvons aussi définir les permissions en utilisant les nombre octal à la place des symboles.
 
 ![](.gitbook/assets/permis-chmodoctalcodes.jpg)
 
-For using octal codes with chmod we have to create an octal string, and that's is nothing more than a simple sum of numbers:
+Pour utiliser les codes octal avec chmod nous devons créers une chaine octal, et ce n'est rien de plus qu'un simple somme de nombre:
 
 | Symbolic | note  | Octal |
 | -------- | ----- | ----- |
@@ -232,17 +232,17 @@ user1@ubuntu16-1:~/sandbox$ ls -l | grep file1
 -rw-r-xr-x 1 user1 user1    0 Jan 27 21:49 file1
 ```
 
-To change permissions  recursively on directories and files use `-R` option:
+Pour modifier les permissions de manière récursive sur les dossiers et fichiers utiliser l'option `-R` :
 
 ```
 user1@ubuntu16-1:~/sandbox$ chmor -R o+r dir1
 ```
 
-#### Access modes
+#### Mode d'accès
 
-When  we  log in, the new shell process runs with your user and group IDs. This usually means that you cannot access files belonging to others and cannot write system files. From the other side, users are totally dependent on other programs to perform operations. 
+Lorsque nous nous conenctons, le nouveau processus shell se lance avec votre ID utilisateur et votre ID de groupe. Cela signifie généralement que vous ne pouvez pas accéder aux fichiers qui appartiennent aux autres et ne pouvea pas écrire sur les fichiers du système. D'un autre côté, les utilisateurs sont totalement dépendant d'autres programmes pour faire les opérations. 
 
-An important example is the /etc/passwd file, which cannot be changed by normal users directly, because write permission is enabled only for root. However, normal users need to be able to modify /etc/passwd somehow:
+Un exemple important est le fichier /etc/passwd, qui ne peut pas être modifier par un utilisater normal directement, car la permission d'écriture est activé seulement pour root. Cependant, si les utilisateurs normaux ont besoin de modifier le fichier, voici comment faire :
 
 ```
 root@ubuntu16-1:~# which passwd
@@ -251,41 +251,41 @@ root@ubuntu16-1:~# ls -l /usr/bin/passwd
 -rwsr-xr-x 1 root root 54256 May 16  2017 /usr/bin/passwd
 ```
 
-So, if the user is unable to modify this file, how can this be done? What is that "s"?
+Donc, si l'utilisateur n'est pas capable de modifier ce fichier, comment cela peut être fait ? Que veut dire le "s" ?
 
 ### suid , guid
 
-The Linux permissions model has two special access modes called suid (set user id) and sgid (set group id). When an executable program has the suid access modes set, it will run as if it had been started by the file’s owner, rather than by the user who really started it. Similarly, with the sgid access modes set, the program will run as if the initiating user belonged to the file’s group rather than to his own group.
+Le modèle de permissions de Linux a deux modes d'accès spéciaux appelé suid (set user id) et sgid (set group id). Lorsqu'un programme exécutable a le mode d'accès suid défini, il sera lancé comme s'il avait été lancé par le propriétaire du fichier, plutôt que par l'utilisateur qui l'a réellement démarré. De manière similaire, avec le mode d'accès sgid défini, le programme sera lancé avec l'utilisateur faisant partie du groupe du fichier plutôt que son propre groupe.
 
-> #### Directories and sgid <a href="directories-and-sgid" id="directories-and-sgid"></a>
+> #### Dossiers et  sgid <a href="directories-and-sgid" id="directories-and-sgid"></a>
 >
-> When a directory has the sgid mode enabled, any files or directories created in it will inherit the group ID of the directory. This is particularly useful for directory trees that are used by a group of people working on the same project.
+> Lorsqu'un dossier a le mode sgid activé, tous fichiers et dossiers à l'intérieur hérite de l'ID du groupe du dossier. C'est particulièrement utile pour les arbres de dossiers qui sont utilisé par un groupe de personne qui travaillent sur le même projet.
 
 ### sticky bit
 
-We have just seen how anyone with write permission to a directory can delete files in it. This might be acceptable for a group project, but is not desirable for globally shared file space such as the /tmp directory. Fortunately, there is a solution.  That  is called the _sticky_ bit.
+Nous avons vu comment n'importe qui avec la permission d'écrire dans un dossier peut supprimer les fichiers à l'intérieur. Cela peut être acceptable pour un projet de groupe, mais pas souhaitable pour un espace de fichiers partagé comme le dossier /tmp. Heureusement, il y a une solution. Ce qui est appelé le _sticky_ bit.
 
-If set stickybit for a directory, it permits only the owning user or the superuser (root) to delete or unlink a file. 
+Si stickybit est défini pour un dossier, il permet seulement au propriétaire ou à l'administrateur(root) de supprimer ou de supprimer le lien d'un fichier. 
 
-Okey lets wrap up what we have learned:
+Résumons ce que nous avons appris :
 
-| access mode    | ** on file**                            | **on directory**                             |
+| Mode d'accès    | **Sur les fichiers**                   | **Sur les dossiers**                         |
 | -------------- | --------------------------------------- | -------------------------------------------- |
-| **SUID**       | executes with permissions of file owner | nothing                                      |
-| **GUID**       | executes with the permissions of group  | new files have group membership of directory |
-| **Sticky Bit** | nothing                                 | only owner can delete files                  |
+| **SUID**       | Exécute avec les permissions du propriétaire | rien                                      |
+| **GUID**       | Exécute avec les permissions du groupe  | Les nouveaux fichiers ont le groupe du dossier |
+| **Sticky Bit** | rien                                 | seulement le propriétaire peut supprimer des fichiers |
 
-#### How suid, guid and stickybit are implemented?
+#### Comment suid, guid et stickybit sont mis en place ?
 
-As there is no more room for setting Access modes, execution character is used. "s" letter is used for both suid and guid but "t" letter is for stickybit. Again we use `+/-` for adding and removing permissions.
+Comme il n'y pas qu'une manière de définir les modes d'accès, le caractère d'exécution est utilisé. La lettre "s" es utilisé à la fois pour les suid et guid mais la lettre "t" est pour stickybit. Nous utilisons encore `+/-` pour ajouter/supprimer les permissions.
 
 ![](.gitbook/assets/permis-accessmodes.jpg)
 
-> As you have probably noticed, if the file or directory is already executable  **s** and **t ** would be displayed  after setting access modes. 
+> Comme vous l'avez déjà remarquer, si le fichier ou le dossier est déjà exécutable  **s** et **t** s'affichent après les modes d'accès. 
 >
-> But if the file or directory hasn't been executable before setting access mode,** S** and **T **would be appear.
+> Mais si le fichier ou le dossier n'est pas encore exécutable avant de définir le mode d'accès,**S** et **T** apparaitront.
 
-As an example for suid consider ping command, as ping needs to access network card it needs root permissions, but an ordinary user can use it:
+Comme exemple pour suid penser à la commande ping, comme ping a besoin d'accder au carte réseau il a besoin des permissions root, mais un utilisateur ordinatire peut l'utiliser:
 
 ```
 user1@ubuntu16-1:~/sandbox$ which ping
@@ -302,7 +302,7 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 rtt min/avg/max/mdev = 39.793/39.862/39.932/0.211 ms
 ```
 
-Now we try setting guid on a directory and we will create a file with another user:
+Maintenant essayons de définir guid sur un dossier et de créer un fichier à l'intérieur avec un autre utilisateur:
 
 ```
 user1@ubuntu16-1:~/sandbox$ ls -l | grep dir1
@@ -322,7 +322,7 @@ total 0
 -rw-rw-r-- 1 user2 user1 0 Jan 29 02:02 NewFileUser2
 ```
 
-And finally lets try how stickybit works on  /tmp:
+Et finalement, testons comment fonctionne stickybit sur  /tmp:
 
 ```
 user1@ubuntu16-1:/$ cd /
@@ -343,9 +343,9 @@ rm: remove write-protected regular empty file 'NewFileUser1'? y
 rm: cannot remove 'NewFileUser1': Operation not permitted
 ```
 
-#### Setting Access Modes via octal codes:
+#### Définir les modes d'accès via les codes octal:
 
-We can also use octal codes to set suid, guid and stickybit:
+Nous pouvons aussi utiliser les codes octal pour définir suid, guid et stickybit:
 
 | Access Mode   | octal |
 | ------------- | ----- |
@@ -353,7 +353,7 @@ We can also use octal codes to set suid, guid and stickybit:
 | **GUID**      | 2000  |
 | **StickyBit** | 1000  |
 
-And again we can use sum of digits.
+Et de nouveau nous faisons la somme des chiffres.
 
 ```
 ###SUID
@@ -380,20 +380,20 @@ drwxrws--T 2 user1 user1 4096 Jan 29 02:33 dir2
 
 ### umask
 
-When a new file or directory is created, the creation process specifies the permissions that the new file or directory should have. Where do they come from? They came from the umask.
+Lorsqu'un nouveau fichier ou dossier est créé, le processus de création spécifie les permissions que ce nouveau fichier ou dossier doit avoir. D'où viennent elles ? Elles viennent de umask.
 
- We can view your umask setting with the `umask` command:
+ Vous pouvez voir votre paramètrage de umask avec la commande `umask` :
 
 ```
 root@ubuntu16-1:~# umask
 0022
 ```
 
-#### How umask work?
+#### Comment fonctionne umask ?
 
 ![](.gitbook/assets/permis-umask.jpg)
 
- When a new file is created, the creation process specifies the permissions that the new file should have. Often, the mode requested is 0666, which makes the file readable and writable by anyone (but not executable). Directories usually default to 0777. However, this permissive creation is affected by a _umask_ value, which specifies what permissions a user does **not** want to grant automatically to newly created files or directories. The system uses the umask value to reduce the originally requested permissions.
+ Lorsqu'un fichier est crée, le processus de création spécifie les permissions que le nouveau fichier doit avoir. Souvent, le mode requis est 0666, ce qui rend le fichier accessible en lecture / écriture par tout le monde (mais pas executable). Les dossiers utilise par défaut 0777. Cependant, cette création permissive est affectée par une valeur _umask_, qui peut définir quel permissions un utilisateur ne veut **pas** donner automatiquement lors de la création de fichiers ou de dossiers. Le système utilise la valeur umask pour réduire les permissions originales demandées.
 
 ```
 user1@ubuntu16-1:~/sandbox$ umask
@@ -409,13 +409,13 @@ user1@ubuntu16-1:~/sandbox$ ls -l | grep newdir
 drwxrwxr-x 2 user1 user1 4096 Jan 28 05:45 newdir
 ```
 
-Usually umask  is set system wide (it could be set per user) and we can find its configuration in one of these places (based on your linux distribution): 
+Généralement umask est défini de manière générale pour le système (il peut être défini par utilisateur) et nous pouvons trouver sa configuration dans un de ces endroits (en fonction de votre distribution de Linux): 
 
 > * /etc/profile (usually)
 > * /etc/bashrc (usually)
 > * /etc/logindefs (ubuntu)
 
-as we are using ubuntu here lets take look at /etc/logindefs:
+Sur ubuntu regardons dans /etc/logindefs:
 
 ```
 # If USERGROUPS_ENAB is set to "yes", that will modify this UMASK default value
@@ -430,7 +430,7 @@ KILLCHAR        025
 UMASK           022
 ```
 
-it say umask would be 002 if USERGROUPS_ENAB is set, lets check it out:
+Cela dit que umask sera 002 si USERGROUPS_ENAB est défini, vérifions le :
 
 ```
 root@ubuntu16-1:~# cat /etc/login.defs | grep -i USERGROUPS_ENAB
@@ -438,21 +438,21 @@ root@ubuntu16-1:~# cat /etc/login.defs | grep -i USERGROUPS_ENAB
 USERGROUPS_ENAB yes
 ```
 
-which is why umask is 002 in our system.
+C'est pour ça que umasl est à  002 sur notre système.
 
-#### Setting file owner and group
+#### Définir le propriétaire de fichier et le groupe
 
-All files in Linux belong to an owner and a group.  We can set the owner by using `chown`  command, and the group by the `chgrp `command.
+Tous les fichiers dans Linux appartiennent à un propriétaire et à un groupe. Nous pouvons définir le propriétaire avec la commande `chown`, et le groupe avec la commande `chgrp `.
 
 ### chown
 
- The root user can change the ownership of a file using the `chown` command.We can use user name or user ID.
+ L'utilisateur root peut modifier la propriété d'un ficheir en utilisant la commande `chown`. Nous pouvons utiliser le nom de l'utilisateur ou son User ID.
 
 ```
 chown [OPTION]… [OWNER][:[GROUP]] FILE…
 ```
 
-The file’s group may be changed at the same time by adding a colon and a group name or ID right after the user name or ID.
+Le groupe du fichier peut être modifier en même temps en ajoutant un deux-points et le nom du groupe ou son ID juste après le nom de l'utilisateur ou son ID.
 
 ```
 root@ubuntu16-1:~/sandbox# touch file1
@@ -465,7 +465,7 @@ total 0
 -rw-r--r-- 1 user1 root 0 Jan 29 03:00 file1
 ```
 
-If only a colon is given, then the user’s default group is used:
+Si seul le deux-points est donné, alors le groupe par défaut de l'utilisateur est utilisé :
 
 ```
 root@ubuntu16-1:~/sandbox# chown user1: file1
@@ -474,17 +474,17 @@ total 0
 -rw-r--r-- 1 user1 user1 0 Jan 29 03:00 file1
 ```
 
- the -R option will apply the change recursively and`  -c  ` Reports when a file change is made. We can also use other file ownership via `--referenece` switch.
+ L'option -R appliquera les modifications de manière récursive et `  -c  ` apporte lorsqu'une modification de fichier est faite. Nous pouvons aussi utiliser d'autres propriétaire de ficheir via l'option  `--reference` .
 
 ### chgrp
 
- chgrp command in Linux is used to change the group ownership of a file or directory.
+ La commande chgrp dans Linux est utilisé pour modifier le groupe propriétaire d'un fichier ou d'un dossier.
 
 ```
 chgrp [OPTION]… GROUP FILE…
 ```
 
-**Note1:** We need to have administrator permission to add or delete groups 
+**Note1:** Nous avons besoin des permissions d'administrateur pour ajouter ou supprimer des groupes 
 
 ```
 root@ubuntu16-1:~/sandbox# ls -l
@@ -500,7 +500,7 @@ total 0
 -rw-r--r-- 1 user1 root 0 Jan 29 03:00 file1
 ```
 
-**Note2:** the owner of file can always change the group of his/her file or directory to its own group or one of the groups that him/her is a member of.
+**Note2:** Le propriétaire d'un fichier peut toujours modifier le groupe de son fichier ou dossier pour son propre groupe ou un des groupes dont il est membre.
 
 ```
 root@ubuntu16-1:~# cd ~user1/
@@ -532,9 +532,9 @@ total 0
 -rw-r--r-- 1 user1 user1 0 Jan 29 05:21 file1
 ```
 
-As with many of the commands covered in this tutorial, `chgrp` has a `-R` option to allow changes to be applied recursively to all selected files and subdirectories.
+Comme pour de nombreuses commande de cette leçon, `chgrp` a une option `-R` qui permet aux modifications d'être appliqués de manière récursive sur tous les fichiers selectionnés et les sous-dossiers.
 
-\--refrence  Uses the groupname of a reference file to change the group of another file or folder.
+\--reference  Utilise le nom du groupe comme un fichier référence pour modifier le groupe d'un autre fichier ou dossier.
 
 .
 
@@ -543,15 +543,15 @@ As with many of the commands covered in this tutorial, `chgrp` has a `-R` option
 .
 
 {% hint style="success" %}
-**Primary and secondary groups**
+**Groupes primaires et secondaire**
 
-There are actually two types of groups — **primary** and **secondary**.
+Il y a actuellement deux types de groupes — **primaire** et **secondaire**.
 
-The **primary group** is the one that’s recorded in the **/etc/passwd** file, configured when an account is set up. When a user creates a file, it’s their primary group that is associated with it. 
+Le **groupe primaire** est celui qui est enregistré dans le fichier **/etc/passwd**, configuré lorsqu'un compte est créé. Lorsqu'un utilisateur crée un fichier, c'est son groupe primaire qui est associé au fichier. 
 
- **Secondary groups** are those that users might be added to once they already have accounts. Secondary group memberships show up in the /etc/group file.
+ Les **Groupes secondaires** sont ceux dans lesquels l'utilisateur a pu être ajouté. L'appartenance au groupes secondaires est défini dans le fichier /etc/group .
 
-A user can change his/her **primary group** (**default group**) with `newgrp `command, and after that all file/directories the user creates will have that group.
+Un utilisateur peut modifier son **groupe primaire** (**groupe par défaut**) avec la commande `newgrp `, et après ça tous les fichiers/dossiers que l'utilisateur créera auront ce groupe.
 {% endhint %}
 
 

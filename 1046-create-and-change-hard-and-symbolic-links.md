@@ -1,32 +1,30 @@
-# 104.6. Create and change hard and symbolic links
+# 104.6. Création et modification des liens physiques et symboliques sur les fichiers
 
-**Weight: **2
+**Poids:** 2
 
-**Description: **Candidates should be able to create and manage hard and symbolic links to a file.
+**Description:** Les candidats doivent être en mesure de créer et de gérer les liens physiques et symboliques vers un fichier.
 
-**Key Knowledge Areas:**
+**Connaissances clés:**
 
 * Create links
 * Identify hard and/or soft links
 * Copying versus linking files
 * Use links to support system administration tasks
 
-**Terms and Utilities:**
+**Concepts et Utilitaires:**
 
 * ln
 * ls
 
+### Introduction aux liens <a href="introducing-links" id="introducing-links"></a>
 
+ Sur un périphérique de stockage, un fichier ou un dossier est une collection de blocs. Les informations à propos d'un fichier est stocké dans un _inode_, ce qui enregistre les informations comme le propriétaire, lorsque le fichier a été accédé la dernière fois, quelle taille il fait, si c'est un dossier ou non, et qui peut le lire ou l'écrire. 
 
-### Introducing links <a href="introducing-links" id="introducing-links"></a>
-
- On a storage device, a file or directory is stored in a collection of blocks. Information about a file is held in an _inode_, which records information such as the owner, when the file was last accessed, how large it is, whether it is a directory or not, and who can read from or write to it. 
-
- A _directory entry_ contains a name for a file or directory and a pointer to the inode where the information about the file or directory is stored.
+ Un _entrée de dossier_ contient un nom pour un dossier ou un dossier et un pointeur vers l'inode où les informations à propos du fichier ou du dossier sont stockés.
 
 ![](.gitbook/assets/links-inodes.jpg)
 
->  The inode number is unique within a particular filesystem.
+>  Le numéro inode est unique dans chaque système de fichier particulier.
 
 ```
 root@ubuntu16-1:~/sandbox# ls -1i
@@ -34,38 +32,38 @@ root@ubuntu16-1:~/sandbox# ls -1i
 2228289 file1
 ```
 
->  \-i switch print the index number of each file
+>  L'option \-i affiche le numéro d'index de chaque fichier
 
-**Whats is link ? ** A link is simply an additional directory entry for a file or directory, allowing two or more names for the same thing.
+**Qu'est ce qu'un lien ?** Un lien est une entrée supplémentaire pour un fichier ou un dossier, permettant deux ou plus de noms pour la même chose.
 
-#### Creating links
+#### Création de liens
 
-There are two types of links : **Hard Link** and** Soft Link**.
+Il y a deux types de liens : **Liens physiques** et **Liens symboliques**.
 
- A **hard link** is a directory entry that points to an inode, while a **soft link** or _symbolic link_ is a directory entry that points to an inode that provides the name of another directory entry.  Symbolic links are also called _symlinks_.
+ Un **lien physique** est une entrée de dossier qui pointe sur un inode, alors qu'un **lien symbolique** est une entrée de dossier qui pointe vers un inode qui fournit le nom d'une autre entrée de dossier. Les liens symboliques sont aussi appelés _symlinks_.
 
 ![](.gitbook/assets/link-links.jpg)
 
-> hard links point to an inode, and inodes are only unique within a particular file system, hard links cannot cross file systems(different partitions or hard disks).
+> Les liens physique pointent vers un inode, et les inodes sont uniques dans un système de fichiers particulier, les liens physique peuvent être au travers de différents systèmes de fichier (differentes partitions ou disques durs).
 
-> You can create hard links only for files and not for directories. The exception is the special directory entries in a directory for the directory itself and for its parent (. and ..)
+> Vous pouvez créer des liens physiques pour les fichier et pas pour les dossiers. L'exception est une entrée spéciale dans le dossier vers le dossier lui-même pour son parent (. and ..)
 
-### Hard Links vs Soft Links
+### Liens physiques vs Liens symboliques
 
-| hard link                                                                              | soft link                                                                                                                                             |
-| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| have same inodes number.                                                               | have different inodes numbers.                                                                                                                        |
-| can’t cross the file system boundaries                                                 | can cross the file system                                                                                                                             |
-| can’t link directories                                                                 | allows you to link between directories                                                                                                                |
-| Links have actual file contents                                                        | contains the path for original file and not the contents                                                                                              |
-| if the original file is removed, the link will still show you the contents of the file | Removing soft link doesn't affect anything but when the original file is removed, the link becomes a 'dangling' link that points to nonexistent file. |
-| permissions will be updated if we change the permissions of source file                | permissions will not be updated                                                                                                                       |
+| Liens physiques                                                                        | Liens symboliques                                          |
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| ont un numéro d'inodes.                                                               | ont des numéros d'inodes différents.          |
+| Ne peut pas être croiser au travers de différents systèmes de fichiers | peut ĉroiser les systèmes de fichiers                                  |
+| ne peut pas être lié au dossier                                    | nous permet de faire des liens vers les dossiers                                 |
+| Les liens ont le contenu du fichier actuel  | contient le chemin vers le fichier original et non le contenu    |
+| Si le fichier original est supprimé, le lien restera et montrera le contenu du fichier | La suppression du lien symbolique n'affecte rien mais lorsque le fichier original est supprimé, le lien devient 'orphelin' car il lie à un fichier non existent. |
+| Les permissions seront mise à jour si nous modifions le fichier source   | Les permissions ne seront pas mise à jours   |
 
-#### Creating links
+#### Création de liens
 
 ### ln
 
-we can  use ln command to create both hard links and soft links
+Nous pouvons utiliser la commande ln pour créer des liens physiques ou des liens symboliques
 
 ```
 ### For  Hard Link 
@@ -75,9 +73,9 @@ ln  [original filename] [link name]
 ln  -s [original filename] [link name] 
 ```
 
-### Hard Links
+### Liens physiques
 
- Use the `ln` command to create additional hard links to an existing file (but not to a directory, even though the system sets up . and .. as hard links).
+ Utiliser la commande `ln` pour créer des liens physiques additionnels sur un fichier existant (mais pas pour un dossier, même si le système nous laisse faire des liens physique vers . et ..).
 
 ```
 root@ubuntu16-1:~/sandbox# ls -l
@@ -101,7 +99,7 @@ root@ubuntu16-1:~/sandbox# ls -1i
 2228289 HardLink
 ```
 
-ls -l command shows all the links with the link column showing the number of links:
+La commande ls -l montre tous les liens avec une colonne lien qui montre le nombre de liens :
 
 ```
 root@ubuntu16-1:~/sandbox# ls -l
@@ -111,11 +109,11 @@ drwxr-xr-x 2 root root 4096 Jan 29 08:14 dir
 -rw-r--r-- 2 root root    0 Jan 29 08:14 HardLink
 ```
 
-look at that"2" infront of file1, it was "1" before creating HardLink.
+Regarder le "2" en face de file1, c'était "1" avant la création du lien physique.
 
-### Soft Links
+### Liens symboliques
 
- `ln` command with the `-s` option creates soft links. Soft links use file or directory names, which may be relative or absolute. If you are using relative names, you will usually want the current working directory to be the directory where you are creating the link. Otherwise, the link you create will be relative to another point in the file system.
+ La commande `ln` avec l'option `-s` crée un lien symbolique. Les liens symboliques utilise le nom du fichier ou du dossier, qui peut être relatif ou absolu. Si vous avez utiliser les nom relatifs, vous voudrez généralement le dossier courant pour être le dossier où vous créer le lien. Autrement, le lien sera crée de manière relative à un autre point dans le système de fichier.
 
 ```
 root@ubuntu16-1:~/sandbox# touch file2
@@ -160,7 +158,7 @@ root@ubuntu16-1:~/sandbox# ls -l | grep soft2dir
 lrwxrwxrwx 1 root root    4 Feb  2 00:04 soft2dir -> dir/
 ```
 
-ls -l command shows all links with second column value 1 and the link points to the original file.
+La commande `ls -l` montre tous les liens avec en valeur de la seconde colonne 1 et le lien pointe vers le fichier original.
 
 ```
 drwxr-xr-x 3 root root 4096 Feb  1 23:59 dir
@@ -172,20 +170,20 @@ lrwxrwxrwx 1 root root    5 Jan 29 09:06 SoftLink -> file2
 lrwxrwxrwx 1 root root   17 Feb  1 23:59 SoftLink2myconf -> dir/dir2/myconfig
 ```
 
-#### Broken symlinks <a href="broken-symlinks" id="broken-symlinks"></a>
+#### Liens symboliques cassés <a href="broken-symlinks" id="broken-symlinks"></a>
 
-Since hard links always point to an inode that represents a file, they are always valid. However, symlinks can be broken for many reasons, including:
+Puisque les liens physiques pointe toujours vers un inode qui représente un fichier, ils sont toujours valide. Cependant, les liens symboliques peuvent être cassés pour de nombreuses raisons, incluant :
 
-* Either the original file or the target of the link did not exist when the link was created
-* The target of a link is deleted or renamed.
-* Some element in the path to the target is removed or renamed.
+* Soit le fichier original ou la cible du lient n'existe plus lorsque le lien est créé
+* La cible d'un lien est supprimé ou renommé.
+* Certains éléments dans le chemin de la cible est supprimé ou renommé.
 
 
 
 {% hint style="info" %}
-**Identifying links via find command**
+**Identifier les liens via la commande find**
 
- To find which files are hard links to a particular inode, use the `find` command and the `-samefile` option with a file name or the `-inum` option with an inode number:
+ Pour trouver quels fichiers sont des liens physiques sur un inode particulier, utiliser la commande `find` et l'option `-samefile` avec un nom de fichier ou l'option `-inum` avec un numéro d'inode :
 
 ```
 root@ubuntu16-1:~/sandbox# ls -1i
@@ -204,7 +202,7 @@ root@ubuntu16-1:~/sandbox# find . -inum 2228289
 ./file1
 ```
 
-We can also use the `find` command to search for symbolic links using the `-type l` find expression:
+Nous pouvons aussi utiliser la commande `find` pour rechercher les liens symboliques en utilisant l'expression `-type l` :
 
 ```
 root@ubuntu16-1:~/sandbox# find . -type l 
@@ -212,26 +210,26 @@ root@ubuntu16-1:~/sandbox# find . -type l
 ```
 {% endhint %}
 
-### Copying versus linking <a href="copying-versus-linking" id="copying-versus-linking"></a>
+### Copier versus lier <a href="copying-versus-linking" id="copying-versus-linking"></a>
 
-Depending on what we  want to accomplish, sometimes we  will use links and sometimes it may be better to make a copy of a file. 
+En fonction de ce qu'on veut accomplir, parfois nous utiliserons les liens et parfois il est mieux de faire une copie du fichier. 
 
-* The major difference is that links provide multiple names for a single file, while a copy creates two sets of identical data under two different names. 
-* You would certainly use copies for backup and also for test purposes where you want to try out a new program without putting your operational data at risk. 
-* You use links when we need an alias for a file (or directory), possibly to provide a more convenient or shorter path. 
-* when we  update a file, all the links to it see the update, which is not the case if you copy a file. 
+* La différence majeur est que le lien fournit de plusieurs noms vers un seul fichier, alors qu'une copie crée deux jeux de données de données identifuqe sous deux noms différents. 
+* Vous voudrez surement utiliser les copies pour sauvegardes et aussi pour des tests où vous voulez essayez un nouveau programme sans mettre vos données opérationnels en risque. 
+* Vous utiliser les liens lorsque vous avez besoin d'un alias pour un fichier (ou un dossier), pour fournir un ou plusieurs moyens d'accès. 
+* Lorsque vous mettez à jour un fichier, tous les liens sont mis à jour, ce qui n'est pas le cas dans le cas d'une copie du fichier. 
 
 {% hint style="danger" %}
-symbolic links can be broken but that subsequent write operations may create a new file. Use links with care.
+Les liens symboliques peuvent être cassé mais cela sous-entend que les opération d'écriture créer un nouveau fichier. Utiliser les liens avec précaution.
 {% endhint %}
 
-#### Links and system administration
+#### Les liens et le système d'administration
 
-Links, especially symbolic links, are frequently used in Linux system administration.
+Les liens, particulièrement les liens symbolique, sont fréquemment utilisé dans l'administration système Linux.
 
-1- **Aliasing commands to a particular version**
+1- **Les commandes d'alias pour une version particulière**
 
-Commands are often aliased, so the user does not have to know a version number for the current command but can access other versions by longer names if necessary.
+Les commandes sont souvent aliasés, donc l'utilisateur n'a pas à connaitre le numéro de version de la commande courante mais peut accéder aux autres versions par son nom long si nécessaire.
 
 ```
 root@ubuntu16-1:~/sandbox# which python
@@ -240,9 +238,9 @@ root@ubuntu16-1:~/sandbox# ls -l /usr/bin/python
 lrwxrwxrwx 1 root root 9 Nov 23  2017 /usr/bin/python -> python2.7
 ```
 
-2-**Command alias examples**
+2- **Exemple de commande alias**
 
- Other uses come into play when multiple command names use the same underlying code, such as the various commands for stopping and for restarting a system. Sometimes, a new command name, such as `genisoimage`, will replace an older command name, but the old name (mkisofs) is kept as a link to the new command.
+ D'autres usages entrent en jeu lorsque les noms de commandes multiples utiliser le même code, comme les commandes variées pour arrêter ou redémarrer un système. Parfois, un nouveau nom de commande, comme `genisoimage`, remplacera un nom de commande plus vieux, mais l'ancien nom (mkisofs) est gardé comme un lien vers la nouvelle commande.
 
 ```
 root@ubuntu16-1:~/sandbox# which halt
@@ -256,9 +254,9 @@ root@ubuntu16-1:~/sandbox# ls -l /usr/bin/mkisofs
 lrwxrwxrwx 1 root root 11 Nov 26  2017 /usr/bin/mkisofs -> genisoimage
 ```
 
-3- **Library links**
+3- **Liens vers les bibliothèques**
 
-Library names are also managed extensively using symlinks, either to allow programs to link to a general name while getting the current version, or to manage systems such as 64-bit systems that are capable of running 32-bit programs.
+Les noms de bibliothèques sont aussi gérées souvent avec des liens symboliques, soit pour autoriser les programme à être lié à un nom général pour gérer la version courante, ou gérer les systèmes comme les système 64-bit qui sont capabl de lancer des programmes 32-bit.
 
 ```
 root@ubuntu16-1:~/sandbox# ls -l /usr/lib/
@@ -283,37 +281,37 @@ lrwxrwxrwx   1 root root     17 Nov 26  2017 libnetpbm.so.10 -> libnetpbm.so.10.
 .
 
 {% hint style="danger" %}
-**remove symbolic links**
+**Supprimer les liens symboliques**
 
-  We can** **remove (delete) symbolic links  using the `rm`, `unlink`, and `find` commands. 
+  Nous pouvons supprimer les liens symboliques en utilisant les commandes `rm`, `unlink`, et `find`. 
 
-_To remove a symlink, you need to have writing permissions on the directory that contains the symlink. Otherwise, you will get “Operation not permitted” error._
+_Pour supprimer un lien symbolique, vous aurez besoin d'avoir les permissions d'écriture sur le dossier qui contient le lien symbolique. Autrement, vous aurez une erreur “Operation not permitted”._
 
-**Remove Symbolic Links with `rm`**
+**Supprimer les liens symboliques avec `rm`**
 
- To delete a symlink, invoke the `rm` command followed by the symbolic link name as an argument: `rm symlink_name`
+ Pour supprimer un symlink, utiliser la commande `rm` suivi par le nom du lien symbolique comme un argument : `rm symlink_name`
 
- With `rm` you can delete more than one symbolic links at once. To do that pass the names of the symlinks as arguments, separated by space: `rm symlink1 symlink2  `Try -i to get confirmed.
+ Avec `rm` vous pouvez supprimer plus d'un lien symbolique en une seule fois. Pour le faire on passe les nom des symlinks comme arguments, séparé par un espace: `rm symlink1 symlink2  ` Essayer l'option -i pour avoir une confirmation.
 
- If the name of the argument ends with `/`, the `rm` command assumes that the file is a directory. The error happens because, when used without the `-d` or `-r` option, `rm` cannot delete directories.
+ Si le nom de l'argument termine avec `/`, la commande `rm` suppose que le fichier est un dossier. Une erreur survient car, sans utiliser l'option`-d` ou `-r`, `rm` ne peut pas supprimer des dossiers.
 
-#### Remove Symbolic Links with `unlink`
+#### Supprimer les liens symbolique avec `unlink`
 
-The unlink command deletes a given file`!` Unlike rm, unlink accepts only a single argument.
+La commande unlink supprime un fichier! Contrairement à rm, unlink accepte seulement un argument unique.
 
-To delete a symbolic link, run the unlink command followed by the symlink name as an argument: `unlink symlink_name`
+Pour supprimer un lien symbolique, lancer la commande unkig suivi par le nom du lien sumbolique comme argument: `unlink symlink_name`
 
-Do not append the / trailing slash at the end of the symlink name because unlink cannot remove directories`.`
+N'ajoutez pas de slash  / a la fin du nom du lien symbolique car unlink ne peut pas supprimer les dossiers.
 
-#### Find and Delete Broken Symbolic Links
+#### Trouver et supprimer les liens symboliques cassés
 
-To find all broken symbolic links under a given directory, run the following command: `find /path/to/directory -xtype l`
+Pour trouver tous les liens symboliques cassé dans un dossier, lancer la commande : `find /path/to/directory -xtype l`
 
- Once you find the broken symlinks, you can either manually remove them with `rm` or `unlink` or use the `-delete` option of the `find` command`: find /path/to/directory -xtype l -delete`
+ Une fois que vous avez trouvé les liens symboliques cassés, vous pouvez soit les supprimer manuellement avec `rm` ou `unlink` ou utiliser l'option `-delete` de la commande `find` : `find /path/to/directory -xtype l -delete`
 
 #### Conclusion
 
-To remove a symbolic link, use either the `rm` or `unlink` command followed by the name of the symlink as an argument. When removing a symbolic link that points to a directory do not append a trailing slash to the symlink name.
+Pour supprimer un lien symbolique, utiliser soit la commande `rm` ou la commande `unlink` suivi par le nom du lien symbolique comme argument. Lorsque vous enlevez un lien symbolique qui pointe sur un dossier, n'ajouter pas de slash au nom du lien symbolique.
 {% endhint %}
 
 .

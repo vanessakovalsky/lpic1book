@@ -51,27 +51,25 @@ Which command displays the current disk space usage for all mounted file systems
     - chown --user dave --group staff data.txt 
     - chown dave+staff data.txt 
     - chown dave:staff data.txt 
-
 10. When considering the use of hard links, what are valid reasons not to use hard links? 
-- Hard links are not available on all Linux systems because traditional filesystems, such as ext4, do not support them 
-- Each hard link has individual ownership, permissions and ACLs which can lead to unintended disclosure of file content 
-- Hard links are specific to one filesystem and cannot point to files on another filesystem 
-- If users other than root should be able to create hard links, suln has to be installed and configured 
-- When a hard linked file is changed, a copy of the file is created and consumes additional space 
-
+    - Hard links are not available on all Linux systems because traditional filesystems, such as ext4, do not support them 
+    - Each hard link has individual ownership, permissions and ACLs which can lead to unintended disclosure of file content 
+    - Hard links are specific to one filesystem and cannot point to files on another filesystem 
+    - If users other than root should be able to create hard links, suln has to be installed and configured 
+    - When a hard linked file is changed, a copy of the file is created and consumes additional space 
 11. In compliance with the FHS, in which of the directories are man pages found? 
-- /opt/man/ 
-- /usr/doc/ 
-- /usr/share/man/ 
-- /var/pkg/man 
-- /var/man/ 
+    - /opt/man/ 
+    - /usr/doc/ 
+    - /usr/share/man/ 
+    - /var/pkg/man 
+    - /var/man/ 
 
 12. What is the process ID number of the init process on a System V init based system? 
-- -1 
-- 0 
-- 1 
-- It is different with each reboot 
-- It is set to the current run level 
+    - -1 
+    - 0 
+    - 1 
+    - It is different with each reboot 
+    - It is set to the current run level 
 
 13. Which daemon handles power management events on a Linux system? 
 - acpid 

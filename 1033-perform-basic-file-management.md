@@ -1555,6 +1555,147 @@ Policy options:
 | cpio -iv -F file.tar           | Extraire un fichier tar en utilisant cpio  |
 | cpio -it -F < file.tar         | Voir seulement les fichiers d'une archive tar en utilisant cpio |
 
+## Exercices
+
+### Exercices guidés
+
+* Considérez l’affichage ci-dessous :
+  ```
+    $ ls -lh
+    total 60K
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Desktop
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Documents
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Downloads
+    -rw-r--r--  1   frank   frank     21    Sep 7   12:59   emp_name
+    -rw-r--r--  1   frank   frank     20    Sep 7   13:03   emp_salary
+    -rw-r--r--  1   frank   frank   8.8K    Apr 1   2018    examples.desktop
+    -rw-r--r--  1   frank   frank     10    Sep 1   2018    file1
+    -rw-r--r--  1   frank   frank     10    Sep 1   2018    file2
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Music
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Pictures
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Public
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Templates
+    drwxr-xr-x  2   frank   frank   4.0K    Apr 1   2018    Videos
+  ```
+  * Que représente le caractère d dans les résultats ?
+<details>
+  <summary>Réponse</summary>
+        d est le caractère qui identifie un répertoire.
+</details>
+        
+  * Pourquoi les tailles s’affichent-elles dans un format humainement lisible ?
+<details>
+  <summary>Réponse</summary>
+        À cause de l’option -h.
+</details>
+
+* Qu’est-ce qui changerait dans l’affichage si ls était utilisé sans argument ?
+<details>
+  <summary>Réponse</summary>
+        Seuls les noms des répertoires et des fichiers seraient indiqués.
+</details>
+
+* Considérez la commande ci-dessous :
+  ```
+    $ cp /home/frank/emp_name /home/frank/backup
+  ```
+  * Que se passera-t-il avec le fichier emp_name si cette commande est exécutée avec succès ?
+<details>
+  <summary>Réponse</summary>
+        emp_name sera copié dans backup.
+</details>
+
+  * Si emp_name était un répertoire, quelle option devrait être ajoutée à cp pour exécuter la commande ?
+<details>
+  <summary>Réponse</summary>
+        -r
+</details>
+
+  * Si cp est remplacé par mv, à quoi pouvez-vous vous attendre ?
+<details>
+  <summary>Réponse</summary>
+        emp_name serait déplacé dans backup. Il n’existera plus dans le répertoire personnel de l’utilisateur frank.
+</details>
+
+* Considérez la liste de fichiers suivante :
+  ```
+    $ ls
+    file1.txt file2.txt file3.txt file4.txt
+  ```
+  * Quel caractère de substitution permettrait de supprimer tout le contenu de ce répertoire ?
+<details>
+  <summary>Réponse</summary>
+    L’astérisque *.
+</details>
+
+* En partant du listing précédent, quels fichiers seraient affichés par la commande suivante ?
+
+    $ ls file*.txt
+<details>
+  <summary>Réponse</summary>
+    Tous, puisque le caractère astérisque représente un nombre quelconque de caractères.
+</details>
+
+* Complétez la commande en ajoutant les chiffres et les caractères appropriés entre les crochets pour énumérer tout le contenu ci-dessus :
+
+    $ ls file[].txt
+<details>
+  <summary>Réponse</summary>
+    file[0-9].txt
+</details>
+
+### Exercices d’approfondissement
+
+* Dans votre répertoire utilisateur, créez deux fichiers dog et cat.
+<details>
+  <summary>Réponse</summary>
+    $ touch dog cat
+</details>
+
+* Toujours dans votre répertoire utilisateur, créez le répertoire animal. Déplacez dog et cat vers animal.
+<details>
+  <summary>Réponse</summary>
+    $ mkdir animal
+    $ mv dog cat -t animal/
+</details>
+
+* Allez dans le dossier Documents qui se trouve dans votre répertoire utilisateur et créez le répertoire backup à l’intérieur de celui-ci.
+<details>
+  <summary>Réponse</summary>
+    $ cd ~/Documents
+    $ mkdir backup
+</details>
+
+* Copiez animal et tout son contenu vers backup.
+<details>
+  <summary>Réponse</summary>
+    $ cp -r animal ~/Documents/backup
+</details>
+
+* Renommez animal dans backup en animal.bkup.
+<details>
+  <summary>Réponse</summary>
+  $ mv animal/ animal.bkup
+</details>
+
+* Le répertoire /home/lpi/databases contient de nombreux fichiers dont : db-1.tar.gz, db-2.tar.gz et db-3.tar.gz. Quelle commande simple pouvez-vous utiliser pour afficher uniquement les fichiers en question ?
+<details>
+  <summary>Réponse</summary>
+    $ ls db-[1-3].tar.gz
+</details>
+
+* Considérez le listing suivant :
+
+    $ ls
+    cne1222223.pdf cne12349.txt cne1234.pdf
+
+    En utilisant un seul caractère de substitution, quelle commande permettrait de supprimer uniquement les fichiers .pdf ?
+<details>
+  <summary>Réponse</summary>
+    $ rm *.pdf
+</details>
+
+
 .
 
 .

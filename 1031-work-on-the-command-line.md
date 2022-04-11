@@ -915,6 +915,90 @@ ping6 (8)            - send ICMP ECHO_REQUEST to network hosts
 
 C'est terminé!
 
+
+## Exercices 
+
+### Exercices guidés
+
+* Utilisez le système man pour déterminer comment indiquer à apropos de fournir une commande brève afin qu’il affiche seulement un bref message d’utilisation et qu’il quitte ensuite.
+<details>
+  <summary>Réponse</summary>
+    Lancez man apropos et faites défiler la section “Options” jusqu’au paragraphe --usage.
+</details>
+
+* Utilisez le système man pour déterminer quelle licence est attribuée à la commande grep.
+<details>
+  <summary>Réponse</summary>
+    Lancez man grep et descendez jusqu’à la section “Copyright” du document. Notez que le programme utilise un copyright de la Free Software Foundation.
+</details>
+
+* Utilisez la commande export pour ajouter un nouveau répertoire à votre PATH (ceci ne survivra pas à un redémarrage).
+<details>
+  <summary>Réponse</summary>
+    Vous pouvez ajouter temporairement un nouveau répertoire (par exemple un répertoire appelé myfiles qui se trouve dans votre répertoire personnel) à votre PATH en utilisant export PATH="/home/yourname/myfiles:$PATH". Créez un script simple dans le répertoire myfiles/, rendez-le exécutable, et essayez de le lancer depuis un autre répertoire. Ces commandes partent du principe que vous êtes dans votre répertoire personnel qui contient un répertoire appelé myfiles.
+
+    $ touch myfiles/myscript.sh
+    $ echo '#!/bin/bash' >> myfiles/myscript.sh
+    $ echo 'echo Hello' >> myfiles/myscript.sh
+    $ chmod +x myfiles/myscript.sh
+    $ myscript.sh
+    Hello
+</details>
+
+* Utilisez la commande unset pour supprimer la variable PATH. Essayez de lancer une commande en utilisant sudo (comme sudo cat /etc/shadow). Que s’est-il passé ? Pourquoi ? (Quittez votre shell pour rétablir le bon fonctionnement des choses.)
+<details>
+  <summary>Réponse</summary>
+    En tapant unset PATH, vous supprimerez les paramètres actuels du PATH. Toute tentative d’invoquer un binaire sans son chemin complet va échouer. Pour cette raison, la tentative d’exécuter une commande en utilisant sudo (qui est lui-même un programme binaire situé dans /usr/bin/sudo) va échouer — à moins que vous ne spécifiez l’emplacement absolu, comme dans : /usr/bin/sudo /bin/cat /etc/shadow. Vous pouvez réinitialiser votre PATH en utilisant export ou en quittant simplement le shell.
+</details>
+
+
+
+### Exercices d'approfondissement
+
+* Identifiez l’architecture matérielle et la version du noyau Linux utilisées sur votre ordinateur dans un format d’affichage facile à lire.
+<details>
+  <summary>Réponse</summary>
+    Lancez man uname, lisez la section “Description”, et identifiez les options de commande qui vous permettront d’obtenir les résultats précis que vous souhaitez. Notez que -v vous fournira la version du noyau et -i la plateforme matérielle.
+
+    $ man uname
+    $ uname -v
+    $ uname -i
+</detail>
+
+* Affichez les vingt dernières lignes de la base de données dynamique history et du fichier .bash_history et comparez les deux résultats.
+<details>
+  <summary>Réponse</summary>
+    $ history 20
+    $ tail -n 20 .bash_history
+</details>
+
+* Utilisez l’outil apropos pour identifier la page man où vous trouverez la commande dont vous aurez besoin pour afficher la taille d’un périphérique bloc matériel connecté en octets plutôt qu’en mégaoctets ou en gigaoctets.
+<details>
+  <summary>Réponse</summary>
+    Une façon de procéder consiste à lancer apropos avec la chaîne block, lire le résultat, noter que lsblk affiche les périphériques de type bloc (et constitue donc l’outil le plus adapté à nos besoins), lancer man lsblk, faire défiler la section “Description” et noter que -b affiche la taille du périphérique en octets. Il ne reste qu’à lancer lsblk -b pour voir ce qui en ressort.
+
+    $ apropos block
+    $ man lsblk
+    $ lsblk -b
+</details>
+
+* Faites des recherches sur Internet pour trouver et étudier la liste complète des caractères spéciaux.
+<details>
+  <summary>Réponse</summary>
+    Voici la liste : & ; | * ? " ' [ ] ( ) $ < > { } # / \ ! ~.
+</details>
+
+* Essayez d’exécuter des commandes en utilisant des chaînes composées de caractères spéciaux et en utilisant différentes méthodes d’échappement. Est-ce que ces méthodes se comportent différemment ?
+<details>
+  <summary>Réponse</summary>
+    L’échappement à l’aide des caractères " préservera les valeurs spéciales du signe dollar, de la quote inversée et de la barre oblique inversée. L’échappement à l’aide d’un caractère ', par contre, rendra tous les caractères littéralement.
+
+    $ echo "$mynewvar"
+    goodbye
+    $ echo '$mynewvar'
+    $mynewvar
+</details>
+
 .
 
 .

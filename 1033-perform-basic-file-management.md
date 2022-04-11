@@ -1644,6 +1644,36 @@ Policy options:
     file[0-9].txt
 </details>
 
+* Considérez le listing suivant :
+```
+  $ find /home/frank/Documents/ -type d
+  /home/frank/Documents/
+  /home/frank/Documents/animal
+  /home/frank/Documents/animal/domestic
+  /home/frank/Documents/animal/wild
+```
+  * Quel genre de fichiers cette commande afficherait-elle ?
+  <details>
+  <summary>Réponse</summary>
+    Des répertoires
+  </details>
+
+  * Dans quel répertoire la recherche doit-elle débuter ?
+<details>
+  <summary>Réponse</summary>
+    /home/frank/Documents
+  </details>
+
+* Un utilisateur veut compresser son répertoire de sauvegarde. Il utilise la commande suivante :
+```
+$ tar cvf /home/frank/backup.tar.gz /home/frank/dir1
+```
+Quelle est l’option qui manque pour compresser la sauvegarde en utilisant l’algorithme gzip ?
+<details>
+  <summary>Réponse</summary>
+  L’option -z.
+</details>
+
 ### Exercices d’approfondissement
 
 * Dans votre répertoire utilisateur, créez deux fichiers dog et cat.
@@ -1692,7 +1722,47 @@ Policy options:
     En utilisant un seul caractère de substitution, quelle commande permettrait de supprimer uniquement les fichiers .pdf ?
 <details>
   <summary>Réponse</summary>
+  ```
     $ rm *.pdf
+  ```
+</details>
+
+* Un administrateur système doit effectuer des vérifications régulières dans le but de nettoyer les fichiers volumineux. Ces fichiers volumineux se trouvent dans /var et se terminent par l’extension .backup.
+  * Écrivez la commande basée sur find pour localiser ces fichiers :
+<details>
+  <summary>Réponse</summary>
+        $ find /var -name *.backup
+</details>
+
+  * Une analyse de la taille de ces fichiers révèle qu’ils vont de 100M à 1G. Complétez la commande ci-dessus avec cette nouvelle information afin de pouvoir localiser les fichiers de sauvegarde allant de 100M à 1G :
+<details>
+  <summary>Réponse</summary>
+        $ find /var -name *.backup -size +100M -size -1G
+</details>
+
+* Enfin, complétez la commande avec une action de suppression pour que ces fichiers soient effacés :
+<details>
+  <summary>Réponse</summary>
+        $ find /var -name *.backup -size +100M -size -1G -delete
+</details>
+
+* Le répertoire /var contient quatre fichiers de sauvegarde :
+```
+    db-jan-2018.backup
+    db-feb-2018.backup
+    db-march-2018.backup
+    db-apr-2018.backup
+```
+  * En utilisant tar, spécifiez la commande qui créerait un fichier d’archive nommé db-first-quarter-2018.backup.tar :
+<details>
+  <summary>Réponse</summary>
+        $ tar -cvf db-first-quarter-2018.backup.tar db-jan-2018.backup db-feb-2018.backup db-march-2018.backup db-apr-2018.backup
+</details>
+
+  * En utilisant tar, spécifiez la commande qui va créer l’archive et la compresser en utilisant gzip. Notez que le nom du fichier résultant devra se terminer par .gz :
+<details>
+  <summary>Réponse</summary>
+        $ tar -zcvf db-first-quarter-2018.backup.tar.gz db-jan-2018.backup db-feb-2018.backup db-march-2018.backup db-apr-2018.backup
 </details>
 
 

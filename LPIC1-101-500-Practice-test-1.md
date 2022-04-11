@@ -13,6 +13,8 @@ Which type of file system is created by mkfs when it is executed with the block 
 - [] ext3 
 - [] ext4 
 
+---
+
 2. Which umask value ensures that new directories can be read, written and listed by their owning user, read and listed by their owning group and are not accessible at all for everyone else? 
 A. 0750 
 B. 0027 

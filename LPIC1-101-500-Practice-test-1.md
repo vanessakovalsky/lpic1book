@@ -4,12 +4,14 @@ Voici un examen blanc pour vous entrainer pour le LPIC-1-101 en version 5
 
 Il comporte 60 questions et vous avez 90 minutes pour répondre
 
-1. Which type of file system is created by mkfs when it is executed with the block device name only and without any additional parameters? 
-A. XFS 
-B. VFAT 
-C. ext2 
-D. ext3 
-E. ext4 
+---
+
+Which type of file system is created by mkfs when it is executed with the block device name only and without any additional parameters? 
+- [] XFS 
+- [] VFAT 
+- [] ext2 
+- [] ext3 
+- [] ext4 
 
 2. Which umask value ensures that new directories can be read, written and listed by their owning user, read and listed by their owning group and are not accessible at all for everyone else? 
 A. 0750 

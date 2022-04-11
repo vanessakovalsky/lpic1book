@@ -13,51 +13,44 @@ Il comporte 60 questions et vous avez 90 minutes pour répondre
     -  ext3 
     -  ext4 
 2. Which umask value ensures that new directories can be read, written and listed by their owning user, read and listed by their owning group and are not accessible at all for everyone else? 
-- 0750 
-- 0027 
-- 0036 
-- 7640 
-- 0029 
-
+    - 0750 
+    - 0027 
+    - 0036 
+    - 7640 
+    - 0029 
 3. Which is the default percentage of reserved space for the root user on new ext4 filesystems? 
-- 10% 
-- 3% 
-- 15% 
-- 0% 
-- 5% 
-
+    - 10% 
+    - 3% 
+    - 15% 
+    - 0% 
+    - 5% 
 4. Which of the following is true when a file system, which is neither listed in /etc/fstab nor known to system, is mounted manually? 
-- systemd ignores any manual mounts which are not done using the systemctl mount command 
-- The command systemctl mountsync can be used to create a mount unit based on the existing mount 
-- systemd automatically generates a mount unit and monitors the mount point without changing it 
-- Unless a systemd mount unit is created, systemd unmounts the file system after a short period of time 
-- systemctl unmount must be used to remove the mount because system opens a file descriptor on
-
+    - systemd ignores any manual mounts which are not done using the systemctl mount command 
+    - The command systemctl mountsync can be used to create a mount unit based on the existing mount 
+    - systemd automatically generates a mount unit and monitors the mount point without changing it 
+    - Unless a systemd mount unit is created, systemd unmounts the file system after a short period of time 
+    - systemctl unmount must be used to remove the mount because system opens a file descriptor on
 5. FILL BLANK - Which program updates the database that is used by the locate command? (Specify ONLY the command without any path or parameters)
-
 6. What does the command mount --bind do? 
-- It makes the contents of one directory available in another directory 
-- It mounts all available filesystems to the current directory 
-- It mounts all user mountable filesystems to the user's home directory 
-- It mounts all file systems listed in /etc/fstab which have the option userbind set 
-- It permanently mounts a regular file to a directory 
-
+    - It makes the contents of one directory available in another directory 
+    - It mounts all available filesystems to the current directory 
+    - It mounts all user mountable filesystems to the user's home directory 
+    - It mounts all file systems listed in /etc/fstab which have the option userbind set 
+    - It permanently mounts a regular file to a directory 
 7. In order to display all currently mounted filesystems, which of the following commands could be used? (Choose two.) 
-- cat /proc/self/mounts 
-- free 
-- lsmounts 
-- mount 
-- cat /proc/filesystems 
-
+    - cat /proc/self/mounts 
+    - free 
+    - lsmounts 
+    - mount 
+    - cat /proc/filesystems 
 8. FILL BLANK - 
 Which command displays the current disk space usage for all mounted file systems? (Specify ONLY the command without any path or parameters.) 
-
 9. Which chown command changes the ownership to dave and the group to staff on a file named data.txt? 
-- chown dave/staff data.txt 
-- chown ""u dave ""g staff data.txt 
-- chown --user dave --group staff data.txt 
-- chown dave+staff data.txt 
-- chown dave:staff data.txt 
+    - chown dave/staff data.txt 
+    - chown ""u dave ""g staff data.txt 
+    - chown --user dave --group staff data.txt 
+    - chown dave+staff data.txt 
+    - chown dave:staff data.txt 
 
 10. When considering the use of hard links, what are valid reasons not to use hard links? 
 - Hard links are not available on all Linux systems because traditional filesystems, such as ext4, do not support them 

@@ -734,6 +734,197 @@ root@ubuntu16-1:~# uptime -V
 uptime from procps-ng 3.3.10
 ```
 
+## Exercices
+
+### Exercices guidés
+
+* `oneko` est un programme très sympa qui affiche un chat qui chasse le curseur de la souris. S'il n'est pas déjà installé sur votre système, installer le en utilisant le gestionnaire de paquet de votre distribution. Nous l'utiliserons pour contrôler le job.
+
+  * Démarrer le programme. Comment le démarrer ?
+<details>
+  <summary>Réponse</summary>
+        En tapant `oneko` dans le terminal.
+</details>
+
+  * Déplacer le curseur de la souris pour voir comment le chat la chasse. Maintenant suspendez le processus. Comment faites vous ? Quelle est la sortie ?
+<details>
+  <summary>Réponse</summary>
+        En pressant en même temps les touches Ctrl+z:
+
+        [1]+  Stopped                 oneko
+</details>
+  
+  * Vérifier combien de jobs vous avez actuellement. Qu'est ce que vous tapez ? Quel est la sortie ?
+<details>
+  <summary>Réponse</summary>
+        $ jobs
+        [1]+  Stopped                 oneko
+</details>
+
+  * Maintenant envoyons le en arrière plan en spécifiant son ID de job. Quel est la sortie ? Comment dire au job de se lancer en arrière plan ?
+  <details>
+  <summary>Réponse</summary>
+        $ bg %1
+        [1]+ oneko &
+
+        The cat is moving again.
+</details>
+
+  * Finalement, arrêter le job en spécifiant son ID de job. Qu'est ce que vous tapez ?
+<details>
+  <summary>Réponse</summary>
+        $ kill %1
+</details>
+
+* Trouver les PIDs de tous les processus lancés par le serveur web Apache HTTPD (apache2) avec deux commandes différentes :
+<details>
+  <summary>Réponse</summary>
+    $ pgrep apache2
+
+    ou
+
+    $ pidof apache2
+</details>
+
+* Terminer tous les processus apache2 sans utiliser leur PIDs et avec deux commandes différentes:
+<details>
+  <summary>Réponse</summary>
+    $ pkill apache2
+
+    or
+
+    $ killall apache2
+</details>
+
+* Supposons que vous devez terminer toutes les instances d'apache2 et vous n'avez pas le temps de trouver leur PIDs. Comment le faire en utilisant kill avec le signal par defaut SIGTERM en une seule ligne:
+<details>
+  <summary>Réponse</summary>
+    $ kill $(pgrep apache2)
+    $ kill `pgrep apache2`
+
+    or
+
+    $ kill $(pidof apache2)
+    $ kill `pidof apache2`
+</details>
+    Note
+    	
+    Puisque SIGTERM (15) est le signal par défaut, il n'est pas nécessaire de passer des options à kill.
+
+* Démarrer top et interragir avec lui pour faire les actions suivantes :
+
+  * Voir une vue en arvre des processus:
+<details>
+  <summary>Réponse</summary>
+        Press V.
+  </details>
+
+  * Voir tous les chemin des processus en différenciant les espaces utilisateurs et les espaces du noyau :
+<details>
+  <summary>Réponse</summary>
+        Press c.
+</details>
+
+* Taper la commande ps pour afficher tous les processus démarrer par l'utilisateur du serveur Web Apache HTTPD (www-data):
+
+  * En utilisant la syntaxe BSD :
+<details>
+  <summary>Réponse</summary>
+        $ ps U www-data
+</details>
+
+  * En utilisant la syntaxe UNIX :
+<details>
+  <summary>Réponse</summary>
+        $ ps -u www-data
+</details>
+
+  * En utilisant la syntaxe GNU :
+<details>
+  <summary>Réponse</summary>
+        $ ps --user www-data
+</details>
+
+### Exercices d'approfondissement
+
+* Le signal SIGHUP peut être utilisé comme un moyen de rédémarrer certains démons. Avec le serveur web Apache HTTPD - par exemple — envoyer SIGHUP à son processus parent (celui que init a démarré) tuera ses enfants. Le parent, cependant, reliera ses fichiers de configuration, réouvrira les fichiers de logs et lancera un nouvel ensemble d'enfants. Faites les tâches suivantes :
+  * Démarrer le serveur web :
+<details>
+  <summary>Réponse</summary>
+        $ sudo systemctl start apache2
+</details>
+
+  * S'assurer de connaître le PID du processus parent:
+<details>
+  <summary>Réponse</summary>
+        $ ps aux | grep apache2
+        Le processus parent est démarré par l'utilisateur root. Dans notre cas avec le PID 1653.
+</details>
+
+  * Rédémarrer le serveur web Apache HTTPD en envoyant le signal SIGHUP à son processus parent :
+<details>
+  <summary>Réponse</summary>
+        $ kill -SIGHUP 1653
+</details>
+
+  * Vérifier que le parent n'a pas été tué et que ces nouveaux enfants ont été lancé :
+<details>
+  <summary>Réponse</summary>
+        $ ps aux | grep apache2
+        Maintenant nous devrions voir le processus parent apache2 ainsi que ces deux nouveaux enfants.
+</details>
+
+* Bien que initialement statique, la sortie de ps peut être rendue dynamique en combinant ps et watch. Nous allons surveillers les nouvelles connexions sur le serveur web Apache HTTPD. Avant de faire les tâches décrites ci-dessous, il est recommandé de lire la descriptions de  MaxConnectionsPerChild directive dans [Apache MPM Common Directives](https://httpd.apache.org/docs/current/mod/mpm_common.html).
+  * Ajouter à la directive MaxConnectionsPerChild une valeur de 1 dans le fichier de configuration d'apache2 — sur Debian et ses dérivé il peut être trouvé dans /etc/apache2/apache2.conf; dans la famille CentOS, dans /etc/httpd/conf/httpd.conf. N'oubliez pas de redémarrer apache2 pour que les changement soient pris en compte.
+<details>
+  <summary>Réponse</summary>
+        The line to include in the config file is MaxConnectionsPerChild 1. One way to restart the web server is through sudo systemctl restart apache2.
+</details>
+
+  * Taper une commande utilisant watch, ps et grep pour les connexions apache2.
+<details>
+  <summary>Réponse</summary>
+        $ watch 'ps aux | grep apache2'
+
+        or
+
+        $ watch "ps aux | grep apache2"
+</details>
+
+  * Ouvrez maintenant un navigateur ou utiliser un navigateur en ligne de commande comme lynx pour établir une connexion sur le serveur web au travers de son IP. Qu'est ce que vous observez sur la sortie de watch ?
+<details>
+  <summary>Réponse</summary>
+        One of the child processes owned by www-data disappears.
+</details>
+
+* Comme vous l'avez appris, par défaut top trie les tâches par pourcentage de l'utilisation du CPI dans l'ordre descendant (les valeurs les plus hautes en premier). Ce comportement peut être modifier avec la touche interractive M (memory usage), N (process unique identifier), T (running time) et P (percentage of CPU time). Cependant, vous pouvez aussi trier la liste des tâches comme vous le souhaitez en lançant top avec l'option -o (pour plus d'informations, vérifier la page de manuel de top). Maintenant faire les tâches suivantes :
+
+  * Lancer top pour que les tâches soit triées par utilisation de la mémoire :
+<details>
+  <summary>Réponse</summary>
+        $ top -o %MEM
+</details>
+
+  * Vérifier que vous avez taper la bonne commande en mettant en surbrillance la colonne memory :
+<details>
+  <summary>Réponse</summary>
+        Press x.
+</details>
+
+* ps a aussi une option o pour spécifier les colonnes que vous voulez voir. Etudier cela et faites les tâches suivantes :
+  * Launch ps so that only information about user, percentage of memory used, percentage of CPU time used and full command is shown:
+<details>
+  <summary>Réponse</summary>
+        $ ps o user,%mem,%cpu,cmd
+</details>
+
+  * Maintenant, lancer ps pour que la seule information affichée soit le nom de l'utilisateur et le nom du programme qu'il utilise:
+<details>
+  <summary>Réponse</summary>
+        $ ps o user,comm
+</details>
+
+
 .
 
 .

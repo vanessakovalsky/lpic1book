@@ -448,6 +448,65 @@ mylog.txt
 Avec l'option  **`-a`** il n'écrase pas le contenu du fichier mais l'ajoute au fichier donné.
 
 
+## Exercices
+
+### Exercices guidés
+
+* En plus des fichiers texte, la commande cat fonctionne aussi avec des données binaires comme l'envoi du contenu d'un bloc de périphérique vers un fichier. En utilisant le redirection, coment cat peut envoyer le contenu du périphérique /dev/sdc vers le fichier sdc.img dans le dossier courant ?
+<details>
+  <summary>Réponse</summary>
+    $ cat /dev/sdc > sdc.img
+</details>
+
+* Quel est le nom du canal standard redirigé par la commande date 1> now.txt?
+<details>
+  <summary>Réponse</summary>
+    Standard output or stdout
+</details>
+
+* Après avoir essayer de surcharger un fichier en utilisant la redirection, un utilisateur a une erreur l'informant que l'option noclobber est activé. Comment peut t'il désactiver l'option noclobber pour la session courante ?
+<details>
+  <summary>Réponse</summary>
+    set +C ou set +o noclobber
+</details>
+
+* Quel est le résultat de la commande  cat <<.>/dev/stdout?
+<details>
+  <summary>Réponse</summary>
+    Bash rentrera en mode de saisie Heredoc, pour sortir un point apprait dans une ligne. Le texte tapé sera redirigé vers stdout (affiché sur l'écran).
+</details>
+
+### Exercices d'approfondissement
+
+* La commande cat /proc/cpu_info affiche un message d'erreur car /proc/cpu_info n'existe pas. Où la commande cat /proc/cpu_info 2>1 redirige ce message d'erreur ?
+<details>
+  <summary>Réponse</summary>
+    Dans un fichier nommé 1 dans le dossier courant.
+</details>
+
+* Est t'il encore possible d'afficher le contenu envoyer à  /dev/null si l'option noclobber est activé pour la session shell courante?
+<details>
+  <summary>Réponse</summary>
+    Oui. /dev/null est un fichier spécial qui n'est pas affecté par noclobber.
+</details>
+
+* Sans utiliser echo, comment le contenu de la variable $USER  peut être redirigé dans le stdin de la commande sha1sum?
+<details>
+  <summary>Réponse</summary>
+    $ sha1sum <<<$USER
+</details>
+
+* Le noyau Linux garend les liens symboliques dans /proc/PID/fd/ pour chaque fichier ouvert par un processus, où PID est le numéro d'identification du processus correspondant. Comment un administrateur système peut utiliser ce dossier pour vérifier la localisation des fichiers de log ouvert par nginx, en supposant que son PID est  1234?
+<details>
+  <summary>Réponse</summary>
+    En utilisant la commande ls -l /proc/1234/fd, qui affichera la cible de chaque lien symbolique sur le dossier.
+</details>
+
+* Il est possible de faire des calculs arithmétiques en utilisant les commandes fournies par shell., mais les calculs sur des décimaux (float) nécessite des programme spécifiques comme bc (basic calculator). Avec bc il est même possible de spécifier un nombre de décimales, avec le paramètre scale. Cependant, bc appetes les opérations suelemnt depuis l'entrée standard, généralement entré en mode interractif. En utilisant une chaine Here, comment l'opération sur les déciamaux avec scale=6; 1/3 peut être envoyé à l'entrée standard de bc ?
+<details>
+  <summary>Réponse</summary>
+    $ bc <<<"scale=6; 1/3"
+</details>
 
 .
 

@@ -332,6 +332,12 @@ CHANGED pigs can not fly because the sky is high!
 
 sed est un outil craiment puissant et pas si compliqué, nous avons juste eu un aperçu ici! 
 
+## Exercices 
+
+### Exercices guidés 
+
+
+
 .
 
 .

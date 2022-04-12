@@ -207,6 +207,93 @@ Nous pouvons aussi utiliser l'option `-p` avant de donner le PID, mais ce n'est 
 | renice 10 -p PID       | Moyen bas       |
 | renice 19 -p PID       | La plus basse           |
 
+## Exercices
+
+### Exercices guidés 
+
+* Dans un système préemptif multi-tâches, que ce passe t'il lorsqu'un processus de priorité basse occupe le processeur et qu'un processus avec une priorité plus faute est en attente pour être exxécutée ?
+<details>
+  <summary>Réponse</summary>
+    Le processus avec la priorité la plus basse se met en pasue et le processus avec la priorité la plus haute est exécuté à la place.
+</details>
+
+* Considérer l'écran suivant de top:
+```
+    top - 08:43:14 up 23 days, 12:29,  5 users,  load average: 0,13, 0,18, 0,21
+    Tasks: 240 total,   2 running, 238 sleeping,   0 stopped,   0 zombie
+    %Cpu(s):  1,4 us,  0,4 sy,  0,0 ni, 98,1 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+    MiB Mem :   7726,4 total,    590,9 free,   1600,8 used,   5534,7 buff/cache
+    MiB Swap:  30517,0 total,  30462,5 free,     54,5 used.   5769,4 avail Mem
+
+      PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+        1 root      20   0  171420  10668   7612 S   0,0   0,1   9:59.15 systemd
+        2 root      20   0       0      0      0 S   0,0   0,0   0:02.76 kthreadd
+        3 root       0 -20       0      0      0 I   0,0   0,0   0:00.00 rcu_gp
+        4 root       0 -20       0      0      0 I   0,0   0,0   0:00.00 rcu_par_gp
+        8 root       0 -20       0      0      0 I   0,0   0,0   0:00.00 mm_percpu_wq
+        9 root      20   0       0      0      0 S   0,0   0,0   0:49.06 ksoftirqd/0
+       10 root      20   0       0      0      0 I   0,0   0,0  18:24.20 rcu_sched
+       11 root      20   0       0      0      0 I   0,0   0,0   0:00.00 rcu_bh
+       12 root      rt   0       0      0      0 S   0,0   0,0   0:08.17 migration/0
+       14 root      20   0       0      0      0 S   0,0   0,0   0:00.00 cpuhp/0
+       15 root      20   0       0      0      0 S   0,0   0,0   0:00.00 cpuhp/1
+       16 root      rt   0       0      0      0 S   0,0   0,0   0:11.79 migration/1
+       17 root      20   0       0      0      0 S   0,0   0,0   0:26.01 ksoftirqd/1
+```
+    Quel PIDs ont des priorités de temps-réel ?
+<details>
+  <summary>Réponse</summary>
+    PIDs 12 and 16.
+</details>
+
+* Considérer la liste suivante de ps -el:
+```
+    F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+    4 S     0     1     0  0  80   0 - 42855 -      ?        00:09:59 systemd
+    1 S     0     2     0  0  80   0 -     0 -      ?        00:00:02 kthreadd
+    1 I     0     3     2  0  60 -20 -     0 -      ?        00:00:00 rcu_gp
+    1 S     0     9     2  0  80   0 -     0 -      ?        00:00:49 ksoftirqd/0
+    1 I     0    10     2  0  80   0 -     0 -      ?        00:18:26 rcu_sched
+    1 I     0    11     2  0  80   0 -     0 -      ?        00:00:00 rcu_bh
+    1 S     0    12     2  0 -40   - -     0 -      ?        00:00:08 migration/0
+    1 S     0    14     2  0  80   0 -     0 -      ?        00:00:00 cpuhp/0
+    5 S     0    15     2  0  80   0 -     0 -      ?        00:00:00 cpuhp/1
+```
+    Quel PID a la priorité la plus haute ?
+<details>
+  <summary>Réponse</summary>
+    PID 12.
+</details>
+
+* Après avoir essayer de renice un processus avec renice, l'erreur suivante survient :
+
+    $ renice -10 21704
+    renice: failed to set priority for 21704 (process ID): Permission denied
+
+    Quel est la cause probable de l'erreur ?
+<details>
+  <summary>Réponse</summary>
+    Only user root can decrease nice numbers below zero.
+</details>
+
+### Exercices d'approfondissement 
+
+* Modifier les prioriés de processus est généralement requils lorsqu'un processus utilise trop de temps de CPU. Utiliser ps avec les options standard pour afficher tous les processus du système dans un format long, quel flag de --sort trie les processus par utilisation du CPU dans l'ordre ASCENDANT ?
+<details>
+  <summary>Réponse</summary>
+    $ ps -el --sort=pcpu
+</details>
+
+* La commande schedtool qui peut définir tous les paramètres de planification du CPU de Linux est capable d'afficher les informations pour un processus donné. Comment peut emme être utilisé pour afficher les paramètres de plannigication du processus  1750? Egalement comment schedtool peut être utilisé pour modifier le processus 1750 vers le temps réel avec une priorité -90 (comme montré par top)?
+<details>
+  <summary>Réponse</summary>
+    $ schedtool 1750
+
+    $ schedtool -R -p 89 1750
+</details>
+
+
+
 .
 
 .

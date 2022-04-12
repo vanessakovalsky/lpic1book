@@ -22,7 +22,7 @@
 * lspci
 * lsusb
 
-Linux traite chaque élément comme un fichier. Cela inclue les programmes, le matériel et même les processes qui sont entrain d'être exécutées. Ces fichiers sont organisés en dossier et standardisés pour un accès plus simple et l'administration. Voyons comment Linux interragit avec les périphériques :
+Linux traite chaque élément comme un fichier. Cela inclut les programmes, le matériel et même les processes qui sont entrain d'être exécutées. Ces fichiers sont organisés en dossier et standardisés pour un accès plus simple et l'administration. Voyons comment Linux interragit avec les périphériques :
 
 ### /proc
 
